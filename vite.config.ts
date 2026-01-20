@@ -9,6 +9,9 @@ import { defineConfig } from 'vite'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
 export default defineConfig({
+  build: {
+    target: 'es6',
+  },
   plugins: [
     vue(),
     vueJsx(),

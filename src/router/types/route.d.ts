@@ -2,18 +2,25 @@ import 'vue-router'
 
 export {}
 
-export interface Route {
-  canAccess?: () => boolean
+export interface IRoute extends IRouteMeta {
+  children: IRoute[]
+  component: string
+  id: SafeNumber
+  parentId: SafeNumber
+  path: string
+}
 
-  externalUrl?: string
+export interface IRouteMeta {
   icon: string
-  order: number
-  params?: Record<string, any>
+  linkUrl?: string
+  permission: string[]
+  query?: Record<string, any>
   requiresAuth: boolean
+  sequence: SafeNumber
   title: string
 }
 
 declare module 'vue-router' {
   /* eslint-disable @typescript-eslint/no-empty-object-type */
-  interface RouteMeta extends Route {}
+  interface RouteMeta extends IRouteMeta {}
 }
