@@ -1,47 +1,22 @@
+import type { Arrayable } from '@vueuse/core'
 import type { Pinia } from 'pinia'
-import type { Router, RouteRecordRaw } from 'vue-router'
+import type { RouteRecordRaw } from 'vue-router'
 
-import { trimStart } from 'es-toolkit'
+import { castArray } from 'es-toolkit/compat'
 import { defineStore } from 'pinia'
 import { defineComponent, h } from 'vue'
 
-import type { IRoute } from '@/router/types/route'
-
-export interface RouteContext {
-  parentRouteMap: RouterStoreState['parentRouteMap']
-  routeMap: RouterStoreState['routeMap']
-  routes: RouteRecordRaw[]
-}
-export interface RouterStoreService {
-  addRoute: Router['addRoute']
-  fallbackComponent: PageComponentFile
-  fetchRoutes(): Promise<IRoute[]>
-}
-export interface RouterStoreState {
-  loaded: boolean
-  parentRouteMap: Map<string, RouteRecordRaw>
-  routeMap: Map<string, RouteRecordRaw>
-  routes: RouteRecordRaw[]
-}
-
-type PageComponentFile = () => Promise<{ default?: any }>
-type PageComponents = Record<string, PageComponentFile>
-
-const basePath = '../../pages'
-const componentSuffix = ['vue', 'tsx', 'ts']
+import type {
+  RouteContext,
+  RouterStoreService,
+  RouterStoreState,
+} from '@/stores/types/RouterStore'
 
 export function createRouterStore(pinia: Pinia) {
-  const components = getOriginalFiles()
-
   const store = defineStore('RouterStore', {
     actions: {
       async generateRoutes(srv: RouterStoreService) {
-        const routeInfoList = await srv.fetchRoutes()
-        const { parentRouteMap, routeMap, routes } = generateRoutes(
-          routeInfoList,
-          components,
-          srv.fallbackComponent,
-        )
+        const { parentRouteMap, routeMap, routes } = await generateRoutes(srv)
         routes.forEach((route) => srv.addRoute(route))
 
         this.routes = routes
@@ -49,16 +24,35 @@ export function createRouterStore(pinia: Pinia) {
         this.parentRouteMap = parentRouteMap
         this.loaded = true
       },
-      getComponentFiles() {
-        return { ...components }
+      isRouteInWhitelist(path: string) {
+        return this.whitelist.has(path)
+      },
+      setHomePath(path: string) {
+        this.homePath = path
+      },
+      setUnauthorizedRedirectPath(path: string) {
+        this.whitelist.delete(this.unauthorizedRedirectPath)
+        this.whitelist.add(path)
+        this.unauthorizedRedirectPath = path
+      },
+      setWhitelist(whitelist: Arrayable<string>, replace: boolean = true) {
+        const list = castArray(whitelist)
+        if (replace) {
+          this.whitelist = new Set(list)
+        } else {
+          list.forEach((path) => this.whitelist.add(path))
+        }
       },
     },
     state: (): RouterStoreState => {
       return {
+        homePath: '/',
         loaded: false,
         parentRouteMap: new Map(),
         routeMap: new Map(),
         routes: [],
+        unauthorizedRedirectPath: '',
+        whitelist: new Set(),
       }
     },
   })
@@ -66,17 +60,15 @@ export function createRouterStore(pinia: Pinia) {
   return () => store(pinia)
 }
 
-function generateRoutes(
-  routeInfoList: IRoute[],
-  components: PageComponents,
-  fallbackComponent: RouterStoreService['fallbackComponent'],
-): RouteContext {
+async function generateRoutes(srv: RouterStoreService) {
+  const originalRoutes = await srv.fetchRoutes()
+  const components = srv.fetchComponents()
   const parentRouteMap = new Map<string, RouteRecordRaw>()
   const routeMap = new Map<string, RouteRecordRaw>()
   const routes: RouteRecordRaw[] = []
 
-  routeInfoList.forEach((item) => {
-    const hasSuffix = componentSuffix.some((suffix) =>
+  originalRoutes.forEach((item) => {
+    const hasSuffix = ['vue', 'tsx', 'ts'].some((suffix) =>
       item.component.endsWith('.' + suffix),
     )
     const endIndex = hasSuffix
@@ -84,10 +76,10 @@ function generateRoutes(
       : item.component.length
     const componentPath = item.component.substring(0, endIndex)
 
-    let component: PageComponentFile | undefined = components[componentPath]
+    let component: GlobFile | undefined = components[componentPath]
     if (!component) {
       console.error(`页面组件不存在: ${item.component}`)
-      component = fallbackComponent
+      component = srv.resolveNotExistsComponent(item.component)
     }
 
     const route: RouteRecordRaw = {
@@ -110,7 +102,7 @@ function generateRoutes(
     routeMap.set(item.id, route)
   })
 
-  routeInfoList.forEach((item) => {
+  originalRoutes.forEach((item) => {
     const route = routeMap.get(item.id)
     if (route) {
       if (routeMap.has(item.parentId)) {
@@ -121,27 +113,10 @@ function generateRoutes(
     }
   })
 
-  return { parentRouteMap, routeMap, routes }
+  return { parentRouteMap, routeMap, routes } as RouteContext
 }
 
-function getOriginalFiles() {
-  const suffixPattern = componentSuffix.join(',')
-  const files = import.meta.glob(`${basePath}/**/*.{${suffixPattern}}`)
-  const result: PageComponents = {}
-
-  Object.entries(files).forEach(([path, component]) => {
-    const uri = normalizeComponentUri(path)
-    result[uri] = component as PageComponentFile
-  })
-
-  return result
-}
-
-function normalizeComponentUri(uri: string): string {
-  return trimStart(uri.replace(basePath, ''), '/')
-}
-
-function withComponentAlias(alias: string, component: PageComponentFile) {
+function withComponentAlias(alias: string, component: GlobFile) {
   return async () => {
     const originalComponent = await component()
     if (!originalComponent.default) {

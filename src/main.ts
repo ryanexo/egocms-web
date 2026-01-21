@@ -1,13 +1,19 @@
-import './assets/main.css'
-import { createApp } from 'vue'
+import '@/assets/main.css'
+import { createApp as createVueApp } from 'vue'
 
+import App from '@/App.vue'
 import { router } from '@/router'
-import { pinia } from '@/stores'
+import { pinia, useRouterStore } from '@/stores'
 
-import App from './App.vue'
+export async function createApp() {
+  const app = createVueApp(App).use(pinia).use(router)
+  const routerStore = useRouterStore()
 
-const app = createApp(App)
+  routerStore.setHomePath('/')
+  routerStore.setWhitelist('/register')
+  routerStore.setUnauthorizedRedirectPath('/login')
 
-app.use(pinia)
-app.use(router)
-app.mount('#app')
+  return app
+}
+
+createApp().then((app) => app.mount('#app'))

@@ -21,6 +21,7 @@
     "@tailwindcss/vite": "^4.1.18",
     "@vueuse/core": "^14.1.0",
     "axios": "^1.13.2",
+    "dayjs": "^1.11.19",
     "es-toolkit": "^1.44.0",
     "nprogress": "^0.2.0",
     "pinia": "^3.0.4",

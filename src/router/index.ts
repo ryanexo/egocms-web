@@ -3,7 +3,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import { useAccessGuard, useProgressGuard } from '@/router/guard/Guard.ts'
 
 function createVueRouter() {
-  const builtinRoutes = import.meta.glob('./builtin/*.ts', { eager: true })
+  const builtinRoutes = import.meta.glob('./routes/*.ts', { eager: true })
   const routes = Object.values(builtinRoutes)
     .map((item) => (item as Record<string, any>).default)
     .flat()
