@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
-import { useDynamicRoutes, useProgressGuard } from '@/router/guard.ts'
+import { useAccessGuard, useProgressGuard } from '@/router/guard/Guard.ts'
 
 function createVueRouter() {
   const builtinRoutes = import.meta.glob('./builtin/*.ts', { eager: true })
@@ -10,7 +10,7 @@ function createVueRouter() {
 
   const router = createRouter({
     history: createWebHashHistory(import.meta.env.BASE_URL),
-    routes,
+    routes: [],
     scrollBehavior: (to, _, savedPosition) => {
       if (savedPosition) {
         return savedPosition
@@ -18,11 +18,16 @@ function createVueRouter() {
       return to.hash ? { behavior: 'smooth', el: to.hash } : { left: 0, top: 0 }
     },
   })
+  const resetRoutes = () => {
+    router.clearRoutes()
+    routes.forEach((route) => router.addRoute(route))
+  }
 
   useProgressGuard(router)
-  useDynamicRoutes(router)
+  useAccessGuard(router)
+  resetRoutes()
 
-  return router
+  return { resetRoutes, router }
 }
 
-export const router = createVueRouter()
+export const { resetRoutes, router } = createVueRouter()

@@ -4,10 +4,10 @@ import NProgress from 'nprogress'
 
 import { useRouterStore } from '@/stores'
 
-export function useDynamicRoutes(router: Router) {
+export function useAccessGuard(router: Router) {
   router.beforeEach((to, from, next) => {
     const routerStore = useRouterStore()
-    routerStore.routes
+    routerStore.loaded
 
     next()
   })

@@ -19,15 +19,14 @@ export default defineConfigWithVueTs(
 
   globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**']),
 
-  ...pluginVue.configs['flat/essential'],
+  pluginVue.configs['flat/essential'],
   vueTsConfigs.recommended,
 
   skipFormatting,
 
-  ...pluginOxlint.configs['flat/recommended'],
+  pluginOxlint.configs['flat/recommended'],
 
   sortImports,
   tsConfig,
-
   prettierEslintConfig,
 )

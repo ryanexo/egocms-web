@@ -3,93 +3,145 @@ import type { Router, RouteRecordRaw } from 'vue-router'
 
 import { trimStart } from 'es-toolkit'
 import { defineStore } from 'pinia'
-import { defineComponent, h, reactive, ref } from 'vue'
+import { defineComponent, h } from 'vue'
 
 import type { IRoute } from '@/router/types/route'
 
-export interface DynamicRouteOptions {
+export interface RouteContext {
+  parentRouteMap: RouterStoreState['parentRouteMap']
+  routeMap: RouterStoreState['routeMap']
+  routes: RouteRecordRaw[]
+}
+export interface RouterStoreService {
   addRoute: Router['addRoute']
-  fetchRoutes: () => Promise<IRoute[]>
+  fallbackComponent: PageComponentFile
+  fetchRoutes(): Promise<IRoute[]>
 }
-
-export interface RouteGenerationOptions {
-  components: Components
-  routes: IRoute[]
-}
-
 export interface RouterStoreState {
-  routes: IRoute[]
+  loaded: boolean
+  parentRouteMap: Map<string, RouteRecordRaw>
+  routeMap: Map<string, RouteRecordRaw>
+  routes: RouteRecordRaw[]
 }
 
-type ComponentFile = () => Promise<{ default?: any }>
-
-type Components = Record<string, ComponentFile>
+type PageComponentFile = () => Promise<{ default?: any }>
+type PageComponents = Record<string, PageComponentFile>
 
 const basePath = '../../pages'
 const componentSuffix = ['vue', 'tsx', 'ts']
 
 export function createRouterStore(pinia: Pinia) {
-  const store = defineStore('RouterStore', () => {
-    // const loaded = ref(false)
-    // const routeMap = reactive(new Map<string, IRoute>())
-    const routes = ref<IRoute[]>([])
-    const components = getOriginalFiles()
+  const components = getOriginalFiles()
 
-    async function fetchRoutes(options: DynamicRouteOptions) {
-      const data = await options.fetchRoutes()
-      generateRoutes({ components, routes: data })
+  const store = defineStore('RouterStore', {
+    actions: {
+      async generateRoutes(srv: RouterStoreService) {
+        const routeInfoList = await srv.fetchRoutes()
+        const { parentRouteMap, routeMap, routes } = generateRoutes(
+          routeInfoList,
+          components,
+          srv.fallbackComponent,
+        )
+        routes.forEach((route) => srv.addRoute(route))
 
-      routes.value = data
-    }
-
-    return reactive({ routes }) as RouterStoreState
+        this.routes = routes
+        this.routeMap = routeMap
+        this.parentRouteMap = parentRouteMap
+        this.loaded = true
+      },
+      getComponentFiles() {
+        return { ...components }
+      },
+    },
+    state: (): RouterStoreState => {
+      return {
+        loaded: false,
+        parentRouteMap: new Map(),
+        routeMap: new Map(),
+        routes: [],
+      }
+    },
   })
 
   return () => store(pinia)
 }
 
-function generateRoutes(options: RouteGenerationOptions): RouteRecordRaw[] {
-  const result: RouteRecordRaw[] = []
+function generateRoutes(
+  routeInfoList: IRoute[],
+  components: PageComponents,
+  fallbackComponent: RouterStoreService['fallbackComponent'],
+): RouteContext {
+  const parentRouteMap = new Map<string, RouteRecordRaw>()
+  const routeMap = new Map<string, RouteRecordRaw>()
+  const routes: RouteRecordRaw[] = []
 
-  options.routes.forEach((item) => {
-    if (!isValidSuffix(item.component)) {
-      console.error(`页面组件不合法: ${item.component}`)
-      return
+  routeInfoList.forEach((item) => {
+    const hasSuffix = componentSuffix.some((suffix) =>
+      item.component.endsWith('.' + suffix),
+    )
+    const endIndex = hasSuffix
+      ? item.component.lastIndexOf('.')
+      : item.component.length
+    const componentPath = item.component.substring(0, endIndex)
+
+    let component: PageComponentFile | undefined = components[componentPath]
+    if (!component) {
+      console.error(`页面组件不存在: ${item.component}`)
+      component = fallbackComponent
     }
 
-    const componentPath = normalizeComponentUri(
-      options.pathPrefix,
-      item.component,
-    )
-
-    result.push({
-      component: withComponentAlias(String(item.id)),
-      name: String(item.id),
+    const route: RouteRecordRaw = {
+      children: [],
+      component: withComponentAlias(item.id, component),
+      meta: {
+        externalUrl: item.meta.externalUrl,
+        icon: item.meta.icon,
+        parent: item.parentId,
+        permission: item.meta.permission,
+        query: item.meta.query,
+        requiresAuth: item.meta.requiresAuth,
+        sequence: item.meta.sequence,
+        title: item.meta.title,
+      },
+      name: item.id,
       path: item.path,
-    })
+    }
+
+    routeMap.set(item.id, route)
   })
 
-  return result
+  routeInfoList.forEach((item) => {
+    const route = routeMap.get(item.id)
+    if (route) {
+      if (routeMap.has(item.parentId)) {
+        routeMap.get(item.parentId)?.children?.push(route)
+      } else {
+        routes.push(route)
+      }
+    }
+  })
+
+  return { parentRouteMap, routeMap, routes }
 }
 
 function getOriginalFiles() {
   const suffixPattern = componentSuffix.join(',')
   const files = import.meta.glob(`${basePath}/**/*.{${suffixPattern}}`)
-  const result: Components = {}
+  const result: PageComponents = {}
 
   Object.entries(files).forEach(([path, component]) => {
-    const uri = normalizeComponentUri(basePath, path)
-    result[uri] = component as ComponentFile
+    const uri = normalizeComponentUri(path)
+    result[uri] = component as PageComponentFile
   })
 
   return result
 }
 
-function normalizeComponentUri(prefix: string, uri: string): string {
-  return trimStart(uri.replace(prefix, ''), '/')
+function normalizeComponentUri(uri: string): string {
+  return trimStart(uri.replace(basePath, ''), '/')
 }
 
-function withComponentAlias(alias: string, component: ComponentFile) {
+function withComponentAlias(alias: string, component: PageComponentFile) {
   return async () => {
     const originalComponent = await component()
     if (!originalComponent.default) {

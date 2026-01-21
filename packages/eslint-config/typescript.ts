@@ -1,8 +1,10 @@
 import tsPlugin from '@typescript-eslint/eslint-plugin'
 import tsParser from '@typescript-eslint/parser'
 import { defineConfig } from 'eslint/config'
+import eslint from '@eslint/js'
 
 export default defineConfig([
+  eslint.configs.recommended,
   {
     files: ['**/*.?([cm])[jt]s?(x)'],
     languageOptions: {
@@ -24,8 +26,8 @@ export default defineConfig([
       '@typescript-eslint': tsPlugin,
     },
     rules: {
-      ...tsPlugin.configs['eslint-recommended']?.overrides?.[0]?.rules,
-      ...tsPlugin.configs.strict?.rules,
+      ...tsPlugin.configs['eslint-recommended'].overrides?.[0].rules,
+      ...tsPlugin.configs.strict.rules,
       '@typescript-eslint/ban-ts-comment': [
         'error',
         {
@@ -36,7 +38,7 @@ export default defineConfig([
         },
       ],
 
-      // '@typescript-eslint-config/consistent-type-definitions': ['warn', 'interface'],
+      // '@typescript-eslint/consistent-type-definitions': ['warn', 'interface'],
       '@typescript-eslint/consistent-type-definitions': 'off',
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',

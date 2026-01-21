@@ -1,26 +1,29 @@
 import 'vue-router'
+import type { RouteMeta } from 'vue-router'
 
 export {}
 
-export interface IRoute extends IRouteMeta {
-  children: IRoute[]
+export interface IRoute {
   component: string
-  id: SafeNumber
-  parentId: SafeNumber
+  id: string
+  meta: RouteMeta
+  parentId: string
   path: string
+  sequence: string
 }
 
 export interface IRouteMeta {
+  externalUrl?: string
   icon: string
-  linkUrl?: string
   permission: string[]
   query?: Record<string, any>
   requiresAuth: boolean
-  sequence: SafeNumber
+  sequence: string
   title: string
 }
 
 declare module 'vue-router' {
-  /* eslint-disable @typescript-eslint/no-empty-object-type */
-  interface RouteMeta extends IRouteMeta {}
+  interface RouteMeta extends IRouteMeta {
+    parent: string
+  }
 }
