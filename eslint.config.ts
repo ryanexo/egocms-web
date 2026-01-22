@@ -7,9 +7,9 @@ import pluginOxlint from 'eslint-plugin-oxlint'
 import pluginVue from 'eslint-plugin-vue'
 import { globalIgnores } from 'eslint/config'
 
-import sortImports from './packages/eslint-config/imports'
-import prettierEslintConfig from './packages/eslint-config/prettier'
-import tsConfig from './packages/eslint-config/typescript'
+import sortImports from './config/eslint-config/imports'
+import prettierEslintConfig from './config/eslint-config/prettier'
+import tsConfig from './config/eslint-config/typescript'
 
 export default defineConfigWithVueTs(
   {

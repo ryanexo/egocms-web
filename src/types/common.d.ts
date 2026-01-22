@@ -5,5 +5,3 @@ declare interface Callable {
 declare type GlobFile = () => Promise<{ default?: any }>
 
 declare type GlobResults = Record<string, GlobFile>
-
-declare type MaybePromise<T> = Promise<T> | T

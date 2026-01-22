@@ -7,15 +7,15 @@ import { defineStore } from 'pinia'
 import { defineComponent, h } from 'vue'
 
 import type {
-  RouteContext,
-  RouterStoreService,
+  RouteGenerationContext,
+  RouterContextProvider,
   RouterStoreState,
-} from '@/stores/types/RouterStore'
+} from '@/stores/types/router.store'
 
 export function createRouterStore(pinia: Pinia) {
   const store = defineStore('RouterStore', {
     actions: {
-      async generateRoutes(srv: RouterStoreService) {
+      async generateRoutes(srv: RouterContextProvider) {
         const { parentRouteMap, routeMap, routes } = await generateRoutes(srv)
         routes.forEach((route) => srv.addRoute(route))
 
@@ -60,7 +60,7 @@ export function createRouterStore(pinia: Pinia) {
   return () => store(pinia)
 }
 
-async function generateRoutes(srv: RouterStoreService) {
+async function generateRoutes(srv: RouterContextProvider) {
   const originalRoutes = await srv.fetchRoutes()
   const components = srv.fetchComponents()
   const parentRouteMap = new Map<string, RouteRecordRaw>()
@@ -113,7 +113,7 @@ async function generateRoutes(srv: RouterStoreService) {
     }
   })
 
-  return { parentRouteMap, routeMap, routes } as RouteContext
+  return { parentRouteMap, routeMap, routes } as RouteGenerationContext
 }
 
 function withComponentAlias(alias: string, component: GlobFile) {

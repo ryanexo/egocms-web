@@ -1,5 +1,6 @@
 export interface AuthStoreState {
-  authModalVisible: boolean
   expires: Date | number | string
+  permission: Set<string>
   token: string
+  unauthorizedHandler?: () => Promise<boolean>
 }

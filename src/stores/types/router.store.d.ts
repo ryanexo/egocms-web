@@ -1,12 +1,12 @@
 import type { RouteRecordRaw } from 'vue-router'
 
-export interface RouteContext {
+export interface RouteGenerationContext {
   parentRouteMap: RouterStoreState['parentRouteMap']
   routeMap: RouterStoreState['routeMap']
   routes: RouteRecordRaw[]
 }
 
-export interface RouterStoreService {
+export interface RouterContextProvider {
   addRoute(route: RouteRecordRaw): void
   fetchComponents(): GlobResults
   fetchRoutes(): Promise<IRoute[]>

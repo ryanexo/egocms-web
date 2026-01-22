@@ -10,7 +10,7 @@ const openReadmeInEditor = () => fetch('/__open-in-editor?file=README.md')
 </script>
 
 <template>
-  <WelcomeItem>
+  <WelcomeItem class="flex flex-col">
     <template #icon>
       <DocumentationIcon />
     </template>
@@ -21,8 +21,10 @@ const openReadmeInEditor = () => fetch('/__open-in-editor?file=README.md')
       href="https://vuejs.org/"
       target="_blank"
       rel="noopener"
-      >official documentation</a
+      class="bg-slate-500 text-[16px/48px]"
     >
+      official documentation
+    </a>
     provides you with all information you need to get started.
   </WelcomeItem>
 
@@ -175,3 +177,5 @@ const openReadmeInEditor = () => fetch('/__open-in-editor?file=README.md')
     >.
   </WelcomeItem>
 </template>
+
+<style lang="scss"></style>

@@ -2,9 +2,11 @@ import type { Router } from 'vue-router'
 
 import { trimStart } from 'es-toolkit'
 
-import type { RouterStoreService } from '@/stores/types/RouterStore'
+import type { RouterContextProvider } from '@/stores/types/router.store'
 
-export function useRouterService(router: Router): RouterStoreService {
+export function useRouterStoreContextProvider(
+  router: Router,
+): RouterContextProvider {
   return {
     addRoute: (route) => router.addRoute(route),
     fetchComponents: () => {
@@ -20,7 +22,7 @@ export function useRouterService(router: Router): RouterStoreService {
     },
     fetchRoutes: () => Promise.resolve([]),
     resolveNotExistsComponent: (_: string) => {
-      return () => import('@/pages/Core/NotFound.vue')
+      return () => import('@/pages/core/NotFound.vue')
     },
   }
 }

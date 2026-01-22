@@ -2,12 +2,11 @@ import type { NavigationGuardReturn, Router } from 'vue-router'
 
 import NProgress from 'nprogress'
 
-import { useRouterService } from '@/router/service.ts'
-import { useAuthStore, useRouterStore } from '@/stores'
+import { useAppStore, useAuthStore, useRouterStore } from '@/stores'
+import { useRouterStoreContextProvider } from '@/stores/adapter/router-store.adapter.ts'
 
 export function useAccessGuard(router: Router) {
   router.beforeEach(async (to) => {
-    debugger
     const routerStore = useRouterStore()
     const authStore = useAuthStore()
 
@@ -26,21 +25,29 @@ export function useAccessGuard(router: Router) {
     }
 
     if (!authStore.isValid()) {
-      const target: NavigationGuardReturn = {
-        path: routerStore.unauthorizedRedirectPath,
-      }
-      if (to.path !== routerStore.homePath) {
-        target.query = { redirect: encodeURIComponent(to.fullPath) }
-      }
-      return target
+      return authStore.notifySessionExpired(() => {
+        const target: NavigationGuardReturn = {
+          path: routerStore.unauthorizedRedirectPath,
+        }
+        if (to.path !== routerStore.homePath) {
+          target.query = { redirect: encodeURIComponent(to.fullPath) }
+        }
+        return target
+      })
     }
 
     if (!routerStore.loaded) {
-      const service = useRouterService(router)
+      const service = useRouterStoreContextProvider(router)
       await routerStore.generateRoutes(service)
     }
 
     return true
+  })
+}
+
+export function useDocumentTitleGuard(router: Router) {
+  router.afterEach((to) => {
+    useAppStore().setPageTitle(to.meta.title)
   })
 }
 
