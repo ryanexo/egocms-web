@@ -1,7 +1,7 @@
+import eslint from '@eslint/js'
 import tsPlugin from '@typescript-eslint/eslint-plugin'
 import tsParser from '@typescript-eslint/parser'
 import { defineConfig } from 'eslint/config'
-import eslint from '@eslint/js'
 
 export default defineConfig([
   eslint.configs.recommended,
@@ -22,6 +22,7 @@ export default defineConfig([
       },
     },
     plugins: {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       '@typescript-eslint': tsPlugin,
     },

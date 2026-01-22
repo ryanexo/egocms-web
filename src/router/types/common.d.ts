@@ -18,12 +18,12 @@ export interface IRouteMeta {
   permission: string[]
   query?: Record<string, any>
   requiresAuth: boolean
-  sequence: string
+  sequence?: string
   title: string
 }
 
 declare module 'vue-router' {
   interface RouteMeta extends IRouteMeta {
-    parent: string
+    parent?: string
   }
 }

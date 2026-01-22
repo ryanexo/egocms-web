@@ -4,6 +4,7 @@ import { computed, createApp as createVueApp } from 'vue'
 
 import App from '@/App.vue'
 import { router } from '@/router'
+import { CoreRoutePathEnum } from '@/router/constants/route.enum.ts'
 import { pinia, useAppStore, useAuthStore, useRouterStore } from '@/stores'
 
 export async function createApp() {
@@ -14,11 +15,14 @@ export async function createApp() {
 
   useTitle(computed(() => appStore.pageTitleFormatted))
 
-  routerStore.setHomePath('/')
-  routerStore.setWhitelist(['/', '/register'])
-  routerStore.setUnauthorizedRedirectPath('/login')
+  routerStore.setHomePath(CoreRoutePathEnum.Home)
+  routerStore.setWhitelist([
+    CoreRoutePathEnum.Login,
+    CoreRoutePathEnum.Register,
+  ])
+  routerStore.setUnauthorizedRedirectPath(CoreRoutePathEnum.Login)
 
-  authStore.setToken('test')
+  authStore.setToken('')
 
   return app
 }

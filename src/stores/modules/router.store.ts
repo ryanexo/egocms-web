@@ -22,6 +22,8 @@ export function createRouterStore(pinia: Pinia) {
         this.routes = routes
         this.routeMap = routeMap
         this.parentRouteMap = parentRouteMap
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         this.loaded = true
       },
       isRouteInWhitelist(path: string) {

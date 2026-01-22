@@ -20,6 +20,7 @@ export function createAppStore(pinia: Pinia) {
     },
     state: (): AppStoreState => {
       return {
+        operationSuccessMessage: '操作成功',
         pageTitle: '',
       }
     },

@@ -10,6 +10,7 @@ import { globalIgnores } from 'eslint/config'
 import sortImports from './config/eslint-config/imports'
 import prettierEslintConfig from './config/eslint-config/prettier'
 import tsConfig from './config/eslint-config/typescript'
+import perfectionist from './config/eslint-config/perfectionist'
 
 export default defineConfigWithVueTs(
   {
@@ -29,4 +30,5 @@ export default defineConfigWithVueTs(
   sortImports,
   tsConfig,
   prettierEslintConfig,
+  perfectionist,
 )
