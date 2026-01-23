@@ -1,7 +1,9 @@
 import type { AxiosInstance } from 'axios'
 
-import { messageService } from '@/services/message.service.ts'
-import { useAppStore, useAuthStore } from '@/stores'
+import type { HttpClientPolicy } from '@/core/http-client/types/http-client'
+
+import { messageService } from '@/core/services/message.service.ts'
+import { useAuthStore } from '@/stores'
 
 export function useCredentialInterceptor(axios: AxiosInstance) {
   axios.interceptors.request.use((config) => {
@@ -14,12 +16,15 @@ export function useCredentialInterceptor(axios: AxiosInstance) {
   })
 }
 
-export function useCustomConfigInterceptor(axios: AxiosInstance) {
+export function useCustomConfigInterceptor(
+  axios: AxiosInstance,
+  policy: HttpClientPolicy,
+) {
   axios.interceptors.response.use((response) => {
     if (response.config?.successMessage) {
       const message =
         response.config?.successMessage === true
-          ? useAppStore().operationSuccessMessage
+          ? policy.defaultSuccessMessage()
           : response.config?.successMessage
 
       messageService.success(message)

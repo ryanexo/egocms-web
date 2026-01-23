@@ -2,7 +2,7 @@ import type { NavigationGuardReturn, Router } from 'vue-router'
 
 import NProgress from 'nprogress'
 
-import { messageService } from '@/services/message.service.ts'
+import { messageService } from '@/core/services/message.service.ts'
 import { useAppStore, useAuthStore, useRouterStore } from '@/stores'
 import { useRouterStoreContextProvider } from '@/stores/adapter/router-store-context.adapter.ts'
 
