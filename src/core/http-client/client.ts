@@ -20,7 +20,7 @@ function createHttpClient(config: HttpClientConfig) {
   })
 
   useCredentialInterceptor(httpClient)
-  useCustomConfigInterceptor(httpClient)
+  useCustomConfigInterceptor(httpClient, config.policy)
 
   return httpClient
 }

@@ -1,3 +1,4 @@
+import '@/assets/theme.css'
 import '@/assets/main.css'
 import { useTitle } from '@vueuse/core'
 import { computed, createApp as createVueApp } from 'vue'
@@ -16,10 +17,7 @@ export async function createApp() {
   useTitle(computed(() => appStore.pageTitleFormatted))
 
   routerStore.setHomePath(CoreRoutePathEnum.Home)
-  routerStore.setWhitelist([
-    CoreRoutePathEnum.Login,
-    CoreRoutePathEnum.Register,
-  ])
+  routerStore.setWhitelist([CoreRoutePathEnum.Login, CoreRoutePathEnum.Register])
   routerStore.setUnauthorizedRedirectPath(CoreRoutePathEnum.Login)
 
   authStore.setToken('')

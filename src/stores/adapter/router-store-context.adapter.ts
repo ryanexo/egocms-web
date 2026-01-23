@@ -4,9 +4,7 @@ import { trimStart } from 'es-toolkit'
 
 import type { RouterContextProvider } from '@/stores/types/router.store'
 
-export function useRouterStoreContextProvider(
-  router: Router,
-): RouterContextProvider {
+export function useRouterStoreContextProvider(router: Router): RouterContextProvider {
   return {
     addRoute: (route) => router.addRoute(route),
     fetchComponents: () => {
@@ -22,7 +20,7 @@ export function useRouterStoreContextProvider(
     },
     fetchRoutes: () => Promise.resolve([]),
     resolveNotExistsComponent: (_: string) => {
-      return () => import('@/pages/core/NotFound.vue')
+      return () => import('@/pages/core/fallback/NotFound.vue')
     },
   }
 }

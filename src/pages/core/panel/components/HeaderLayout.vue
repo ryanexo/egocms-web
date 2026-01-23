@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div>asdf</div>
+  <div></div>
 </template>
 
 <style scoped></style>
