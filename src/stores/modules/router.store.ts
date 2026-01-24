@@ -4,13 +4,15 @@ import type { RouteRecordRaw } from 'vue-router'
 
 import { castArray } from 'es-toolkit/compat'
 import { defineStore } from 'pinia'
-import { defineComponent, h } from 'vue'
+import { defineAsyncComponent, defineComponent, h } from 'vue'
 
 import type {
   RouteGenerationContext,
   RouterContextProvider,
   RouterStoreState,
 } from '@/stores/types/router.store'
+
+import { AsyncComponentSkeleton } from '@/components/skeleton/AsyncComponentSkelton.tsx'
 
 export function createRouterStore(pinia: Pinia) {
   const store = defineStore('RouterStore', {
@@ -62,6 +64,26 @@ export function createRouterStore(pinia: Pinia) {
   return () => store(pinia)
 }
 
+export function useAsyncComponentName(name: string, component: GlobFile) {
+  return async () => {
+    const originalComponent = defineAsyncComponent({
+      loader: () =>
+        new Promise((resolve) =>
+          setTimeout(async () => {
+            resolve((await component()).default)
+          }, 3000),
+        ),
+      loadingComponent: AsyncComponentSkeleton,
+    })
+    return defineComponent({
+      name: `route-${name}`,
+      setup(props, { attrs, slots }) {
+        return () => h(originalComponent, { ...props, ...attrs }, slots)
+      },
+    })
+  }
+}
+
 async function generateRoutes(srv: RouterContextProvider) {
   const originalRoutes = await srv.fetchRoutes()
   const components = srv.fetchComponents()
@@ -86,7 +108,7 @@ async function generateRoutes(srv: RouterContextProvider) {
 
     const route: RouteRecordRaw = {
       children: [],
-      component: withComponentAlias(item.id, component),
+      component: useAsyncComponentName(item.id, component),
       meta: {
         externalUrl: item.meta.externalUrl,
         icon: item.meta.icon,
@@ -116,19 +138,4 @@ async function generateRoutes(srv: RouterContextProvider) {
   })
 
   return { parentRouteMap, routeMap, routes } as RouteGenerationContext
-}
-
-function withComponentAlias(alias: string, component: GlobFile) {
-  return async () => {
-    const originalComponent = await component()
-    if (!originalComponent.default) {
-      return originalComponent
-    }
-    return defineComponent({
-      name: `route-${alias}`,
-      setup(props, { attrs, slots }) {
-        return () => h(originalComponent, { ...props, ...attrs }, slots)
-      },
-    })
-  }
 }

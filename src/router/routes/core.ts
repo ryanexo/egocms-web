@@ -2,7 +2,10 @@ import type { RouteRecordRaw } from 'vue-router'
 
 import AuthenticationPage from '@/pages/core/auth/AuthenticationPage.vue'
 import HomeView from '@/pages/HomeView.vue'
-import { CoreRouteNameEnum, CoreRoutePathEnum } from '@/router/constants/route.enum.ts'
+import {
+  CoreRouteNameEnum,
+  CoreRoutePathEnum,
+} from '@/router/constants/route.enum.ts'
 
 export default [
   {
