@@ -15,10 +15,9 @@ export function useHttpClientPolicy(): HttpClientPolicy {
     return Reflect.has(response, 'code') && Reflect.has(response, 'msg')
   }
 
-  const defaultSuccessMessage: HttpClientPolicy['defaultSuccessMessage'] =
-    () => {
-      return '操作成功'
-    }
+  const defaultSuccessMessage: HttpClientPolicy['defaultSuccessMessage'] = () => {
+    return '操作成功'
+  }
 
   return { defaultSuccessMessage, isValidCode, isValidJsonData }
 }

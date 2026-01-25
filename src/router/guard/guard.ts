@@ -4,7 +4,7 @@ import NProgress from 'nprogress'
 
 import { messageService } from '@/core/services/message.service.ts'
 import { useAppStore, useAuthStore, useRouterStore } from '@/stores'
-import { useRouterStoreContextProvider } from '@/stores/adapter/router-store-context.adapter.ts'
+import { useRouterStoreContextProvider } from '@/stores/adapter/router-store-context-provider.adapter.ts'
 
 export function useAccessGuard(router: Router) {
   router.beforeEach(async (to) => {
@@ -12,10 +12,7 @@ export function useAccessGuard(router: Router) {
     const authStore = useAuthStore()
 
     if (!to.meta.requiresAuth || routerStore.isRouteInWhitelist(to.path)) {
-      if (
-        to.path === routerStore.unauthorizedRedirectPath &&
-        authStore.isValid()
-      ) {
+      if (to.path === routerStore.unauthorizedRedirectPath && authStore.isValid()) {
         const redirectPath = to.query?.redirect
         return typeof redirectPath === 'string' && redirectPath !== ''
           ? decodeURIComponent(redirectPath)

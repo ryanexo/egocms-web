@@ -33,10 +33,7 @@ export function createAuthStore(pinia: Pinia) {
        * @param perm 权限列表，Key为路由Path，Value为权限值
        * @param replace 替换现有权限，false时追加
        */
-      setPermission(
-        perm: Record<string, Arrayable<string>>,
-        replace: boolean = true,
-      ) {
+      setPermission(perm: Record<string, Arrayable<string>>, replace: boolean = true) {
         const result: string[] = []
         Object.entries(perm).forEach(([path, permList]) => {
           castArray(permList).forEach((item) => {

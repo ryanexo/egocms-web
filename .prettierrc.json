@@ -12,7 +12,7 @@
   "jsxSingleQuote": false,
   "objectWrap": "preserve",
   "plugins": ["prettier-plugin-tailwindcss"],
-  "printWidth": 80,
+  "printWidth": 100,
   "proseWrap": "always",
   "quoteProps": "as-needed",
   "requirePragma": false,

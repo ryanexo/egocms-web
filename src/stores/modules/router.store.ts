@@ -12,7 +12,7 @@ import type {
   RouterStoreState,
 } from '@/stores/types/router.store'
 
-import { AsyncComponentSkeleton } from '@/components/skeleton/AsyncComponentSkelton.tsx'
+import { useAsyncComponentSkeleton } from '@/components/skeleton/AsyncComponentSkelton.tsx'
 
 export function createRouterStore(pinia: Pinia) {
   const store = defineStore('RouterStore', {
@@ -73,7 +73,7 @@ export function useAsyncComponentName(name: string, component: GlobFile) {
             resolve((await component()).default)
           }, 3000),
         ),
-      loadingComponent: AsyncComponentSkeleton,
+      loadingComponent: useAsyncComponentSkeleton('article'),
     })
     return defineComponent({
       name: `route-${name}`,
@@ -92,12 +92,8 @@ async function generateRoutes(srv: RouterContextProvider) {
   const routes: RouteRecordRaw[] = []
 
   originalRoutes.forEach((item) => {
-    const hasSuffix = ['vue', 'tsx', 'ts'].some((suffix) =>
-      item.component.endsWith('.' + suffix),
-    )
-    const endIndex = hasSuffix
-      ? item.component.lastIndexOf('.')
-      : item.component.length
+    const hasSuffix = ['vue', 'tsx', 'ts'].some((suffix) => item.component.endsWith('.' + suffix))
+    const endIndex = hasSuffix ? item.component.lastIndexOf('.') : item.component.length
     const componentPath = item.component.substring(0, endIndex)
 
     let component: GlobFile | undefined = components[componentPath]

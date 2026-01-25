@@ -5,6 +5,7 @@ import { createApp, defineComponent, ref } from 'vue'
 
 import type {
   ConfirmBehavior,
+  ConfirmDialogResult,
   ConfirmOptions,
 } from '@/components/message/types/ConfirmDialogTypes'
 
@@ -13,7 +14,7 @@ import { createPromiseWithResolver } from '@/utils/promise.ts'
 export function openConfirmDialog(
   content: Component | string,
   options?: ConfirmOptions,
-): Promise<ConfirmBehavior> {
+): ConfirmDialogResult {
   const { promise, resolve } = createPromiseWithResolver<ConfirmBehavior>()
   const { promise: closedSignal, resolve: notifyClosed } =
     // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
@@ -69,5 +70,5 @@ export function openConfirmDialog(
     el.remove()
   })
 
-  return promise
+  return { close: () => resolve('close'), result: promise }
 }

@@ -16,10 +16,7 @@ export function useCredentialInterceptor(axios: AxiosInstance) {
   })
 }
 
-export function useCustomConfigInterceptor(
-  axios: AxiosInstance,
-  policy: HttpClientPolicy,
-) {
+export function useCustomConfigInterceptor(axios: AxiosInstance, policy: HttpClientPolicy) {
   axios.interceptors.response.use((response) => {
     if (response.config?.successMessage) {
       const message =

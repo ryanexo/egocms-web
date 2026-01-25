@@ -13,6 +13,8 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     ConfirmDialog: typeof import('./src/components/message/ConfirmDialog.vue')['default']
+    ElementWrapper: typeof import('./src/components/form/ElementWrapper.vue')['default']
+    GridLayout: typeof import('./src/components/form/GridLayout.vue')['default']
     HeaderLayout: typeof import('./src/pages/core/panel/components/HeaderLayout.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     IconCommunity: typeof import('./src/components/icons/IconCommunity.vue')['default']
@@ -20,9 +22,11 @@ declare module 'vue' {
     IconEcosystem: typeof import('./src/components/icons/IconEcosystem.vue')['default']
     IconSupport: typeof import('./src/components/icons/IconSupport.vue')['default']
     IconTooling: typeof import('./src/components/icons/IconTooling.vue')['default']
+    LayoutContainer: typeof import('./src/components/form/LayoutContainer.vue')['default']
     PanelPage: typeof import('./src/pages/core/panel/PanelPage.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SchemaForm: typeof import('./src/components/form/SchemaForm.vue')['default']
     SidebarLayout: typeof import('./src/pages/core/panel/components/SidebarLayout.vue')['default']
     TConfigProvider: typeof import('tdesign-vue-next')['ConfigProvider']
     TheWelcome: typeof import('./src/components/TheWelcome.vue')['default']
@@ -33,6 +37,8 @@ declare module 'vue' {
 // For TSX support
 declare global {
   const ConfirmDialog: typeof import('./src/components/message/ConfirmDialog.vue')['default']
+  const ElementWrapper: typeof import('./src/components/form/ElementWrapper.vue')['default']
+  const GridLayout: typeof import('./src/components/form/GridLayout.vue')['default']
   const HeaderLayout: typeof import('./src/pages/core/panel/components/HeaderLayout.vue')['default']
   const HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
   const IconCommunity: typeof import('./src/components/icons/IconCommunity.vue')['default']
@@ -40,9 +46,11 @@ declare global {
   const IconEcosystem: typeof import('./src/components/icons/IconEcosystem.vue')['default']
   const IconSupport: typeof import('./src/components/icons/IconSupport.vue')['default']
   const IconTooling: typeof import('./src/components/icons/IconTooling.vue')['default']
+  const LayoutContainer: typeof import('./src/components/form/LayoutContainer.vue')['default']
   const PanelPage: typeof import('./src/pages/core/panel/PanelPage.vue')['default']
   const RouterLink: typeof import('vue-router')['RouterLink']
   const RouterView: typeof import('vue-router')['RouterView']
+  const SchemaForm: typeof import('./src/components/form/SchemaForm.vue')['default']
   const SidebarLayout: typeof import('./src/pages/core/panel/components/SidebarLayout.vue')['default']
   const TConfigProvider: typeof import('tdesign-vue-next')['ConfigProvider']
   const TheWelcome: typeof import('./src/components/TheWelcome.vue')['default']

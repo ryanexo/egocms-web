@@ -9,7 +9,7 @@ const messageService: MessageService = {
     const result = await openConfirmDialog(options.content, {
       title: options.title,
       type: options.type || 'default',
-    })
+    }).result
     return [result === 'confirm', result]
   },
   error: (content, options) => {

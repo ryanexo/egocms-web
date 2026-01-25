@@ -1,10 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
-import {
-  useAccessGuard,
-  useDocumentTitleGuard,
-  useProgressGuard,
-} from '@/router/guard/guard.ts'
+import { useAccessGuard, useDocumentTitleGuard, useProgressGuard } from '@/router/guard/guard.ts'
 
 function createVueRouter() {
   const builtinRoutes = import.meta.glob('./routes/*.ts', { eager: true })

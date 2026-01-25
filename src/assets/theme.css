@@ -1,8 +1,8 @@
 @import 'tailwindcss';
 
-@theme{
-    --color-primary: rgb(0 82 217);
-    --color-success: rgb(43 164 113);
-    --color-danger: rgb(213 73 65);
-    --color-warning: rgb(227 115 24);
+@theme {
+  --color-primary: rgb(0 82 217);
+  --color-success: rgb(43 164 113);
+  --color-danger: rgb(213 73 65);
+  --color-warning: rgb(227 115 24);
 }

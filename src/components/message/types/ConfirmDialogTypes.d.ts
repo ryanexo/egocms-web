@@ -8,3 +8,8 @@ export interface ConfirmOptions {
 }
 
 export type ConfirmTheme = 'danger' | 'default' | 'info' | 'success' | 'warning'
+
+export interface ConfirmDialogResult {
+  close: () => void
+  result: Promise<ConfirmBehavior>
+}
