@@ -1,3 +1,5 @@
+import type { StyleValue } from 'vue'
+
 import { useResizeObserver } from '@vueuse/core'
 import {
   computed,
@@ -11,14 +13,14 @@ import {
   watch,
 } from 'vue'
 
-import type { ColProps, LayoutData, LayoutProps } from './types/layout'
+import type { GridColProps, GridLayoutMeta, GridLayoutProps } from './types/grid-layout'
 
 const contextKey = Symbol('GridLayoutContext')
 
-const GridLayout = defineComponent<LayoutProps>({
+const GridLayout = defineComponent<GridLayoutProps>({
   name: 'GridLayout',
   props: ['gap', 'lg', 'md', 'sm', 'xs', 'xl', 'follow'],
-  setup(props: LayoutProps, { attrs, slots }) {
+  setup(props: GridLayoutProps, { attrs, slots }) {
     const gap = computed(() => `${(props.gap ?? 1) * 0.25}rem`)
     provide(contextKey, reactive({ ...toRefs(props), gap }))
 
@@ -26,7 +28,11 @@ const GridLayout = defineComponent<LayoutProps>({
       return (
         <div
           class="flex flex-wrap"
-          style={{ '--layout-gap': gap.value, rowGap: gap.value }}
+          style={{
+            '--layout-gap': gap.value,
+            columnGap: 'var(--layout-gap)',
+            rowGap: 'var(--layout-gap)',
+          }}
           {...attrs}
         >
           {slots?.default?.()}
@@ -36,15 +42,15 @@ const GridLayout = defineComponent<LayoutProps>({
   },
 })
 
-const GridCol = defineComponent<ColProps>({
+const GridCol = defineComponent<GridColProps>({
   name: 'GridCol',
   props: ['lg', 'md', 'sm', 'xs', 'xl', 'col', 'span'],
-  setup(props: ColProps, { attrs, expose, slots }) {
-    const ctx = inject<LayoutProps>(contextKey)
+  setup(props: GridColProps, { attrs, expose, slots }) {
+    const ctx = inject<GridLayoutProps>(contextKey)
     const container = computed(() => ctx?.follow ?? document.body)
     const containerWidth = ref(document.body.offsetWidth)
-    const mergedOptions = computed<Required<ColProps>>(() => {
-      const result: Required<ColProps> = {
+    const mergedOptions = computed<Required<GridColProps>>(() => {
+      const result: Required<GridColProps> = {
         col: 6,
         lg: 6,
         md: 6,
@@ -54,7 +60,7 @@ const GridCol = defineComponent<ColProps>({
         xs: 6,
       }
       Object.keys(result).forEach((item) => {
-        const key = item as keyof ColProps
+        const key = item as keyof GridColProps
         const ctxValue = Reflect.get(ctx || {}, key)
         if (ctxValue !== undefined) {
           result[key] = ctxValue
@@ -86,16 +92,16 @@ const GridCol = defineComponent<ColProps>({
 
     return () => {
       const baseWidth = 100 / 24
-      const colWidth = (baseWidth * cols.value).toFixed(6) + '%'
+      const style: StyleValue = { width: (baseWidth * cols.value).toFixed(6) + '%' }
+      if (cols.value < 24) {
+        style.paddingLeft = 'var(--layout-gap)'
+        style.paddingRight = 'var(--layout-gap)'
+      }
 
       return (
         <div
           {...attrs}
-          style={{
-            paddingLeft: 'var(--layout-gap)',
-            paddingRight: 'var(--layout-gap)',
-            width: colWidth,
-          }}
+          style={style}
         >
           {slots?.default?.()}
         </div>
@@ -104,7 +110,7 @@ const GridCol = defineComponent<ColProps>({
   },
 })
 
-function getCurrentLayout(width: number, layout: LayoutProps): LayoutData {
+function getCurrentLayout(width: number, layout: GridLayoutProps): GridLayoutMeta {
   if (width >= 1920 && layout.xl) {
     return { cols: layout.xl, layout: 'xl' }
   }

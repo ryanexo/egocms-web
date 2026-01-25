@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { SecuredIcon, User1Icon } from 'tdesign-icons-vue-next'
+import { LoginIcon, SecuredIcon, User1Icon, UserAddIcon } from 'tdesign-icons-vue-next'
 import { h, ref } from 'vue'
 
+import type { ButtonGroupProps } from '@/components/button/types/button-group'
 import type { SchemaFormProps } from '@/components/form/types/schema-form'
 
+import ButtonGroup from '@/components/button/ButtonGroup.tsx'
 import SchemaForm from '@/components/form/SchemaForm.tsx'
 
 const formOptions: SchemaFormProps['elements'] = [
@@ -43,14 +45,34 @@ const formOptions: SchemaFormProps['elements'] = [
   },
 ]
 
+const buttons: ButtonGroupProps['buttons'] = [
+  { icon: (h) => h(LoginIcon), id: 'login', text: '登录' },
+  { icon: (h) => h(UserAddIcon), id: 'register', text: '注册', theme: 'default' },
+]
+
 const data = ref({})
 </script>
 
 <template>
-  <schema-form
-    :data="data"
-    :elements="formOptions"
-  />
+  <div class="flex flex-col items-center gap-y-6">
+    <schema-form
+      size="large"
+      :data="data"
+      :elements="formOptions"
+    />
+    <button-group
+      size="large"
+      :buttons="buttons"
+      :gap="6"
+    />
+  </div>
 </template>
 
-<style scoped></style>
+<style scoped lang="scss">
+:deep(.button-group) {
+  width: 100%;
+}
+:deep(.t-button) {
+  width: 50%;
+}
+</style>

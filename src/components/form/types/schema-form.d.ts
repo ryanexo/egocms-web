@@ -17,9 +17,9 @@ import type {
   TreeSelectProps,
   UploadProps,
 } from 'tdesign-vue-next'
-import type { DefineComponent, VNode } from 'vue'
+import type { DefineComponent, Slots } from 'vue'
 
-import type { LayoutProps } from '@/components/form/types/layout'
+import type { GridLayoutProps } from '@/components/layout/types/grid-layout'
 
 export type ElementType =
   | 'custom'
@@ -43,7 +43,7 @@ interface BaseSchemaElementProps<T extends Record<string, any>, P extends Record
   meta?: Omit<FormItemProps, 'label' | 'rules'>
   props?: P
   rules?: FormRule[]
-  slots?: Record<string, DefineComponent | VNode>
+  slots?: Slots
   span?: number
   type: ElementType
 }
@@ -86,6 +86,6 @@ export interface SchemaFormProps<
 > extends FormProps<T> {
   collapse?: boolean
   elements: SchemaElementProps<T>[]
-  responsive?: Omit<LayoutProps, 'follow'>
+  responsive?: Omit<GridLayoutProps, 'follow'>
   size?: 'large' | 'medium' | 'small'
 }

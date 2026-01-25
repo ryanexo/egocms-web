@@ -5,6 +5,7 @@ import { Skeleton } from 'tdesign-vue-next'
 import { defineComponent } from 'vue'
 
 const AsyncComponentSkeleton = defineComponent({
+  name: 'AsyncComponentSkeleton',
   props: {
     theme: {
       default: 'article',
@@ -30,4 +31,4 @@ function useAsyncComponentSkeleton(theme: SkeletonProps['theme'] = 'article') {
   return <AsyncComponentSkeleton theme={theme} />
 }
 
-export { AsyncComponentSkeleton, useAsyncComponentSkeleton }
+export { useAsyncComponentSkeleton }

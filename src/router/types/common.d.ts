@@ -13,6 +13,8 @@ export interface IRoute {
 }
 
 export interface IRouteMeta {
+  affix?: boolean
+  affixCancelable?: boolean
   externalUrl?: string
   icon: string
   permission: string[]

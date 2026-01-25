@@ -1,11 +1,15 @@
 <script setup lang="ts">
+import dayjs from 'dayjs'
 import { RocketFilledIcon } from 'tdesign-icons-vue-next'
 
 import LoginForm from '@/pages/core/auth/components/LoginForm.vue'
+
+const year = dayjs().format('YYYY')
+const copyright = `Copyright©${year}`
 </script>
 
 <template>
-  <div class="flex flex-1 flex-col items-center justify-center gap-y-6">
+  <div class="mt-12 flex flex-1 flex-col items-center gap-y-6 lg:mt-0 lg:justify-center">
     <div class="bg-primary flex h-16 w-16 items-center justify-center rounded-2xl">
       <rocket-filled-icon
         size="32px"
@@ -20,6 +24,10 @@ import LoginForm from '@/pages/core/auth/components/LoginForm.vue'
 
     <div class="mt-4 max-w-lg">
       <login-form />
+    </div>
+
+    <div class="text-center text-xs text-gray-500">
+      <span>{{ copyright }}</span>
     </div>
   </div>
 </template>

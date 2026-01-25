@@ -4,7 +4,7 @@ export interface PromiseWithResolver<T> {
   resolve: (value: T) => void
 }
 
-export function createPromiseWithResolver<T>(): PromiseWithResolver<T> {
+export function createPromiseWithResolver<T = void>(): PromiseWithResolver<T> {
   let resolve: PromiseWithResolver<T>['resolve'] = () => {}
   let reject: PromiseWithResolver<T>['reject'] = () => {}
 

@@ -20,15 +20,15 @@ import {
 } from 'tdesign-vue-next'
 import { computed, defineComponent, inject, provide, reactive, ref, toRefs, unref } from 'vue'
 
-import type { LayoutProps } from '@/components/form/types/layout'
 import type {
   CustomElementProps,
   ElementType,
   SchemaElementProps,
   SchemaFormProps,
 } from '@/components/form/types/schema-form'
+import type { GridLayoutProps } from '@/components/layout/types/grid-layout'
 
-import { GridCol, GridLayout } from '@/components/form/LayoutContainer.tsx'
+import { GridCol, GridLayout } from '@/components/layout/GridLayout.tsx'
 
 const contextKey = Symbol('SchemaFormContext')
 
@@ -50,10 +50,10 @@ const SchemaForm = defineComponent({
     requiredMark: Boolean as PropType<FormProps['requiredMark']>,
     requiredMarkPosition: String as PropType<FormProps['requiredMarkPosition']>,
     resetType: String as PropType<FormProps['resetType']>,
-    responsive: Object as PropType<Omit<LayoutProps, 'follow'>>,
+    responsive: Object as PropType<Omit<GridLayoutProps, 'follow'>>,
     scrollToFirstError: String as PropType<FormProps['scrollToFirstError']>,
     showErrorMessage: Boolean as PropType<FormProps['showErrorMessage']>,
-    size: String as PropType<'default' | 'large' | 'small'>,
+    size: String as PropType<'large' | 'medium' | 'small'>,
     statusIcon: [Boolean, Object] as PropType<FormProps['statusIcon']>,
     submitWithWarningMessage: Boolean as PropType<FormProps['submitWithWarningMessage']>,
   },
@@ -199,8 +199,9 @@ const SchemaElement = defineComponent<SchemaElementProps>({
               {...props.props}
               modelValue={context.data?.[props.fieldKey]}
               onUpdate:modelValue={updateModelValue}
-              v-slots={slots}
-            />
+            >
+              {slots}
+            </FormItemElement>
           </FormItem>
         </GridCol>
       )

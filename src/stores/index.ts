@@ -3,7 +3,7 @@ import piniaPluginPersistedState from 'pinia-plugin-persistedstate'
 
 import { createAppStore } from '@/stores/modules/app.store.ts'
 import { createAuthStore } from '@/stores/modules/auth.store.ts'
-import { createPageTabStore } from '@/stores/modules/page-tab.store.ts'
+import { createPageStore } from '@/stores/modules/page.store.ts'
 import { createRouterStore } from '@/stores/modules/router.store.ts'
 
 export const pinia = createPinia().use(piniaPluginPersistedState)
@@ -11,4 +11,4 @@ export const pinia = createPinia().use(piniaPluginPersistedState)
 export const useAppStore = createAppStore(pinia)
 export const useRouterStore = createRouterStore(pinia)
 export const useAuthStore = createAuthStore(pinia)
-export const useTabStore = createPageTabStore(pinia)
+export const usePageStore = createPageStore(pinia)

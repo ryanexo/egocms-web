@@ -1,6 +1,6 @@
 import type { Pinia } from 'pinia'
 
-import { useIntervalFn } from '@vueuse/core'
+import { useTimeoutPoll } from '@vueuse/core'
 import { defineStore } from 'pinia'
 
 import type { AppStoreState, AppUpdater } from '@/stores/types/app.store'
@@ -35,25 +35,28 @@ export function createAppStore(pinia: Pinia) {
 
 function watchAppVersion(updater: AppUpdater) {
   const { abort, signal } = new AbortController()
-  const { pause, resume } = useIntervalFn(
-    () => {
-      pause()
-      updater
-        .isLatestVersion(signal)
-        .then((isLatest) => {
-          if (!signal.aborted && !isLatest) {
-            return updater.confirm()
-          }
-          return true
-        })
-        .then((canRefresh) => canRefresh && window.location.reload())
-        .finally(() => !signal.aborted && resume())
+  const { pause } = useTimeoutPoll(
+    async () => {
+      if (!signal.aborted) {
+        return
+      }
+      const isLatest = await updater.isLatestVersion(signal)
+      if (isLatest) {
+        return
+      }
+      const canRefresh = await updater.confirm()
+      if (canRefresh) {
+        window.location.reload()
+      }
     },
     updater.getUpdateFrequencySeconds() * 1000,
-    { immediate: true },
+    { immediate: true, immediateCallback: true },
   )
 
-  signal.addEventListener('abort', () => updater.cancel())
+  signal.addEventListener('abort', () => {
+    updater.cancel()
+    pause()
+  })
 
   return () => abort()
 }

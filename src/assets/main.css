@@ -1,1 +1,33 @@
 @import 'tdesign-vue-next/es/style/index.css';
+@import 'nprogress/nprogress.css';
+
+#nprogress {
+  .bar {
+    background-color: var(--color-primary);
+  }
+  .spinner-icon {
+    border-top-color: var(--color-primary);
+    border-left-color: var(--color-primary);
+  }
+}
+
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+.fade-slide-enter-from {
+  opacity: 0;
+  transform: translateX(64px);
+}
+
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateX(-64px);
+}
+
+body:has(.fade-slide-enter-active, .fade-slide-leave-active) {
+    overflow: hidden;
+}

@@ -1,5 +1,5 @@
 /* eslint-disable perfectionist/sort-interfaces */
-export interface ColProps {
+export interface GridColProps {
   /**
    * 初始列数
    */
@@ -30,12 +30,12 @@ export interface ColProps {
   xs?: number
 }
 
-export interface LayoutData {
+export interface GridLayoutMeta {
   cols: number
-  layout: keyof Omit<ColProps, 'col' | 'span'>
+  layout: keyof Omit<GridColProps, 'col' | 'span'>
 }
 
-export interface LayoutProps extends Partial<Omit<ColProps, 'col' | 'span'>> {
+export interface GridLayoutProps extends Partial<Omit<GridColProps, 'col' | 'span'>> {
   follow?: HTMLElement
   gap?: number
 }

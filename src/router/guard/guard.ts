@@ -52,7 +52,7 @@ export function useDocumentTitleGuard(router: Router) {
 }
 
 export function useProgressGuard(router: Router) {
-  NProgress.configure({ speed: 1000, trickle: true, trickleSpeed: 300 })
+  NProgress.configure({ speed: 500, trickle: true, trickleSpeed: 200 })
 
   router.beforeEach(() => {
     NProgress.start()
