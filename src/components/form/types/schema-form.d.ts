@@ -7,21 +7,22 @@ import type {
   InputProps,
   OptionProps,
   RadioGroupProps,
-  RadioOption,
   RangeInputProps,
+  SelectOptionGroup,
   SelectProps,
   SwitchProps,
   TagInputProps,
   TextareaProps,
   TimePickerProps,
+  TNode,
   TreeSelectProps,
-  UploadProps,
 } from 'tdesign-vue-next'
-import type { DefineComponent, Slots } from 'vue'
+import type { TdRadioProps } from 'tdesign-vue-next/es/radio/type'
+import type { Slots } from 'vue'
 
 import type { GridLayoutProps } from '@/components/layout/types/grid-layout'
 
-export type ElementType =
+export type SchemaType =
   | 'custom'
   | 'date-picker'
   | 'input'
@@ -36,56 +37,64 @@ export type ElementType =
   | 'time-picker'
   | 'tree-select'
 
-interface BaseSchemaElementProps<T extends Record<string, any>, P extends Record<string, any>, E> {
-  extra?: E
-  fieldKey: keyof T & string
+interface SubProps<
+  S_TYPE extends SchemaType,
+  DATA extends Record<string, any>,
+  S_PROPS extends Record<string, any>,
+  CH,
+> {
+  children?: CH
+  fieldKey: keyof DATA & string
   label?: string
   meta?: Omit<FormItemProps, 'label' | 'rules'>
-  props?: P
+  props?: S_PROPS
   rules?: FormRule[]
   slots?: Slots
   span?: number
-  type: ElementType
+  type: S_TYPE
 }
 
-export type DatePickerElementProps<T = any> = BaseSchemaElementProps<T, DatePickerProps, never>
-export type InputElementProps<T = any> = BaseSchemaElementProps<T, InputProps, never>
-export type InputNumberElementProps<T = any> = BaseSchemaElementProps<T, InputNumberProps, never>
-export type RadioElementProps<T = any> = BaseSchemaElementProps<T, RadioGroupProps, RadioOption>
-export type RangeInputElementProps<T = any> = BaseSchemaElementProps<T, RangeInputProps, never>
-export type SelectElementProps<T = any> = BaseSchemaElementProps<T, SelectProps<T>, OptionProps>
-export type SliderElementProps<T = any> = BaseSchemaElementProps<T, SwitchProps, never>
-export type SwitchElementProps<T = any> = BaseSchemaElementProps<T, SwitchProps, never>
-export type TagInputElementProps<T = any> = BaseSchemaElementProps<T, TagInputProps, never>
-export type TextareaElementProps<T = any> = BaseSchemaElementProps<T, TextareaProps, never>
-export type TimePickerElementProps<T = any> = BaseSchemaElementProps<T, TimePickerProps, never>
-export type TreeSelectElementProps<T = any> = BaseSchemaElementProps<T, TreeSelectProps, never>
-export type UploadElementProps<T = any> = BaseSchemaElementProps<T, UploadProps, never>
-export type CustomElementProps<T = any> = BaseSchemaElementProps<T, Record<string, any>, never> & {
-  render: DefineComponent
+export type DatePickerSubProps<T = any> = SubProps<'date-picker', T, DatePickerProps, never>
+export type InputSubProps<T = any> = SubProps<'input', T, InputProps, never>
+export type InputNumberSubProps<T = any> = SubProps<'input-number', T, InputNumberProps, never>
+export type RadioSubProps<T = any> = SubProps<'radio', T, RadioGroupProps, TdRadioProps[]>
+export type RangeInputSubProps<T = any> = SubProps<'range-input', T, RangeInputProps, never>
+export type SelectSubProps<T = any> = SubProps<
+  'select',
+  T,
+  SelectProps<T>,
+  Omit<SelectOptionGroup, 'group'>[] | OptionProps[]
+>
+export type SliderSubProps<T = any> = SubProps<'slider', T, SwitchProps, never>
+export type SwitchSubProps<T = any> = SubProps<'switch', T, SwitchProps, never>
+export type TagInputSubProps<T = any> = SubProps<'tag-input', T, TagInputProps, never>
+export type TextareaSubProps<T = any> = SubProps<'textarea', T, TextareaProps, never>
+export type TimePickerSubProps<T = any> = SubProps<'time-picker', T, TimePickerProps, never>
+export type TreeSelectSubProps<T = any> = SubProps<'tree-select', T, TreeSelectProps, never>
+export type CustomSubProps<T = any> = SubProps<'custom', T, Record<string, any>, never> & {
+  render: TNode
 }
 
-export type SchemaElementProps<T = any> =
-  | CustomElementProps<T>
-  | DatePickerElementProps<T>
-  | InputElementProps<T>
-  | InputNumberElementProps<T>
-  | RadioElementProps<T>
-  | RangeInputElementProps<T>
-  | SelectElementProps<T>
-  | SliderElementProps<T>
-  | SwitchElementProps<T>
-  | TagInputElementProps<T>
-  | TextareaElementProps<T>
-  | TimePickerElementProps<T>
-  | TreeSelectElementProps<T>
-  | UploadElementProps<T>
+export type SchemaSubProps<T = any> =
+  | CustomSubProps<T>
+  | DatePickerSubProps<T>
+  | InputNumberSubProps<T>
+  | InputSubProps<T>
+  | RadioSubProps<T>
+  | RangeInputSubProps<T>
+  | SelectSubProps<T>
+  | SliderSubProps<T>
+  | SwitchSubProps<T>
+  | TagInputSubProps<T>
+  | TextareaSubProps<T>
+  | TimePickerSubProps<T>
+  | TreeSelectSubProps<T>
 
 export interface SchemaFormProps<
   T extends Record<string, any> = Record<string, any>,
 > extends FormProps<T> {
   collapse?: boolean
-  elements: SchemaElementProps<T>[]
+  options: SchemaSubProps<T>[]
   responsive?: Omit<GridLayoutProps, 'follow'>
   size?: 'large' | 'medium' | 'small'
 }

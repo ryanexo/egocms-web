@@ -10,11 +10,11 @@ export interface PageMeta extends Pick<
 export interface PageStoreState {
   currentPage: string
   openedPages: string[]
-  pageMap: Map<string, PageMeta>
+  pages: Map<string, PageMeta>
   pageVisible: boolean
+  pined: Set<string>
   repo?: PageStoreRepo
   skipCache: Set<string>
-  stickyPages: string[]
 }
 
 export type PersistableState = Omit<PageStoreState, 'pageVisible' | 'repo'>

@@ -1,18 +1,19 @@
-import type { Component } from 'vue'
+import type { TNode } from 'tdesign-vue-next'
+import type { Slots } from 'vue'
 
 import { Dialog } from 'tdesign-vue-next'
-import { createApp, defineComponent, ref } from 'vue'
+import { createApp, defineComponent, h, ref } from 'vue'
 
 import type {
   ConfirmBehavior,
   ConfirmDialogResult,
   ConfirmOptions,
-} from '@/components/message/types/ConfirmDialogTypes'
+} from '@/components/dialog/types/ConfirmDialogTypes'
 
 import { createPromiseWithResolver } from '@/utils/promise.ts'
 
 export function openConfirmDialog(
-  content: Component | string,
+  content: string | TNode,
   options?: ConfirmOptions,
 ): ConfirmDialogResult {
   const { promise, resolve } = createPromiseWithResolver<ConfirmBehavior>()
@@ -41,6 +42,11 @@ export function openConfirmDialog(
       }
 
       return () => {
+        const slots: Slots = {
+          default: () => [h(content)],
+          header: () => [h(options?.title || '提示')],
+        }
+
         return (
           <Dialog
             closeOnEscKeydown={options?.closeOnEscKeydown}
@@ -55,10 +61,7 @@ export function openConfirmDialog(
             showOverlay={options?.showOverlay}
             visible={visible.value}
           >
-            {{
-              default: () => content,
-              header: () => options?.title || '提示',
-            }}
+            {slots}
           </Dialog>
         )
       }

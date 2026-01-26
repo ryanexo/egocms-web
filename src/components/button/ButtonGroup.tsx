@@ -1,75 +1,72 @@
 import type { DropdownProps } from 'tdesign-vue-next'
-import type { PropType, VNode } from 'vue'
+import type { PropType } from 'vue'
 
 import { omit } from 'es-toolkit'
 import { Button, Dropdown } from 'tdesign-vue-next'
 import { defineComponent, inject, provide, reactive, toRefs } from 'vue'
 
 import type {
-  ButtonElementProps,
+  ActionProps,
   ButtonGroupContext,
   ButtonGroupProps,
 } from '@/components/button/types/button-group'
 
 const contextKey = Symbol('SchemaButton')
 
-const ButtonElement = defineComponent<ButtonElementProps>({
+const Action = defineComponent<ActionProps>({
   name: 'SchemaButtonElement',
   props: {
-    block: Boolean as PropType<ButtonElementProps['block']>,
-    content: [String, Object] as PropType<ButtonElementProps['content']>,
-    default: [String, Object] as PropType<ButtonElementProps['default']>,
-    disabled: Boolean as PropType<ButtonElementProps['disabled']>,
-    dropdown: [Array, Object] as PropType<ButtonElementProps['dropdown']>,
-    dropdownTrigger: [String, Object] as PropType<ButtonElementProps['dropdownTrigger']>,
-    form: String as PropType<ButtonElementProps['form']>,
-    ghost: Boolean as PropType<ButtonElementProps['ghost']>,
-    href: String as PropType<ButtonElementProps['href']>,
-    icon: [Object, Function] as PropType<ButtonElementProps['icon']>,
-    id: String as PropType<ButtonElementProps['id']>,
-    loading: Boolean as PropType<ButtonElementProps['loading']>,
-    loadingProps: Object as PropType<ButtonElementProps['loadingProps']>,
-    shape: String as PropType<ButtonElementProps['shape']>,
-    slots: Object as PropType<ButtonElementProps['slots']>,
-    suffix: Object as PropType<ButtonElementProps['suffix']>,
-    tag: String as PropType<ButtonElementProps['tag']>,
-    text: String as PropType<ButtonElementProps['text']>,
-    theme: String as PropType<ButtonElementProps['theme']>,
-    type: String as PropType<ButtonElementProps['type']>,
-    variant: String as PropType<ButtonElementProps['variant']>,
+    block: Boolean as PropType<ActionProps['block']>,
+    content: [String, Object] as PropType<ActionProps['content']>,
+    default: [String, Object] as PropType<ActionProps['default']>,
+    disabled: Boolean as PropType<ActionProps['disabled']>,
+    dropdown: [Array, Object] as PropType<ActionProps['dropdown']>,
+    form: String as PropType<ActionProps['form']>,
+    ghost: Boolean as PropType<ActionProps['ghost']>,
+    href: String as PropType<ActionProps['href']>,
+    icon: [Object, Function] as PropType<ActionProps['icon']>,
+    id: String as PropType<ActionProps['id']>,
+    loading: Boolean as PropType<ActionProps['loading']>,
+    loadingProps: Object as PropType<ActionProps['loadingProps']>,
+    shape: String as PropType<ActionProps['shape']>,
+    slots: Object as PropType<ActionProps['slots']>,
+    suffix: Object as PropType<ActionProps['suffix']>,
+    tag: String as PropType<ActionProps['tag']>,
+    text: String as PropType<ActionProps['text']>,
+    theme: String as PropType<ActionProps['theme']>,
+    type: String as PropType<ActionProps['type']>,
+    variant: String as PropType<ActionProps['variant']>,
   },
-  setup(props: ButtonElementProps) {
+  setup(props: ActionProps) {
     const context = inject(contextKey) as ButtonGroupContext
 
     return () => {
       const slots = { ...props.slots, default: () => props.text }
-      const buttonProps = omit(props, ['dropdown', 'slots'])
+      const selfProps: ActionProps & { size?: ButtonGroupProps['size'] } = omit(props, [
+        'dropdown',
+        'slots',
+      ])
       if (context.disabled !== undefined) {
-        buttonProps.disabled = context.disabled
+        selfProps.disabled = context.disabled
       }
       if (context.loading !== undefined) {
-        buttonProps.loading = context.loading
+        selfProps.loading = context.loading
+      }
+      selfProps.size = context.size
+
+      if (!props.dropdown) {
+        return <Button {...selfProps}>{slots}</Button>
       }
 
-      const result: VNode[] = [
-        <Button
-          {...buttonProps}
-          size={context.size}
-        >
-          {slots}
-        </Button>,
-      ]
+      const dropdownProps: DropdownProps = Array.isArray(props.dropdown)
+        ? { options: props.dropdown }
+        : props.dropdown
 
-      if (props.dropdown) {
-        const dropdownProps: DropdownProps = Array.isArray(props.dropdown)
-          ? { options: props.dropdown }
-          : props.dropdown
-        const dropdown = <Dropdown {...dropdownProps}>{props.dropdownTrigger}</Dropdown>
-
-        result.push(dropdown)
-      }
-
-      return result
+      return (
+        <Dropdown {...dropdownProps}>
+          <Button {...selfProps}>{slots}</Button>
+        </Dropdown>
+      )
     }
   },
 })
@@ -77,9 +74,9 @@ const ButtonElement = defineComponent<ButtonElementProps>({
 const ButtonGroup = defineComponent<ButtonGroupProps>({
   name: 'ButtonGroup',
   props: {
-    buttons: {
+    actions: {
       required: true,
-      type: Array as PropType<ButtonGroupProps['buttons']>,
+      type: Array as PropType<ButtonGroupProps['actions']>,
     },
     disabled: Boolean as PropType<ButtonGroupProps['disabled']>,
     gap: {
@@ -102,8 +99,8 @@ const ButtonGroup = defineComponent<ButtonGroupProps>({
           class="button-group flex"
           style={{ columnGap: gapStyle, rowGap: gapStyle }}
         >
-          {...props.buttons.map((buttonProps) => {
-            return <ButtonElement {...buttonProps}></ButtonElement>
+          {...props.actions.map((actionProps) => {
+            return <Action {...actionProps}></Action>
           })}
         </div>
       )

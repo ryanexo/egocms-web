@@ -12,7 +12,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    ConfirmDialog: typeof import('./src/components/message/ConfirmDialog.vue')['default']
+    ConfirmDialog: typeof import('./src/components/dialog/ConfirmDialog.vue')['default']
     ElementWrapper: typeof import('./src/components/form/ElementWrapper.vue')['default']
     GridLayout: typeof import('./src/components/form/GridLayout.vue')['default']
     HeaderLayout: typeof import('./src/pages/core/panel/components/HeaderLayout.vue')['default']
@@ -36,7 +36,7 @@ declare module 'vue' {
 
 // For TSX support
 declare global {
-  const ConfirmDialog: typeof import('./src/components/message/ConfirmDialog.vue')['default']
+  const ConfirmDialog: typeof import('./src/components/dialog/ConfirmDialog.vue')['default']
   const ElementWrapper: typeof import('./src/components/form/ElementWrapper.vue')['default']
   const GridLayout: typeof import('./src/components/form/GridLayout.vue')['default']
   const HeaderLayout: typeof import('./src/pages/core/panel/components/HeaderLayout.vue')['default']

@@ -8,7 +8,7 @@ import type { SchemaFormProps } from '@/components/form/types/schema-form'
 import ButtonGroup from '@/components/button/ButtonGroup.tsx'
 import SchemaForm from '@/components/form/SchemaForm.tsx'
 
-const formOptions: SchemaFormProps['elements'] = [
+const formOptions: SchemaFormProps['options'] = [
   {
     fieldKey: 'username',
     meta: { status: 'error' },
@@ -45,22 +45,27 @@ const formOptions: SchemaFormProps['elements'] = [
   },
 ]
 
-const buttons: ButtonGroupProps['buttons'] = [
+const actions: ButtonGroupProps['actions'] = [
   { icon: (h) => h(LoginIcon), id: 'login', text: '登录' },
-  { icon: (h) => h(UserAddIcon), id: 'register', text: '注册', theme: 'default' },
+  {
+    icon: (h) => h(UserAddIcon),
+    id: 'register',
+    text: '注册',
+    theme: 'default',
+  },
 ]
 
-const data = ref({})
+const data = ref<Record<string, never>>({})
 </script>
 
 <template>
   <div class="flex flex-col items-center gap-y-6">
     <schema-form
       :data="data"
-      :elements="formOptions"
+      :options="formOptions"
     />
     <button-group
-      :buttons="buttons"
+      :actions="actions"
       :gap="6"
     />
   </div>

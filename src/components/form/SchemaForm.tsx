@@ -1,5 +1,12 @@
-import type { FormProps, ValidateResultContext } from 'tdesign-vue-next'
-import type { DefineComponent, PropType } from 'vue'
+import type {
+  FormProps,
+  OptionProps,
+  RadioGroupProps,
+  SelectOptionGroup,
+  ValidateResultContext,
+} from 'tdesign-vue-next'
+import type { TdRadioProps } from 'tdesign-vue-next/es/radio/type'
+import type { DefineComponent, DefineSetupFnComponent, PropType, VNode } from 'vue'
 
 import { isEmpty } from 'es-toolkit/compat'
 import {
@@ -8,6 +15,9 @@ import {
   FormItem,
   Input,
   InputNumber,
+  Option,
+  OptionGroup,
+  Radio,
   RadioGroup,
   RangeInput,
   Select,
@@ -18,13 +28,13 @@ import {
   TimePicker,
   TreeSelect,
 } from 'tdesign-vue-next'
-import { computed, defineComponent, inject, provide, reactive, ref, toRefs, unref } from 'vue'
+import { computed, defineComponent, h, inject, provide, reactive, ref, toRefs, unref } from 'vue'
 
 import type {
-  CustomElementProps,
-  ElementType,
-  SchemaElementProps,
   SchemaFormProps,
+  SchemaSubProps,
+  SchemaType,
+  SelectSubProps,
 } from '@/components/form/types/schema-form'
 import type { GridLayoutProps } from '@/components/layout/types/grid-layout'
 
@@ -39,12 +49,12 @@ const SchemaForm = defineComponent({
     colon: Boolean as PropType<FormProps['colon']>,
     data: Object as PropType<FormProps['data']>,
     disabled: Boolean as PropType<FormProps['disabled']>,
-    elements: Array as PropType<SchemaElementProps[]>,
     errorMessage: Object as PropType<FormProps['errorMessage']>,
     id: String as PropType<FormProps['id']>,
     labelAlign: String as PropType<FormProps['labelAlign']>,
     labelWidth: [String, Number] as PropType<FormProps['labelWidth']>,
     layout: String as PropType<FormProps['layout']>,
+    options: Array as PropType<SchemaSubProps[]>,
     preventSubmitDefault: Boolean as PropType<FormProps['preventSubmitDefault']>,
     readonly: Boolean as PropType<FormProps['readonly']>,
     requiredMark: Boolean as PropType<FormProps['requiredMark']>,
@@ -58,7 +68,7 @@ const SchemaForm = defineComponent({
     submitWithWarningMessage: Boolean as PropType<FormProps['submitWithWarningMessage']>,
   },
   setup(props: SchemaFormProps, { emit, expose }) {
-    const elements = ref<InstanceType<typeof SchemaElement>[]>([])
+    const options = ref<InstanceType<typeof SchemaElement>[]>([])
     const form = ref<InstanceType<typeof Form>>()
     const responsive = computed<SchemaFormProps['responsive'] & {}>(() => {
       return {
@@ -109,10 +119,10 @@ const SchemaForm = defineComponent({
             xl={unref(responsive).xl}
             xs={unref(responsive).xs}
           >
-            {...props.elements.map((item) => {
+            {...props.options.map((item) => {
               return (
                 <SchemaElement
-                  ref={elements}
+                  ref={options}
                   {...item}
                 />
               )
@@ -124,10 +134,10 @@ const SchemaForm = defineComponent({
   },
 })
 
-const SchemaElement = defineComponent<SchemaElementProps>({
+const SchemaElement = defineComponent<SchemaSubProps>({
   name: 'SchemaElement',
   props: [
-    'extra',
+    'children',
     'fieldKey',
     'label',
     'props',
@@ -138,9 +148,12 @@ const SchemaElement = defineComponent<SchemaElementProps>({
     'meta',
     'rules',
   ],
-  setup(props: SchemaElementProps, { slots }) {
+  setup(props: SchemaSubProps, { slots }) {
     const context = inject(contextKey) as SchemaFormProps
-    const components = {
+    const components: Record<
+      Exclude<SchemaType, 'custom'>,
+      DefineComponent | DefineSetupFnComponent<any>
+    > = {
       'date-picker': DatePicker,
       input: Input,
       'input-number': InputNumber,
@@ -153,30 +166,192 @@ const SchemaElement = defineComponent<SchemaElementProps>({
       textarea: Textarea,
       'time-picker': TimePicker,
       'tree-select': TreeSelect,
-    } as Record<Exclude<ElementType, 'custom'>, DefineComponent<any, any, any>>
-
-    const updateModelValue = (value: any) => {
-      if (context.data) {
-        context.data[props.fieldKey] = value
-      }
     }
 
     return () => {
       const isInvalidLabel = isEmpty(props.label)
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const size = context.size ?? props.props?.size
-
-      if (props.type === 'select') {
-        return <div></div>
+      const modelValuePair: Record<string, any> = {
+        modelValue: context.data?.[props.fieldKey],
+        'onUpdate:modelValue': (value: any) => {
+          if (context.data) {
+            context.data[props.fieldKey] = value
+          }
+        },
       }
+      const subProps = props.props || {}
+      const size = context.size ?? (subProps as Record<string, any>).size
+      const element: VNode[] = []
 
-      if (props.type === 'radio') {
-        return <div></div>
+      switch (props.type) {
+        case 'custom': {
+          element.push(h(props.render))
+          break
+        }
+
+        case 'radio': {
+          const retypeProps = subProps as RadioGroupProps
+          const options = Array.isArray(props.children) ? props.children : []
+
+          const GroupComp = (
+            <RadioGroup
+              allowUncheck={retypeProps.allowUncheck}
+              defaultValue={retypeProps.defaultValue}
+              disabled={retypeProps.disabled}
+              name={retypeProps.name}
+              onChange={retypeProps.onChange}
+              options={retypeProps.options}
+              readonly={retypeProps.readonly}
+              size={size}
+              theme={retypeProps.theme}
+              variant={retypeProps.variant}
+              {...modelValuePair}
+            >
+              {...options.map((item) => {
+                const itemOpts: TdRadioProps =
+                  typeof item === 'object' ? item : { label: item, value: item }
+
+                return (
+                  <Radio
+                    allowUncheck={itemOpts.allowUncheck}
+                    checked={itemOpts.checked}
+                    default={itemOpts.default}
+                    defaultChecked={itemOpts.defaultChecked}
+                    disabled={itemOpts.disabled}
+                    label={itemOpts.label}
+                    name={itemOpts.name}
+                    onChange={itemOpts.onChange}
+                    onClick={itemOpts.onClick}
+                    readonly={itemOpts.readonly}
+                    value={itemOpts.value}
+                  >
+                    {itemOpts.label}
+                  </Radio>
+                )
+              })}
+            </RadioGroup>
+          )
+
+          element.push(GroupComp)
+          break
+        }
+
+        case 'select': {
+          const renderOption = (options: SelectSubProps['children']) => {
+            if (!options) {
+              return []
+            }
+            return options.map((option) => {
+              const group = option as SelectOptionGroup
+              if (Array.isArray(group.children)) {
+                return (
+                  <OptionGroup
+                    divider={group.divider}
+                    label={group.label}
+                  >
+                    {renderOption(group.children)}
+                  </OptionGroup>
+                )
+              }
+
+              const selectOption = option as OptionProps
+              return (
+                <Option
+                  checkAll={selectOption.checkAll}
+                  content={selectOption.content}
+                  default={selectOption.default}
+                  disabled={selectOption.disabled}
+                  label={selectOption.label}
+                  title={selectOption.title}
+                  value={selectOption.value}
+                >
+                  {selectOption.label}
+                </Option>
+              )
+            })
+          }
+          const retypeProps = subProps as SelectSubProps['props'] & {}
+
+          element.push(
+            <Select
+              autofocus={retypeProps.autofocus}
+              autoWidth={retypeProps.autoWidth}
+              borderless={retypeProps.borderless}
+              clearable={retypeProps.clearable}
+              collapsedItems={retypeProps.collapsedItems}
+              creatable={retypeProps.creatable}
+              defaultInputValue={retypeProps.defaultInputValue}
+              defaultPopupVisible={retypeProps.defaultPopupVisible}
+              defaultValue={retypeProps.defaultValue}
+              disabled={retypeProps.disabled}
+              empty={retypeProps.empty}
+              filter={retypeProps.filter}
+              filterable={retypeProps.filterable}
+              inputProps={retypeProps.inputProps}
+              inputValue={retypeProps.inputValue}
+              keys={retypeProps.keys}
+              label={retypeProps.label}
+              loading={retypeProps.loading}
+              loadingText={retypeProps.loadingText}
+              max={retypeProps.max}
+              minCollapsedNum={retypeProps.minCollapsedNum}
+              multiple={retypeProps.multiple}
+              onBlur={retypeProps.onBlur}
+              onChange={retypeProps.onChange}
+              onClear={retypeProps.onClear}
+              onCreate={retypeProps.onCreate}
+              onEnter={retypeProps.onEnter}
+              onFocus={retypeProps.onFocus}
+              onInputChange={retypeProps.onInputChange}
+              onPopupVisibleChange={retypeProps.onPopupVisibleChange}
+              onRemove={retypeProps.onRemove}
+              onSearch={retypeProps.onSearch}
+              options={retypeProps.options}
+              panelBottomContent={retypeProps.panelBottomContent}
+              panelTopContent={retypeProps.panelTopContent}
+              placeholder={retypeProps.placeholder}
+              popupProps={retypeProps.popupProps}
+              popupVisible={retypeProps.popupVisible}
+              prefixIcon={retypeProps.prefixIcon}
+              readonly={retypeProps.readonly}
+              reserveKeyword={retypeProps.reserveKeyword}
+              scroll={retypeProps.scroll}
+              selectInputProps={retypeProps.selectInputProps}
+              showArrow={retypeProps.showArrow}
+              size={size}
+              status={retypeProps.status}
+              suffix={retypeProps.suffix}
+              suffixIcon={retypeProps.suffixIcon}
+              tagInputProps={retypeProps.tagInputProps}
+              tagProps={retypeProps.tagProps}
+              tips={retypeProps.tips}
+              value={retypeProps.value}
+              valueDisplay={retypeProps.valueDisplay}
+              valueType={retypeProps.valueType}
+            >
+              {renderOption(props.children)}
+            </Select>,
+          )
+
+          break
+        }
+
+        default: {
+          const FormNode = components[props.type]
+          if (FormNode) {
+            element.push(
+              <FormNode
+                size={size}
+                {...props.props}
+                modelValue={context.data?.[props.fieldKey]}
+                {...modelValuePair}
+              >
+                {slots}
+              </FormNode>,
+            )
+          }
+          break
+        }
       }
-
-      const FormItemElement =
-        props.type === 'custom' ? (props as CustomElementProps).render : components[props.type]
 
       return (
         <GridCol>
@@ -194,14 +369,7 @@ const SchemaElement = defineComponent<SchemaElementProps>({
             successBorder={props.meta?.successBorder}
             tips={props.meta?.tips}
           >
-            <FormItemElement
-              size={size}
-              {...props.props}
-              modelValue={context.data?.[props.fieldKey]}
-              onUpdate:modelValue={updateModelValue}
-            >
-              {slots}
-            </FormItemElement>
+            {element}
           </FormItem>
         </GridCol>
       )

@@ -1,13 +1,17 @@
 import { debounce } from 'es-toolkit'
 
-import type { PageMeta, PageStoreRepo, PageStoreState } from '@/stores/types/page'
+import type { PageMeta, PageStoreRepo, PageStoreState, PersistableState } from '@/stores/types/page'
 
 import { appStorage } from '@/core/storage'
 import { StorageKey } from '@/core/storage/constants.ts'
 
-interface LocalPageStoreData extends Omit<PageStoreState, 'pageMap' | 'pageVisible' | 'skipCache'> {
-  pageList: PageMeta[]
-  skipCacheList: string[]
+interface LocalPageStoreData extends Omit<
+  PageStoreState,
+  'pages' | 'pageVisible' | 'pined' | 'skipCache'
+> {
+  pageMap: PageMeta[]
+  pinSet: string[]
+  skipCacheSet: string[]
 }
 
 export function usePageStoreRepo(): PageStoreRepo {
@@ -17,9 +21,9 @@ export function usePageStoreRepo(): PageStoreRepo {
     let state: LocalPageStoreData = {
       currentPage: '',
       openedPages: [],
-      pageList: [],
-      skipCacheList: [],
-      stickyPages: [],
+      pageMap: [],
+      pinSet: [],
+      skipCacheSet: [],
     }
 
     try {
@@ -34,18 +38,18 @@ export function usePageStoreRepo(): PageStoreRepo {
     return {
       currentPage: state.currentPage,
       openedPages: state.openedPages,
-      pageMap: new Map(state.pageList.map((item) => [item.id, item])),
-      skipCache: new Set(state.skipCacheList),
-      stickyPages: state.stickyPages,
+      pages: new Map(state.pageMap.map((item) => [item.id, item])),
+      pined: new Set(state.pinSet),
+      skipCache: new Set(state.skipCacheSet),
     }
   }
-  const push: PageStoreRepo['push'] = debounce((state) => {
+  const push: PageStoreRepo['push'] = debounce((state: PersistableState) => {
     store.set(StorageKey.Page, {
       currentPage: state.currentPage,
       openedPages: state.openedPages,
-      pageList: [...state.pageMap.values()],
-      skipCacheList: [...state.skipCache],
-      stickyPages: state.stickyPages,
+      pageMap: [...state.pages.values()],
+      pinSet: [...state.pined],
+      skipCacheSet: [...state.skipCache],
     } as LocalPageStoreData)
   }, 300)
 
