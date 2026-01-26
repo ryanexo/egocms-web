@@ -1,6 +1,6 @@
 import { debounce } from 'es-toolkit'
 
-import type { PageMeta, PageStoreRepo, PageStoreState } from '@/stores/types/page-tab.store'
+import type { PageMeta, PageStoreRepo, PageStoreState } from '@/stores/types/page'
 
 import { appStorage } from '@/core/storage'
 import { StorageKey } from '@/core/storage/constants.ts'

@@ -7,8 +7,8 @@ import App from '@/App.vue'
 import { router } from '@/router'
 import { CoreRoutePathEnum } from '@/router/constants/route.enum.ts'
 import { pinia, useAppStore, useAuthStore, usePageStore, useRouterStore } from '@/stores'
-import { useAppUpdater } from '@/stores/adapter/app-updater.adapter.ts'
-import { usePageStoreRepo } from '@/stores/adapter/page-storage.adapter.ts'
+import { useAppUpdater } from '@/stores/adapters/app-updater.ts'
+import { usePageStoreRepo } from '@/stores/adapters/page-storage.ts'
 
 export async function createApp() {
   const app = createVueApp(App).use(pinia).use(router)

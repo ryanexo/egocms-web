@@ -2,7 +2,7 @@ import type { Router } from 'vue-router'
 
 import { trimStart } from 'es-toolkit'
 
-import type { RouterContextProvider } from '@/stores/types/router.store'
+import type { RouterContextProvider } from '@/stores/types/router'
 
 export function useRouterStoreContextProvider(router: Router): RouterContextProvider {
   return {

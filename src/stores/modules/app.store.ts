@@ -3,7 +3,7 @@ import type { Pinia } from 'pinia'
 import { useTimeoutPoll } from '@vueuse/core'
 import { defineStore } from 'pinia'
 
-import type { AppStoreState, AppUpdater } from '@/stores/types/app.store'
+import type { AppStoreState, AppUpdater } from '@/stores/types/app'
 
 export function createAppStore(pinia: Pinia) {
   let updaterCloser: Callable | undefined = undefined

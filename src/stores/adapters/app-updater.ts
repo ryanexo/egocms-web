@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 
-import type { AppUpdater } from '@/stores/types/app.store'
+import type { AppUpdater } from '@/stores/types/app'
 
 import { openConfirmDialog } from '@/components/message/ConfirmDialog.tsx'
 import { httpClient } from '@/core/http-client/client.ts'

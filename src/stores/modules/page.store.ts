@@ -4,7 +4,7 @@ import { promiseTimeout } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { nextTick } from 'vue'
 
-import type { PageMeta, PageStoreRepo, PageStoreState } from '@/stores/types/page-tab.store'
+import type { PageMeta, PageStoreRepo, PageStoreState } from '@/stores/types/page'
 
 export function createPageStore(pinia: Pinia) {
   const store = defineStore('PageStore', {

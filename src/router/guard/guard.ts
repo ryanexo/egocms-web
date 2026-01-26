@@ -2,9 +2,9 @@ import type { NavigationGuardReturn, Router } from 'vue-router'
 
 import NProgress from 'nprogress'
 
-import { messageService } from '@/core/services/message.service.ts'
+import { messageService } from '@/core/services/MessageService.ts'
 import { useAppStore, useAuthStore, useRouterStore } from '@/stores'
-import { useRouterStoreContextProvider } from '@/stores/adapter/router-store-context-provider.adapter.ts'
+import { useRouterStoreContextProvider } from '@/stores/adapters/router-context-provider.ts'
 
 export function useAccessGuard(router: Router) {
   router.beforeEach(async (to) => {

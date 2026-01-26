@@ -5,9 +5,9 @@ import dayjs from 'dayjs'
 import { castArray } from 'es-toolkit/compat'
 import { defineStore } from 'pinia'
 
-import type { AuthStoreState } from '@/stores/types/auth.store'
+import type { AuthStoreState } from '@/stores/types/auth'
 
-import { usePersistStorage } from '@/stores/adapter/persist-storage.adapter.ts'
+import { usePersistStorage } from '@/stores/adapters/persist-storage.ts'
 
 export function createAuthStore(pinia: Pinia) {
   const store = defineStore('AuthStore', {

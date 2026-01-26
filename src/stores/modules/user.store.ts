@@ -2,7 +2,7 @@ import type { Pinia } from 'pinia'
 
 import { defineStore } from 'pinia'
 
-import type { UserInfo, UserStoreState } from '@/stores/types/user.store'
+import type { UserInfo, UserStoreState } from '@/stores/types/user'
 
 export function createUserStore(pinia: Pinia) {
   const store = defineStore('UserStore', {

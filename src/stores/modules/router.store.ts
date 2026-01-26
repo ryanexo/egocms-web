@@ -10,7 +10,7 @@ import type {
   RouteGenerationContext,
   RouterContextProvider,
   RouterStoreState,
-} from '@/stores/types/router.store'
+} from '@/stores/types/router'
 
 import { useAsyncComponentSkeleton } from '@/components/skeleton/AsyncComponentSkelton.tsx'
 
