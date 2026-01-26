@@ -17,12 +17,12 @@ export function createPageStore(pinia: Pinia) {
         }
       },
       openPage(page: PageMeta) {
+        if (!this.pageMap.has(page.id)) {
+          this.openedPages.push(page.id)
+        }
         this.pageMap.set(page.id, page)
-        this.openedPages.push(page.id)
       },
       async refreshCurrentPage() {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         this.pageVisible = false
         this.skipCache.add(this.currentPage)
 
@@ -30,13 +30,9 @@ export function createPageStore(pinia: Pinia) {
         await promiseTimeout(100)
 
         this.skipCache.delete(this.currentPage)
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         this.pageVisible = true
       },
       setRepo(repo: PageStoreRepo) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         this.repo = repo
         this.$patch(repo.pull())
       },

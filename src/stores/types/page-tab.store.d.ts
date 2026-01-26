@@ -9,12 +9,12 @@ export interface PageMeta extends Pick<
 
 export interface PageStoreState {
   currentPage: string
-  readonly openedPages: string[]
-  readonly pageMap: Map<string, PageMeta>
-  readonly pageVisible: boolean
-  readonly repo?: PageStoreRepo
-  readonly skipCache: Set<string>
-  readonly stickyPages: string[]
+  openedPages: string[]
+  pageMap: Map<string, PageMeta>
+  pageVisible: boolean
+  repo?: PageStoreRepo
+  skipCache: Set<string>
+  stickyPages: string[]
 }
 
 export type PersistableState = Omit<PageStoreState, 'pageVisible' | 'repo'>
