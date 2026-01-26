@@ -1,6 +1,8 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
   "include": [
+    "commitlint.config.ts",
+    "vite.config.ts",
     "env.d.ts",
     "src/**/*",
     "src/**/*.d.ts",

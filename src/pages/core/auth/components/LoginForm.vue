@@ -16,9 +16,9 @@ const formOptions: SchemaFormProps['elements'] = [
       label: () => {
         return h(
           'span',
-          { class: 'inline-flex justify-center items-center gap-x-1' },
+          { class: 'inline-flex justify-center items-center gap-x-1 text-gray-500' },
           {
-            default: () => [h(User1Icon), h('span', '用户名')],
+            default: () => [h(User1Icon)],
           },
         )
       },
@@ -33,9 +33,9 @@ const formOptions: SchemaFormProps['elements'] = [
       label: () => {
         return h(
           'span',
-          { class: 'inline-flex justify-center items-center gap-x-1' },
+          { class: 'inline-flex justify-center items-center gap-x-1 text-gray-500' },
           {
-            default: () => [h(SecuredIcon), h('span', '密　码')],
+            default: () => [h(SecuredIcon)],
           },
         )
       },
@@ -56,12 +56,10 @@ const data = ref({})
 <template>
   <div class="flex flex-col items-center gap-y-6">
     <schema-form
-      size="large"
       :data="data"
       :elements="formOptions"
     />
     <button-group
-      size="large"
       :buttons="buttons"
       :gap="6"
     />
