@@ -4,10 +4,12 @@ import pluginOxlint from 'eslint-plugin-oxlint'
 import pluginVue from 'eslint-plugin-vue'
 import { globalIgnores } from 'eslint/config'
 
-import sortImports from './config/eslint-config/imports'
-import perfectionist from './config/eslint-config/perfectionist'
-import prettierEslintConfig from './config/eslint-config/prettier'
-import tsConfig from './config/eslint-config/typescript'
+import {
+  perfectionistConfig,
+  prettierConfig,
+  sortImportsConfig,
+  tsConfig,
+} from './config/eslint-config'
 
 export default defineConfigWithVueTs(
   {
@@ -24,8 +26,8 @@ export default defineConfigWithVueTs(
 
   pluginOxlint.configs['flat/recommended'],
 
-  sortImports,
+  sortImportsConfig,
   tsConfig,
-  perfectionist,
-  prettierEslintConfig,
+  perfectionistConfig,
+  prettierConfig,
 )
