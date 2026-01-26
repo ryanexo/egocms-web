@@ -16,6 +16,8 @@ export function useAppUpdater(interval: number = 10): AppUpdater {
 
   const confirm: AppUpdater['confirm'] = async () => {
     const prompt = openConfirmDialog('版本已更新，是否立即更新？', {
+      closeOnEscKeydown: false,
+      closeOnOverlayClick: false,
       title: '更新提示',
       type: 'warning',
     })

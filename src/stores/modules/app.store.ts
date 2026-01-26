@@ -37,7 +37,7 @@ function watchAppVersion(updater: AppUpdater) {
   const { abort, signal } = new AbortController()
   const { pause } = useTimeoutPoll(
     async () => {
-      if (!signal.aborted) {
+      if (signal.aborted) {
         return
       }
       const isLatest = await updater.isLatestVersion(signal)
@@ -47,6 +47,8 @@ function watchAppVersion(updater: AppUpdater) {
       const canRefresh = await updater.confirm()
       if (canRefresh) {
         window.location.reload()
+      } else {
+        abort()
       }
     },
     updater.getUpdateFrequencySeconds() * 1000,

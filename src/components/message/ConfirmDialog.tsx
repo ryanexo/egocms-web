@@ -43,11 +43,16 @@ export function openConfirmDialog(
       return () => {
         return (
           <Dialog
+            closeOnEscKeydown={options?.closeOnEscKeydown}
+            closeOnOverlayClick={options?.closeOnOverlayClick}
+            confirmOnEnter={options?.confirmOnEnter}
             onCancel={handleCancel}
             onCloseBtnClick={handleClose}
             onClosed={notifyClosed}
             onConfirm={handleConfirm}
             onUpdate:visible={setVisible}
+            preventScrollThrough={options?.preventScrollThrough}
+            showOverlay={options?.showOverlay}
             visible={visible.value}
           >
             {{
