@@ -20,7 +20,7 @@ import type {
 import type { TdRadioProps } from 'tdesign-vue-next/es/radio/type'
 import type { Slots } from 'vue'
 
-import type { GridLayoutProps } from '@/components/layout/types/grid-layout'
+import type { GridLayoutResponsive } from '@/components/layout/types/grid-layout'
 
 export type SchemaType =
   | 'custom'
@@ -95,6 +95,6 @@ export interface SchemaFormProps<
 > extends FormProps<T> {
   collapse?: boolean
   options: SchemaSubProps<T>[]
-  responsive?: Omit<GridLayoutProps, 'follow'>
+  responsive?: GridLayoutResponsive
   size?: 'large' | 'medium' | 'small'
 }

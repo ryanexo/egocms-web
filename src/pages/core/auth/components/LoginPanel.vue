@@ -9,7 +9,9 @@ const copyright = `Copyright©${year}`
 </script>
 
 <template>
-  <div class="mt-12 flex flex-1 flex-col items-center gap-y-6 lg:mt-0 lg:justify-center">
+  <div
+    class="my-auto flex flex-1 flex-col items-center gap-y-6 p-12 lg:my-0 lg:mt-0 lg:justify-center"
+  >
     <div class="bg-primary flex h-16 w-16 items-center justify-center rounded-2xl">
       <rocket-filled-icon
         size="32px"

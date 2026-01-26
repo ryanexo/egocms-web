@@ -63,10 +63,12 @@ const data = ref<Record<string, never>>({})
     <schema-form
       :data="data"
       :options="formOptions"
+      :responsive="{ gap: 4 }"
     />
     <button-group
+      class="flex-wrap md:flex-nowrap"
       :actions="actions"
-      :gap="6"
+      :gap="4"
     />
   </div>
 </template>
@@ -76,6 +78,6 @@ const data = ref<Record<string, never>>({})
   width: 100%;
 }
 :deep(.t-button) {
-  width: 50%;
+  width: 100%;
 }
 </style>

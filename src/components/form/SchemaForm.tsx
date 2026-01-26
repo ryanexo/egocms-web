@@ -36,7 +36,7 @@ import type {
   SchemaType,
   SelectSubProps,
 } from '@/components/form/types/schema-form'
-import type { GridLayoutProps } from '@/components/layout/types/grid-layout'
+import type { GridLayoutResponsive } from '@/components/layout/types/grid-layout'
 
 import { GridCol, GridLayout } from '@/components/layout/GridLayout.tsx'
 
@@ -60,7 +60,7 @@ const SchemaForm = defineComponent({
     requiredMark: Boolean as PropType<FormProps['requiredMark']>,
     requiredMarkPosition: String as PropType<FormProps['requiredMarkPosition']>,
     resetType: String as PropType<FormProps['resetType']>,
-    responsive: Object as PropType<Omit<GridLayoutProps, 'follow'>>,
+    responsive: Object as PropType<GridLayoutResponsive>,
     scrollToFirstError: String as PropType<FormProps['scrollToFirstError']>,
     showErrorMessage: Boolean as PropType<FormProps['showErrorMessage']>,
     size: String as PropType<'large' | 'medium' | 'small'>,

@@ -35,7 +35,9 @@ export interface GridLayoutMeta {
   layout: keyof Omit<GridColProps, 'col' | 'span'>
 }
 
-export interface GridLayoutProps extends Partial<Omit<GridColProps, 'col' | 'span'>> {
+export interface GridLayoutProps extends Omit<GridColProps, 'col' | 'span'> {
   follow?: HTMLElement
   gap?: number
 }
+
+export type GridLayoutResponsive = Omit<GridLayoutProps, 'follow'>
