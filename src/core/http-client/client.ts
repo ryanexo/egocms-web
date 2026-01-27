@@ -1,3 +1,5 @@
+import type { AxiosInstance } from 'axios'
+
 import axios from 'axios'
 
 import type { HttpClientConfig } from '@/core/http-client/types/http-client'
@@ -9,7 +11,7 @@ import {
 } from '@/core/http-client/interceptor.ts'
 import { useStandardResponseTransformer } from '@/core/http-client/transformer.ts'
 
-function createHttpClient(config: HttpClientConfig) {
+function createHttpClient(config: HttpClientConfig): AxiosInstance {
   const httpClient = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
     headers: {
@@ -19,12 +21,14 @@ function createHttpClient(config: HttpClientConfig) {
     transformResponse: [useStandardResponseTransformer(config.policy)],
   })
 
-  useCredentialInterceptor(httpClient)
+  useCredentialInterceptor(httpClient, config.policy)
   useCustomConfigInterceptor(httpClient, config.policy)
 
   return httpClient
 }
 
-export const httpClient = createHttpClient({
+const httpClient = createHttpClient({
   policy: useHttpClientPolicy(),
 })
+
+export { httpClient }

@@ -72,6 +72,7 @@ const Action = defineComponent<ActionProps>({
 })
 
 const ButtonGroup = defineComponent<ButtonGroupProps>({
+  emits: ['click'],
   name: 'ButtonGroup',
   props: {
     actions: {
@@ -86,8 +87,10 @@ const ButtonGroup = defineComponent<ButtonGroupProps>({
     loading: Boolean as PropType<ButtonGroupProps['loading']>,
     size: String as PropType<ButtonGroupProps['size']>,
   },
-  setup(props: ButtonGroupProps) {
+  setup(props: ButtonGroupProps, { emit }) {
     const { disabled, loading, size } = toRefs(props)
+    const onTriggerAction = (event: MouseEvent, id: keyof any) => emit('click', { event, id })
+
     provide(contextKey, reactive({ disabled, loading, size }))
 
     return () => {
@@ -100,7 +103,12 @@ const ButtonGroup = defineComponent<ButtonGroupProps>({
           style={{ columnGap: gapStyle, rowGap: gapStyle }}
         >
           {...props.actions.map((actionProps) => {
-            return <Action {...actionProps}></Action>
+            return (
+              <Action
+                {...actionProps}
+                onClick={(e) => onTriggerAction(e, actionProps.id)}
+              />
+            )
           })}
         </div>
       )

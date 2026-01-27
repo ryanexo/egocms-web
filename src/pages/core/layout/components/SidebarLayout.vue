@@ -1,10 +1,10 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="menu h-full">
+  <div class="menu flex h-full">
     <t-menu
-      theme="dark"
       class="w-full!"
+      theme="dark"
     ></t-menu>
   </div>
 </template>

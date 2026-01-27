@@ -90,9 +90,7 @@ export type SchemaSubProps<T = any> =
   | TimePickerSubProps<T>
   | TreeSelectSubProps<T>
 
-export interface SchemaFormProps<
-  T extends Record<string, any> = Record<string, any>,
-> extends FormProps<T> {
+export interface SchemaFormProps<T extends Record<string, any> = any> extends FormProps<T> {
   collapse?: boolean
   options: SchemaSubProps<T>[]
   responsive?: GridLayoutResponsive

@@ -1,5 +1,8 @@
 import type { HttpClientPolicy } from '@/core/http-client/types/http-client'
 
+import { messageService } from '@/core/services/MessageService.ts'
+import { useAuthStore } from '@/stores'
+
 export function useHttpClientPolicy(): HttpClientPolicy {
   const isValidCode: HttpClientPolicy['isValidCode'] = (code) => {
     return code === 'SERVER-000-00000'
@@ -15,9 +18,15 @@ export function useHttpClientPolicy(): HttpClientPolicy {
     return Reflect.has(response, 'code') && Reflect.has(response, 'msg')
   }
 
-  const defaultSuccessMessage: HttpClientPolicy['defaultSuccessMessage'] = () => {
-    return '操作成功'
+  const sendSuccessMessage: HttpClientPolicy['sendSuccessMessage'] = (message) => {
+    if (message === undefined) {
+      return
+    }
+    const messageStr = message === true ? '操作成功' : message
+    messageService.success(messageStr)
   }
 
-  return { defaultSuccessMessage, isValidCode, isValidJsonData }
+  const authorizationValue: HttpClientPolicy['authorizationValue'] = () => useAuthStore().token
+
+  return { authorizationValue, isValidCode, isValidJsonData, sendSuccessMessage }
 }

@@ -2,13 +2,13 @@ import type { RouteRecordRaw } from 'vue-router'
 
 import AuthPage from '@/pages/core/auth/AuthPage.vue'
 import LoginPage from '@/pages/core/auth/LoginPage.vue'
-import FrameworkLayout from '@/pages/core/framework/FrameworkLayout.vue'
+import AppLayout from '@/pages/core/layout/AppLayout.vue'
 import { CoreRouteNameEnum, CoreRoutePathEnum } from '@/router/constants/route.enum.ts'
 
 const routes: RouteRecordRaw[] = [
   {
     children: [],
-    component: FrameworkLayout,
+    component: AppLayout,
     meta: {
       icon: '',
       permission: [],

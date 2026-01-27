@@ -34,7 +34,10 @@ export function createAppStore(pinia: Pinia) {
 }
 
 function watchAppVersion(updater: AppUpdater) {
-  const { abort, signal } = new AbortController()
+  const controller = new AbortController()
+  const { signal } = controller
+  const abort = () => controller.abort()
+
   const { pause } = useTimeoutPoll(
     async () => {
       if (signal.aborted) {

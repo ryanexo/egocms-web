@@ -1,8 +1,3 @@
-import 'vue-router'
-import type { RouteMeta } from 'vue-router'
-
-export {}
-
 export interface IRoute {
   component: string
   id: string

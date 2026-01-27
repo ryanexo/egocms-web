@@ -8,12 +8,18 @@ export interface ActionProps extends Omit<ButtonProps, 'size'> {
   text?: string
 }
 
-export interface ButtonGroupProps {
+export interface ButtonGroupProps extends ButtonGroupEvents {
   actions: ActionProps[]
   disabled?: boolean
   gap?: number
   loading?: boolean
   size?: 'large' | 'medium' | 'small'
+}
+
+export type ButtonGroupClickContext = { e: MouseEvent; id: keyof any }
+
+export interface ButtonGroupEvents {
+  onClick?: (context: ButtonGroupClickContext) => void
 }
 
 export type ButtonGroupContext = Omit<ButtonGroupProps, 'actions'>

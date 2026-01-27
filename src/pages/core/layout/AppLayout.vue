@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import HeaderLayout from '@/pages/core/framework/components/HeaderLayout.vue'
-import SidebarLayout from '@/pages/core/framework/components/SidebarLayout.vue'
+import HeaderLayout from '@/pages/core/layout/components/HeaderLayout.vue'
+import SidebarLayout from '@/pages/core/layout/components/SidebarLayout.vue'
 import { usePageStore } from '@/stores'
 
 const pageStore = usePageStore()
 </script>
 
 <template>
-  <div class="base-layout flex h-screen">
+  <div class="base-layout flex h-full w-full">
     <div class="w-[20%] max-w-60">
       <sidebar-layout></sidebar-layout>
     </div>

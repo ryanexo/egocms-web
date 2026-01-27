@@ -28,7 +28,7 @@ export async function createApp() {
   /**
    * APP依赖Token运行，开发环境可设置一个非空Token以运行
    */
-  authStore.setToken('test')
+  authStore.setToken('')
 
   return app
 }
