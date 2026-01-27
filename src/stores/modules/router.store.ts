@@ -30,6 +30,9 @@ export function createRouterStore(pinia: Pinia) {
         return this.whitelist.has(path)
       },
       setHomePath(path: string) {
+        if (path === '/') {
+          throw new Error(`HomePath不能为'/'`)
+        }
         this.homePath = path
       },
       setUnauthorizedRedirectPath(path: string) {
@@ -48,7 +51,7 @@ export function createRouterStore(pinia: Pinia) {
     },
     state: (): RouterStoreState => {
       return {
-        homePath: '/',
+        homePath: '',
         loaded: false,
         parentRouteMap: new Map(),
         routeMap: new Map(),

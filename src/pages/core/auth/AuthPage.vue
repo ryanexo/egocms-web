@@ -1,11 +1,11 @@
 <script setup lang="ts">
+import ActionPanel from '@/pages/core/auth/components/ActionPanel.vue'
 import BrandPanel from '@/pages/core/auth/components/BrandPanel.vue'
-import LoginPanel from '@/pages/core/auth/components/LoginPanel.vue'
 </script>
 
 <template>
   <div class="flex min-h-screen w-screen">
-    <LoginPanel />
+    <ActionPanel />
     <BrandPanel />
   </div>
 </template>

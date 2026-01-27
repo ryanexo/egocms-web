@@ -20,7 +20,7 @@ export async function createApp() {
   useTitle(computed(() => appStore.pageTitleFormatted))
 
   appStore.setAppUpdater(useAppUpdater(30))
-  routerStore.setHomePath(CoreRoutePathEnum.Home)
+  routerStore.setHomePath(CoreRoutePathEnum.Dashboard)
   routerStore.setWhitelist([CoreRoutePathEnum.Login, CoreRoutePathEnum.Register])
   routerStore.setUnauthorizedRedirectPath(CoreRoutePathEnum.Login)
   pageStore.setRepo(usePageStoreRepo())
@@ -28,7 +28,7 @@ export async function createApp() {
   /**
    * APP依赖Token运行，开发环境可设置一个非空Token以运行
    */
-  authStore.setToken('')
+  authStore.setToken('test')
 
   return app
 }

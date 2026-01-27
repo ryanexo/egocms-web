@@ -17,6 +17,7 @@ export interface IRouteMeta {
   affixCancelable?: boolean
   externalUrl?: string
   icon: string
+  isRoot?: boolean
   permission: string[]
   query?: Record<string, any>
   requiresAuth: boolean

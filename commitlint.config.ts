@@ -1,4 +1,6 @@
-import { RuleConfigCondition, RuleConfigSeverity, TargetCaseType } from '@commitlint/types'
+import type { RuleConfigCondition, TargetCaseType } from '@commitlint/types'
+
+import { RuleConfigSeverity } from '@commitlint/types'
 
 export default {
   parserPreset: 'conventional-changelog-conventionalcommits',

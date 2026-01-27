@@ -3,6 +3,7 @@ import type { NavigationGuardReturn, Router } from 'vue-router'
 import NProgress from 'nprogress'
 
 import { messageService } from '@/core/services/MessageService.ts'
+import { CoreRouteNameEnum } from '@/router/constants/route.enum.ts'
 import { useAppStore, useAuthStore, useRouterStore } from '@/stores'
 import { useRouterStoreContextProvider } from '@/stores/adapters/router-context-provider.ts'
 
@@ -11,12 +12,16 @@ export function useAccessGuard(router: Router) {
     const routerStore = useRouterStore()
     const authStore = useAuthStore()
 
+    if (to.name === CoreRouteNameEnum.Home) {
+      return { path: routerStore.homePath, replace: true }
+    }
+
     if (!to.meta.requiresAuth || routerStore.isRouteInWhitelist(to.path)) {
       if (to.path === routerStore.unauthorizedRedirectPath && authStore.isValid()) {
         const redirectPath = to.query?.redirect
         return typeof redirectPath === 'string' && redirectPath !== ''
           ? decodeURIComponent(redirectPath)
-          : { path: routerStore.homePath }
+          : { path: routerStore.homePath, replace: true }
       }
 
       return true

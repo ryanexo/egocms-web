@@ -60,6 +60,9 @@ export function createAuthStore(pinia: Pinia) {
           result.forEach((item) => this.permission.add(item))
         }
       },
+      /**
+       * 会话过期处理程序，未设置则使用notifySessionExpired的fallback处理
+       */
       setSessionExpiredHandler(handler: AuthStoreState['unauthorizedHandler']) {
         this.unauthorizedHandler = handler
       },

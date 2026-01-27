@@ -68,7 +68,7 @@ const SchemaForm = defineComponent({
     submitWithWarningMessage: Boolean as PropType<FormProps['submitWithWarningMessage']>,
   },
   setup(props: SchemaFormProps, { emit, expose }) {
-    const options = ref<InstanceType<typeof SchemaElement>[]>([])
+    const options = ref<InstanceType<typeof SchemaField>[]>([])
     const form = ref<InstanceType<typeof Form>>()
     const responsive = computed<SchemaFormProps['responsive'] & {}>(() => {
       return {
@@ -121,7 +121,7 @@ const SchemaForm = defineComponent({
           >
             {...props.options.map((item) => {
               return (
-                <SchemaElement
+                <SchemaField
                   ref={options}
                   {...item}
                 />
@@ -134,7 +134,7 @@ const SchemaForm = defineComponent({
   },
 })
 
-const SchemaElement = defineComponent<SchemaSubProps>({
+const SchemaField = defineComponent<SchemaSubProps>({
   name: 'SchemaElement',
   props: [
     'children',
@@ -180,11 +180,11 @@ const SchemaElement = defineComponent<SchemaSubProps>({
       }
       const subProps = props.props || {}
       const size = context.size ?? (subProps as Record<string, any>).size
-      const element: VNode[] = []
+      const fields: VNode[] = []
 
       switch (props.type) {
         case 'custom': {
-          element.push(h(props.render))
+          fields.push(h(props.render))
           break
         }
 
@@ -231,7 +231,7 @@ const SchemaElement = defineComponent<SchemaSubProps>({
             </RadioGroup>
           )
 
-          element.push(GroupComp)
+          fields.push(GroupComp)
           break
         }
 
@@ -271,7 +271,7 @@ const SchemaElement = defineComponent<SchemaSubProps>({
           }
           const retypeProps = subProps as SelectSubProps['props'] & {}
 
-          element.push(
+          fields.push(
             <Select
               autofocus={retypeProps.autofocus}
               autoWidth={retypeProps.autoWidth}
@@ -338,7 +338,7 @@ const SchemaElement = defineComponent<SchemaSubProps>({
         default: {
           const FormNode = components[props.type]
           if (FormNode) {
-            element.push(
+            fields.push(
               <FormNode
                 size={size}
                 {...props.props}
@@ -369,7 +369,7 @@ const SchemaElement = defineComponent<SchemaSubProps>({
             successBorder={props.meta?.successBorder}
             tips={props.meta?.tips}
           >
-            {element}
+            {fields}
           </FormItem>
         </GridCol>
       )

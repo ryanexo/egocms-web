@@ -17,7 +17,7 @@ export default defineConfigWithVueTs(
     name: 'app/files-to-lint',
   },
 
-  globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**']),
+  globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**', './*.d.ts']),
 
   pluginVue.configs['flat/essential'],
   vueTsConfigs.recommended,
