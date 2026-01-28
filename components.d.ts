@@ -31,7 +31,10 @@ declare module 'vue' {
     TButton: typeof import('tdesign-vue-next')['Button']
     TConfigProvider: typeof import('tdesign-vue-next')['ConfigProvider']
     TheWelcome: typeof import('./src/components/TheWelcome.vue')['default']
+    TIcon: typeof import('tdesign-vue-next')['Icon']
     TMenu: typeof import('tdesign-vue-next')['Menu']
+    TMenuItem: typeof import('tdesign-vue-next')['MenuItem']
+    TSubmenu: typeof import('tdesign-vue-next')['Submenu']
     WelcomeItem: typeof import('./src/components/WelcomeItem.vue')['default']
   }
 }
@@ -57,6 +60,9 @@ declare global {
   const TButton: (typeof import('tdesign-vue-next'))['Button']
   const TConfigProvider: (typeof import('tdesign-vue-next'))['ConfigProvider']
   const TheWelcome: (typeof import('./src/components/TheWelcome.vue'))['default']
+  const TIcon: (typeof import('tdesign-vue-next'))['Icon']
   const TMenu: (typeof import('tdesign-vue-next'))['Menu']
+  const TMenuItem: (typeof import('tdesign-vue-next'))['MenuItem']
+  const TSubmenu: (typeof import('tdesign-vue-next'))['Submenu']
   const WelcomeItem: (typeof import('./src/components/WelcomeItem.vue'))['default']
 }

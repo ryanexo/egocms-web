@@ -2,6 +2,7 @@
 import { ArrowLeftIcon } from 'tdesign-icons-vue-next'
 import { useRouter } from 'vue-router'
 
+import { trans } from '@/locales'
 import FullscreenLayout from '@/pages/core/layout/FullscreenLayout.vue'
 import { CoreRoutePathEnum } from '@/router/constants/route.enum.ts'
 
@@ -17,14 +18,14 @@ const router = useRouter()
         <notfound />
       </div>
       <div class="flex flex-col items-center justify-center gap-y-4 text-center">
-        <span class="text-3xl leading-8 font-bold">404 Not Found</span>
-        <span class="text-t-secondary leading-3">抱歉，您访问的页面不存在</span>
+        <span class="text-3xl leading-8 font-bold">{{ trans('fallback.notFound.title') }}</span>
+        <span class="text-t-secondary leading-3">{{ trans('fallback.notFound.subtitle') }}</span>
       </div>
       <t-button @click="router.replace(CoreRoutePathEnum.Home)">
         <template #icon>
           <arrow-left-icon />
         </template>
-        返回首页
+        {{ trans('fallback.notFound.subtitle') }}
       </t-button>
     </div>
   </fullscreen-layout>

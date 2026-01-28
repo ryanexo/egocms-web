@@ -1,0 +1,14 @@
+{
+  "http": {
+    "success": "操作成功"
+  },
+  "app": {
+    "update": {
+      "title": "更新提示",
+      "content": "版本已更新，是否立即更新？"
+    },
+    "error": {
+      "setHomePath": "HomePath不能为'/'"
+    }
+  }
+}

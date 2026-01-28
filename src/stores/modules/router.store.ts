@@ -14,6 +14,7 @@ import type {
 
 import { useAsyncComponentSkeleton } from '@/components/skeleton/AsyncComponentSkelton.tsx'
 import { messageService } from '@/core/services/MessageService.ts'
+import { trans } from '@/locales'
 
 export function createRouterStore(pinia: Pinia) {
   const store = defineStore('RouterStore', {
@@ -34,7 +35,7 @@ export function createRouterStore(pinia: Pinia) {
       },
       setHomePath(path: string) {
         if (path === '/') {
-          throw new Error(`HomePath不能为'/'`)
+          throw new Error(trans('common.app.error.setHomePath'))
         }
         this.homePath = path
       },
@@ -68,7 +69,7 @@ export function createRouterStore(pinia: Pinia) {
   return () => store(pinia)
 }
 
-export function useAsyncComponentName(name: string, component: GlobFile) {
+export function useAsyncComponentName(name: string, component: ImportFn) {
   return async () => {
     const originalComponent = defineAsyncComponent({
       loader: () =>
@@ -100,7 +101,7 @@ async function generateRoutes(srv: RouterContextProvider) {
     const endIndex = hasSuffix ? item.component.lastIndexOf('.') : item.component.length
     const componentPath = item.component.substring(0, endIndex)
 
-    let component: GlobFile | undefined = components[componentPath]
+    let component: ImportFn | undefined = components[componentPath]
     if (!component) {
       console.error(`页面组件不存在: ${item.component}`)
       component = srv.resolveNotExistsComponent(item.component)

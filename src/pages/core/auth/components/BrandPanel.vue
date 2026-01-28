@@ -5,26 +5,28 @@ import {
   UserSafetyFilledIcon,
 } from 'tdesign-icons-vue-next'
 
+import { trans } from '@/locales'
+
 const brand = {
   items: [
     {
-      description: '多层安全防护机制，保障内容与数据安全无忧',
+      description: trans('auth.brand.details.safe.description'),
       icon: UserSafetyFilledIcon,
-      title: '安全可靠',
+      title: trans('auth.brand.details.safe.title'),
     },
     {
-      description: '精细化权限管理，确保内容发布各司其职',
+      description: trans('auth.brand.details.perm.description'),
       icon: ControlPlatformFilledIcon,
-      title: '权限可控',
+      title: trans('auth.brand.details.perm.title'),
     },
     {
-      description: '统一管理多类型内容，结构清晰、查找便捷',
+      description: trans('auth.brand.details.content.description'),
       icon: TaskDoubleFilledIcon,
-      title: '内容高效管理',
+      title: trans('auth.brand.details.content.title'),
     },
   ],
-  slogan: '让管理更简单，让发布更可靠，一起探索无限可能',
-  title: '内容，从这里开始',
+  slogan: trans('auth.brand.slogan'),
+  title: trans('auth.brand.title'),
 }
 </script>
 

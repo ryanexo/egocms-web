@@ -6,6 +6,7 @@ import type {
 } from '@/core/http-client/types/http-client'
 
 import { messageService } from '@/core/services/MessageService.ts'
+import { trans } from '@/locales'
 import { useAuthStore } from '@/stores'
 
 export function createHttpClientValidator(): HttpClientValidator {
@@ -36,7 +37,7 @@ export function createHttpClientNotifier(): HttpClientNotifier {
     if (message === undefined) {
       return
     }
-    const messageStr = message === true ? '操作成功' : message
+    const messageStr = message === true ? trans('common.http.success') : message
     messageService.success(messageStr)
   }
 

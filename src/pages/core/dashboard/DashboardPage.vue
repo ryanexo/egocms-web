@@ -1,7 +1,9 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { trans } from '@/locales'
+</script>
 
 <template>
-  <div>123xxx</div>
+  <div>{{ trans('tip.http.success') }}</div>
 </template>
 
 <style scoped></style>

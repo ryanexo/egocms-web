@@ -15,7 +15,7 @@ export function useRouterStoreContextProvider(router: Router): RouterContextProv
 
       Object.entries(files).forEach(([path, component]) => {
         const uri = trimStart(path.replace('../../pages', ''), '/')
-        result[uri] = component as GlobFile
+        result[uri] = component as ImportFn
       })
 
       return result

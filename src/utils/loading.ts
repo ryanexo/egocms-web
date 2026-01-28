@@ -21,21 +21,21 @@ function useLoading(duration: number = 200): Loading {
   const context = { beginTime: 0, taskCount: 0 }
 
   const createResolver = <T>(originalResolve: PromiseResolve<T>): PromiseResolve<T> => {
-    return (value) => {
-      const resolve = () => {
-        context.taskCount -= 1
-        if (context.taskCount === 0) {
-          context.beginTime = 0
-          isLoading.value = false
-        }
-        originalResolve(value)
+    const resolve = (value: T) => {
+      context.taskCount -= 1
+      if (context.taskCount === 0) {
+        context.beginTime = 0
+        isLoading.value = false
       }
+      originalResolve(value)
+    }
 
+    return (value) => {
       const currentTime = Date.now()
       const timeDiff = currentTime - context.beginTime
 
       if (duration === 0 || timeDiff >= duration) {
-        resolve()
+        resolve(value)
       } else {
         setTimeout(resolve, duration - timeDiff)
       }

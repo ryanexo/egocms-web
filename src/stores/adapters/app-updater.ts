@@ -4,6 +4,7 @@ import type { AppUpdater } from '@/stores/types/app'
 
 import { openConfirmDialog } from '@/components/dialog/ConfirmDialog.tsx'
 import { httpClient } from '@/core/http-client/client.ts'
+import { trans } from '@/locales'
 
 /**
  * @param {number} interval 更新检查间隔(单位:秒)，默认10秒
@@ -15,10 +16,10 @@ export function useAppUpdater(interval: number = 10): AppUpdater {
   let dialogCloser: Callable | undefined = undefined
 
   const confirm: AppUpdater['confirm'] = async () => {
-    const prompt = openConfirmDialog('版本已更新，是否立即更新？', {
+    const prompt = openConfirmDialog(trans('common.app.updater.confirm'), {
       closeOnEscKeydown: false,
       closeOnOverlayClick: false,
-      title: '更新提示',
+      title: trans('common.app.update.content'),
       type: 'warning',
     })
     dialogCloser = prompt.close

@@ -15,6 +15,7 @@ import type { SchemaFormProps } from '@/components/form/types/schema-form'
 
 import ButtonGroup from '@/components/button/ButtonGroup.tsx'
 import SchemaForm from '@/components/form/SchemaForm.tsx'
+import { trans } from '@/locales'
 
 const year = dayjs().format('YYYY')
 const copyright = `Copyright©${year}`
@@ -34,7 +35,7 @@ const formOptions: SchemaFormProps<UserCredentialParams>['options'] = [
           },
         )
       },
-      placeholder: '请输入用户名',
+      placeholder: trans('auth.login.form.field.username.placeholder'),
     },
     rules: [{ required: true }],
     type: 'input',
@@ -51,18 +52,18 @@ const formOptions: SchemaFormProps<UserCredentialParams>['options'] = [
           },
         )
       },
-      placeholder: '请输入密码',
+      placeholder: trans('auth.login.form.field.password.placeholder'),
     },
     type: 'input',
   },
 ]
 
 const actions: ButtonGroupProps['actions'] = [
-  { icon: (h) => h(LoginIcon), id: 'login', text: '登录' },
+  { icon: (h) => h(LoginIcon), id: 'login', text: trans('auth.login.actions.login') },
   {
     icon: (h) => h(UserAddIcon),
-    id: 'register',
-    text: '注册',
+    id: 'forget',
+    text: trans('auth.login.actions.forget'),
     theme: 'default',
   },
 ]
@@ -77,8 +78,8 @@ const actions: ButtonGroupProps['actions'] = [
   </div>
 
   <div class="flex flex-col gap-y-2 text-center">
-    <h1 class="text-3xl">欢迎回来</h1>
-    <h3 class="text-gray-500">请登录您的账户继续</h3>
+    <h1 class="text-3xl">{{ trans('auth.login.title') }}</h1>
+    <h3 class="text-gray-500">{{ trans('auth.login.subtitle') }}</h3>
   </div>
 
   <div class="login mt-4 max-w-lg">

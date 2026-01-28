@@ -10,7 +10,7 @@ export interface RouterContextProvider {
   addRoute(route: RouteRecordRaw): void
   fetchComponents(): GlobResults
   fetchRoutes(): Promise<IRoute[]>
-  resolveNotExistsComponent(filePath: string): GlobFile
+  resolveNotExistsComponent(filePath: string): ImportFn
 }
 
 export interface RouterStoreState {

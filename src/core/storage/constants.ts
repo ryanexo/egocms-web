@@ -3,5 +3,6 @@ export const enum StorageScope {
 }
 
 export const enum StorageKey {
+  Locale = 'locale',
   Page = 'page',
 }

@@ -11,7 +11,7 @@ export function useAccessGuard(router: Router) {
     const routerStore = useRouterStore()
     const authStore = useAuthStore()
 
-    if (to.name === CoreRouteNameEnum.Home) {
+    if (to.name === CoreRouteNameEnum.Home && routerStore.homePath !== '') {
       return { path: routerStore.homePath, replace: true }
     }
 
