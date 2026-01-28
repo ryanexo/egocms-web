@@ -11,11 +11,11 @@ export interface IRouteMeta {
   affix?: boolean
   affixCancelable?: boolean
   externalUrl?: string
-  icon: string
+  icon?: string
   isRoot?: boolean
-  permission: string[]
+  permission?: string[]
   query?: Record<string, any>
-  requiresAuth: boolean
+  requiresAuth?: boolean
   sequence?: string
   title: string
 }

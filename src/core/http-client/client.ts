@@ -2,33 +2,31 @@ import type { AxiosInstance } from 'axios'
 
 import axios from 'axios'
 
-import type { HttpClientConfig } from '@/core/http-client/types/http-client'
+import type { HttpClientPolicies } from '@/core/http-client/types/http-client'
 
-import { useHttpClientPolicy } from '@/core/http-client/adapter/http-client-policy.adapter.ts'
+import { useHttpClientDefaultConfig } from '@/core/http-client/adapters/policy.adapter.ts'
 import {
   useCredentialInterceptor,
   useCustomConfigInterceptor,
 } from '@/core/http-client/interceptor.ts'
 import { useStandardResponseTransformer } from '@/core/http-client/transformer.ts'
 
-function createHttpClient(config: HttpClientConfig): AxiosInstance {
+function createHttpClient(policies: HttpClientPolicies): AxiosInstance {
   const httpClient = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
     headers: {
       'Content-Type': 'application/json',
     },
     timeout: 1000 * 10,
-    transformResponse: [useStandardResponseTransformer(config.policy)],
+    transformResponse: [useStandardResponseTransformer(policies)],
   })
 
-  useCredentialInterceptor(httpClient, config.policy)
-  useCustomConfigInterceptor(httpClient, config.policy)
+  useCredentialInterceptor(httpClient, policies)
+  useCustomConfigInterceptor(httpClient, policies)
 
   return httpClient
 }
 
-const httpClient = createHttpClient({
-  policy: useHttpClientPolicy(),
-})
+const httpClient = createHttpClient(useHttpClientDefaultConfig())
 
 export { httpClient }

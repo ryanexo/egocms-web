@@ -12,9 +12,7 @@
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
-    "lint": "run-s lint:*",
-    "lint:oxlint": "oxlint . --fix",
-    "lint:eslint": "eslint . --fix --cache",
+    "lint": "oxlint . --fix & eslint . --fix",
     "format": "prettier --write --experimental-cli src/",
     "prepare": "husky"
   },
@@ -32,6 +30,7 @@
     "tdesign-icons-vue-next": "^0.4.2",
     "tdesign-vue-next": "^1.18.0",
     "vue": "^3.5.26",
+    "vue-i18n": "^11.2.8",
     "vue-router": "^4.6.4"
   },
   "devDependencies": {
@@ -74,6 +73,7 @@
     "unplugin-vue-components": "^31.0.0",
     "vite": "beta",
     "vite-plugin-vue-devtools": "^8.0.5",
+    "vite-svg-loader": "^5.1.0",
     "vue-tsc": "^3.2.2"
   },
   "packageManager": "pnpm@10.28.1+sha512.7d7dbbca9e99447b7c3bf7a73286afaaf6be99251eb9498baefa7d406892f67b879adb3a1d7e687fc4ccc1a388c7175fbaae567a26ab44d1067b54fcb0d6a316"

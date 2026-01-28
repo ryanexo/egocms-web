@@ -2,7 +2,6 @@ import type { NavigationGuardReturn, Router } from 'vue-router'
 
 import NProgress from 'nprogress'
 
-import { messageService } from '@/core/services/MessageService.ts'
 import { CoreRouteNameEnum } from '@/router/constants/route.enum.ts'
 import { useAppStore, useAuthStore, useRouterStore } from '@/stores'
 import { useRouterStoreContextProvider } from '@/stores/adapters/router-context-provider.ts'
@@ -40,10 +39,8 @@ export function useAccessGuard(router: Router) {
     }
 
     if (!routerStore.loaded) {
-      const message = messageService.loading('正在加载菜单', { duration: 0 })
       const service = useRouterStoreContextProvider(router)
       await routerStore.generateRoutes(service)
-      message.then((closer) => closer.close())
     }
 
     return true

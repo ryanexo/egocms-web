@@ -1,4 +1,5 @@
-import type { DtoUserAuthnResult, UserCreateParams, UserCredentialParams } from '@/api/user/types'
+import type { DtoUserAuthnResult, UserCreateParams, UserCredentialParams } from '@/api/user/params'
+import type { UserApi } from '@/api/user/types'
 
 import { defineQuery, defineQueryNoData } from '@/core/http-client/utils/query.ts'
 
@@ -12,4 +13,4 @@ const register = defineQuery<UserCreateParams, string>((httpClient, data, config
   return httpClient.post('/user/register', data, config)
 })
 
-export const userApi = { login, logout, register }
+export const userApi: UserApi = { login, logout, register }

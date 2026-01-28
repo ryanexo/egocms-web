@@ -3,6 +3,7 @@ export const enum CoreRouteNameEnum {
   Dashboard = 'dashboard',
   Home = 'home',
   Login = 'login',
+  NotFound = 'notFound',
   Register = 'register',
 }
 
@@ -11,5 +12,6 @@ export const enum CoreRoutePathEnum {
   Dashboard = '/dashboard',
   Home = '/',
   Login = '/login',
+  NotFound = '/:matches(.*)*',
   Register = '/register',
 }

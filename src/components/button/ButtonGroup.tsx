@@ -7,6 +7,7 @@ import { defineComponent, inject, provide, reactive, toRefs } from 'vue'
 
 import type {
   ActionProps,
+  ButtonGroupClickContext,
   ButtonGroupContext,
   ButtonGroupProps,
 } from '@/components/button/types/button-group'
@@ -72,7 +73,9 @@ const Action = defineComponent<ActionProps>({
 })
 
 const ButtonGroup = defineComponent<ButtonGroupProps>({
-  emits: ['click'],
+  emits: {
+    click: (_: ButtonGroupClickContext) => true,
+  },
   name: 'ButtonGroup',
   props: {
     actions: {

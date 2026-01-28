@@ -13,13 +13,16 @@ import type {
 } from '@/stores/types/router'
 
 import { useAsyncComponentSkeleton } from '@/components/skeleton/AsyncComponentSkelton.tsx'
+import { messageService } from '@/core/services/MessageService.ts'
 
 export function createRouterStore(pinia: Pinia) {
   const store = defineStore('RouterStore', {
     actions: {
       async generateRoutes(srv: RouterContextProvider) {
+        const message = messageService.loading('正在加载菜单', { duration: 0 })
         const { parentRouteMap, routeMap, routes } = await generateRoutes(srv)
         routes.forEach((route) => srv.addRoute(route))
+        message.then((closer) => closer.close())
 
         this.routes = routes
         this.routeMap = routeMap

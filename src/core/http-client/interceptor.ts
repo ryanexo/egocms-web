@@ -1,20 +1,20 @@
 import type { AxiosInstance } from 'axios'
 
-import type { HttpClientPolicy } from '@/core/http-client/types/http-client'
+import type { HttpClientPolicies } from '@/core/http-client/types/http-client'
 
-export function useCredentialInterceptor(axios: AxiosInstance, policy: HttpClientPolicy) {
+export function useCredentialInterceptor(axios: AxiosInstance, policies: HttpClientPolicies) {
   axios.interceptors.request.use((config) => {
     if (config.withAuthorization && !config.headers.has('Authorization')) {
-      config.headers.set('Authorization', policy.authorizationValue())
+      config.headers.set('Authorization', policies.authorizer.token())
     }
 
     return config
   })
 }
 
-export function useCustomConfigInterceptor(axios: AxiosInstance, policy: HttpClientPolicy) {
+export function useCustomConfigInterceptor(axios: AxiosInstance, policies: HttpClientPolicies) {
   axios.interceptors.response.use((response) => {
-    policy.sendSuccessMessage(response.config?.successMessage)
+    policies.notifier.sendSuccessMessage(response.config?.successMessage)
     return response
   })
 }

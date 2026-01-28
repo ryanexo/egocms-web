@@ -29,14 +29,20 @@ function createQueryDefinition<T, R>(
   return { abort, result, signal }
 }
 
-function defineQuery<T, R = any>(query: Query<T, R>, defaultConfig?: AxiosRequestConfig) {
-  return (data: T, config?: AxiosRequestConfig): QueryResult<R> => {
+function defineQuery<T, R = any>(
+  query: Query<T, R>,
+  defaultConfig?: Omit<AxiosRequestConfig, 'signal'>,
+) {
+  return (data: T, config?: Omit<AxiosRequestConfig, 'signal'>): QueryResult<R> => {
     return createQueryDefinition<T, R>(httpClient, query, defaultConfig, data, config)
   }
 }
 
-function defineQueryNoData<R = any>(query: Query<never, R>, defaultConfig?: AxiosRequestConfig) {
-  return (config?: AxiosRequestConfig) => {
+function defineQueryNoData<R = any>(
+  query: Query<never, R>,
+  defaultConfig?: Omit<AxiosRequestConfig, 'signal'>,
+) {
+  return (config?: Omit<AxiosRequestConfig, 'signal'>) => {
     return createQueryDefinition<never, R>(httpClient, query, defaultConfig, undefined, config)
   }
 }

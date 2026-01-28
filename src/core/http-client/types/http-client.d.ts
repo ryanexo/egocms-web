@@ -1,12 +1,21 @@
 import type { AxiosRequestConfig } from 'axios'
 
-export interface HttpClientConfig {
-  policy: HttpClientPolicy
+export interface HttpClientPolicies {
+  authorizer: HttpClientAuthorizer
+  notifier: HttpClientNotifier
+  validator: HttpClientValidator
 }
 
-export interface HttpClientPolicy {
-  authorizationValue(): string
+export interface HttpClientAuthorizer {
+  reauthorize(): Promise<boolean>
+  token(): string
+}
+
+export interface HttpClientValidator {
   isValidCode(code: number | string): boolean
-  isValidJsonData(response: any): response is HttpResponse
+  isValidJsonData(response: unknown): response is HttpResponse
+}
+
+export interface HttpClientNotifier {
   sendSuccessMessage(message: AxiosRequestConfig['successMessage']): void
 }

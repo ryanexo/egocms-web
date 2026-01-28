@@ -2,10 +2,19 @@ import type { RouteRecordRaw } from 'vue-router'
 
 import AuthPage from '@/pages/core/auth/AuthPage.vue'
 import LoginPage from '@/pages/core/auth/LoginPage.vue'
+import NotFound from '@/pages/core/fallback/NotFound.vue'
 import AppLayout from '@/pages/core/layout/AppLayout.vue'
 import { CoreRouteNameEnum, CoreRoutePathEnum } from '@/router/constants/route.enum.ts'
 
 const routes: RouteRecordRaw[] = [
+  {
+    component: NotFound,
+    meta: {
+      title: '页面不存在',
+    },
+    name: CoreRouteNameEnum.NotFound,
+    path: CoreRoutePathEnum.NotFound,
+  },
   {
     children: [],
     component: AppLayout,

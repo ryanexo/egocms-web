@@ -9,7 +9,7 @@ import {
 } from 'tdesign-icons-vue-next'
 import { h, ref } from 'vue'
 
-import type { UserCredentialParams } from '@/api/user/types'
+import type { UserCredentialParams } from '@/api/user/params'
 import type { ButtonGroupProps } from '@/components/button/types/button-group'
 import type { SchemaFormProps } from '@/components/form/types/schema-form'
 

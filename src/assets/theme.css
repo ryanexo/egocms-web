@@ -5,4 +5,8 @@
   --color-success: rgb(43 164 113);
   --color-danger: rgb(213 73 65);
   --color-warning: rgb(227 115 24);
+
+  --color-t-base: var(--color-gray-700);
+  --color-t-secondary: var(--color-gray-500);
+  --color-t-muted: var(--color-gray-400);
 }

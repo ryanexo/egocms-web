@@ -4,14 +4,16 @@ import type {
   InternalAxiosRequestConfig,
 } from 'axios'
 
-import type { HttpClientPolicy } from '@/core/http-client/types/http-client'
+import type { HttpClientPolicies } from '@/core/http-client/types/http-client'
 
 import { HttpRequestException } from '@/core/exceptions/HttpRequestException.ts'
 
-export function useStandardResponseTransformer(policy: HttpClientPolicy): AxiosResponseTransformer {
+export function useStandardResponseTransformer(
+  policies: HttpClientPolicies,
+): AxiosResponseTransformer {
   return function (this: InternalAxiosRequestConfig, data) {
-    if (policy.isValidJsonData(data)) {
-      if (!policy.isValidCode(data.code)) {
+    if (policies.validator.isValidJsonData(data)) {
+      if (!policies.validator.isValidCode(data.code)) {
         throw new HttpRequestException<AxiosRequestConfig>(data.msg).withContext(this)
       }
       if (this.unwrapResponse !== false) {
