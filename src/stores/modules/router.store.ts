@@ -17,7 +17,7 @@ import { messageService } from '@/core/services/MessageService.ts'
 import { trans } from '@/locales'
 
 export function createRouterStore(pinia: Pinia) {
-  const store = defineStore('RouterStore', {
+  const store = defineStore('store.router', {
     actions: {
       async generateRoutes(srv: RouterContextProvider) {
         const message = messageService.loading('正在加载菜单', { duration: 0 })

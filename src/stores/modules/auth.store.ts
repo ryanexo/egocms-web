@@ -7,10 +7,8 @@ import { defineStore } from 'pinia'
 
 import type { AuthStoreState } from '@/stores/types/auth'
 
-import { usePersistStorage } from '@/stores/adapters/persist-storage.ts'
-
 export function createAuthStore(pinia: Pinia) {
-  const store = defineStore('AuthStore', {
+  const store = defineStore('store.auth', {
     actions: {
       /**
        * 检查当前用户是否含有指定权限，通用权限请使用scope = '/'
@@ -71,7 +69,7 @@ export function createAuthStore(pinia: Pinia) {
         this.expires = expires
       },
     },
-    persist: { pick: ['expires', 'token'], storage: usePersistStorage() },
+    persist: { pick: ['expires', 'token'] },
     state: (): AuthStoreState => {
       return {
         expires: 0,

@@ -5,10 +5,10 @@ import { castArray } from 'es-toolkit/compat'
 import { defineStore } from 'pinia'
 import { nextTick } from 'vue'
 
-import type { PageMeta, PageStoreRepo, PageStoreState } from '@/stores/types/page'
+import type { PageMeta, PageStoreState } from '@/stores/types/page'
 
 export function createPageStore(pinia: Pinia) {
-  const store = defineStore('PageStore', {
+  const store = defineStore('store.page', {
     actions: {
       closeAll(defaultPage: PageMeta) {
         this.$reset()
@@ -75,10 +75,6 @@ export function createPageStore(pinia: Pinia) {
         this.skipCache.delete(this.currentPage)
         this.pageVisible = true
       },
-      setRepo(repo: PageStoreRepo) {
-        this.repo = repo
-        this.$patch(repo.pull())
-      },
       unpin(id: string) {
         this.pined.delete(id)
       },
@@ -112,6 +108,9 @@ export function createPageStore(pinia: Pinia) {
         return [...stickied, ...statics]
       },
     },
+    persist: {
+      pick: ['currentPage', 'openedPages', 'pages', 'pined', 'skipCache'],
+    },
     state: (): PageStoreState => {
       return {
         currentPage: '',
@@ -124,25 +123,7 @@ export function createPageStore(pinia: Pinia) {
     },
   })
 
-  return () => {
-    const instance = store(pinia)
-
-    instance.$onAction(({ after, name, store }) => {
-      const actions = new Set<typeof name>([
-        'closeAll',
-        'closeLeadingPages',
-        'closePage',
-        'closeTrailingPages',
-        'movePage',
-        'openPage',
-        'pin',
-        'unpin',
-      ])
-      after(() => actions.has(name) && store?.repo?.push(store.$state))
-    })
-
-    return instance
-  }
+  return () => store(pinia)
 }
 
 function purgePages(state: PageStoreState, pageIdList: string | string[]) {

@@ -1,14 +1,14 @@
 import type { StorageLike } from 'pinia-plugin-persistedstate'
 
-import { appStorage } from '@/core/storage'
+import { storage } from '@/core/storage'
 
 export function usePersistStorage(): StorageLike {
   return {
     getItem(key: string): null | string {
-      return appStorage.get(key)
+      return storage.get(key)
     },
     setItem(key: string, value: string): void {
-      appStorage.set(key, value)
+      storage.set(key, value)
     },
   }
 }

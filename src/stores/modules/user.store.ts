@@ -7,7 +7,7 @@ import type { UserInfo, UserStoreState } from '@/stores/types/user'
 import { SessionExpiredException } from '@/core/exceptions/SessionExpired.ts'
 
 export function createUserStore(pinia: Pinia) {
-  const store = defineStore('UserStore', {
+  const store = defineStore('store.user', {
     actions: {
       /**
        * 用户未登录时会触发session expired

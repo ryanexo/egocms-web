@@ -10,7 +10,7 @@ import type {
   TranslationSource,
 } from '@/locales/types/translations'
 
-import { appStorage } from '@/core/storage'
+import { storage } from '@/core/storage'
 import { StorageKey } from '@/core/storage/constants.ts'
 
 function loadLocaleFiles() {
@@ -84,7 +84,7 @@ function useLocaleSetter(composer: Composer): LocaleSetter {
     const translations = await loadTranslations(source)
     composer.setLocaleMessage(locale, translations)
     composer.locale.value = locale
-    appStorage.set(StorageKey.Locale, locale)
+    storage.set(StorageKey.Locale, locale)
 
     if (fallback) {
       composer.fallbackLocale.value = locale
@@ -93,7 +93,7 @@ function useLocaleSetter(composer: Composer): LocaleSetter {
     return nextTick().then(() => true)
   }
   const restoreLocale: LocaleSetter['restoreLocale'] = async (fallback) => {
-    const locale = appStorage.get('locale')
+    const locale = storage.get('locale')
     const success = isValidLocale(locale) && (await setLocale(locale))
     if (success) {
       return true

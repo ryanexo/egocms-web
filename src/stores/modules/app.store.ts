@@ -8,7 +8,7 @@ import type { AppStoreState, AppUpdater } from '@/stores/types/app'
 export function createAppStore(pinia: Pinia) {
   let updaterCloser: Callable | undefined = undefined
 
-  const store = defineStore('AppStore', {
+  const store = defineStore('store.app', {
     actions: {
       setAppUpdater(updater: AppUpdater) {
         updaterCloser?.()
