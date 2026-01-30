@@ -37,7 +37,7 @@ export type SchemaType =
   | 'time-picker'
   | 'tree-select'
 
-interface SubProps<
+interface ISubProps<
   S_TYPE extends SchemaType,
   DATA extends Record<string, any>,
   S_PROPS extends Record<string, any>,
@@ -54,24 +54,24 @@ interface SubProps<
   type: S_TYPE
 }
 
-export type DatePickerSubProps<T = any> = SubProps<'date-picker', T, DatePickerProps, never>
-export type InputSubProps<T = any> = SubProps<'input', T, InputProps, never>
-export type InputNumberSubProps<T = any> = SubProps<'input-number', T, InputNumberProps, never>
-export type RadioSubProps<T = any> = SubProps<'radio', T, RadioGroupProps, TdRadioProps[]>
-export type RangeInputSubProps<T = any> = SubProps<'range-input', T, RangeInputProps, never>
-export type SelectSubProps<T = any> = SubProps<
+export type DatePickerSubProps<T = any> = ISubProps<'date-picker', T, DatePickerProps, never>
+export type InputSubProps<T = any> = ISubProps<'input', T, InputProps, never>
+export type InputNumberSubProps<T = any> = ISubProps<'input-number', T, InputNumberProps, never>
+export type RadioSubProps<T = any> = ISubProps<'radio', T, RadioGroupProps, TdRadioProps[]>
+export type RangeInputSubProps<T = any> = ISubProps<'range-input', T, RangeInputProps, never>
+export type SelectSubProps<T = any> = ISubProps<
   'select',
   T,
   SelectProps<T>,
   Omit<SelectOptionGroup, 'group'>[] | OptionProps[]
 >
-export type SliderSubProps<T = any> = SubProps<'slider', T, SwitchProps, never>
-export type SwitchSubProps<T = any> = SubProps<'switch', T, SwitchProps, never>
-export type TagInputSubProps<T = any> = SubProps<'tag-input', T, TagInputProps, never>
-export type TextareaSubProps<T = any> = SubProps<'textarea', T, TextareaProps, never>
-export type TimePickerSubProps<T = any> = SubProps<'time-picker', T, TimePickerProps, never>
-export type TreeSelectSubProps<T = any> = SubProps<'tree-select', T, TreeSelectProps, never>
-export type CustomSubProps<T = any> = SubProps<'custom', T, Record<string, any>, never> & {
+export type SliderSubProps<T = any> = ISubProps<'slider', T, SwitchProps, never>
+export type SwitchSubProps<T = any> = ISubProps<'switch', T, SwitchProps, never>
+export type TagInputSubProps<T = any> = ISubProps<'tag-input', T, TagInputProps, never>
+export type TextareaSubProps<T = any> = ISubProps<'textarea', T, TextareaProps, never>
+export type TimePickerSubProps<T = any> = ISubProps<'time-picker', T, TimePickerProps, never>
+export type TreeSelectSubProps<T = any> = ISubProps<'tree-select', T, TreeSelectProps, never>
+export type CustomSubProps<T = any> = ISubProps<'custom', T, Record<string, any>, never> & {
   render: TNode
 }
 

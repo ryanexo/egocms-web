@@ -46,28 +46,61 @@ const SchemaForm = defineComponent({
   emits: ['reset', 'submit', 'validate'],
   name: 'SchemaForm',
   props: {
-    colon: Boolean as PropType<FormProps['colon']>,
-    data: Object as PropType<FormProps['data']>,
+    colon: {
+      default: false,
+      type: Boolean as PropType<FormProps['colon']>,
+    },
+    data: {
+      default: () => Object.create(null),
+      type: Object as PropType<FormProps['data']>,
+    },
     disabled: Boolean as PropType<FormProps['disabled']>,
     errorMessage: Object as PropType<FormProps['errorMessage']>,
     id: String as PropType<FormProps['id']>,
-    labelAlign: String as PropType<FormProps['labelAlign']>,
-    labelWidth: [String, Number] as PropType<FormProps['labelWidth']>,
-    layout: String as PropType<FormProps['layout']>,
-    options: Array as PropType<SchemaSubProps[]>,
-    preventSubmitDefault: Boolean as PropType<FormProps['preventSubmitDefault']>,
+    labelAlign: {
+      default: 'right',
+      type: String as PropType<FormProps['labelAlign']>,
+    },
+    labelWidth: {
+      default: '100px',
+      type: [String, Number] as PropType<FormProps['labelWidth']>,
+    },
+    layout: {
+      default: 'vertical',
+      type: String as PropType<FormProps['layout']>,
+    },
+    options: {
+      required: true,
+      type: Array as PropType<SchemaSubProps[]>,
+    },
+    preventSubmitDefault: {
+      default: true,
+      type: Boolean as PropType<FormProps['preventSubmitDefault']>,
+    },
     readonly: Boolean as PropType<FormProps['readonly']>,
-    requiredMark: Boolean as PropType<FormProps['requiredMark']>,
-    requiredMarkPosition: String as PropType<FormProps['requiredMarkPosition']>,
-    resetType: String as PropType<FormProps['resetType']>,
+    requiredMark: {
+      default: true,
+      type: Boolean as PropType<FormProps['requiredMark']>,
+    },
+    requiredMarkPosition: {
+      default: 'left',
+      type: String as PropType<FormProps['requiredMarkPosition']>,
+    },
+    resetType: {
+      default: 'empty',
+      type: String as PropType<FormProps['resetType']>,
+    },
     responsive: Object as PropType<GridLayoutResponsive>,
     scrollToFirstError: String as PropType<FormProps['scrollToFirstError']>,
-    showErrorMessage: Boolean as PropType<FormProps['showErrorMessage']>,
+    showErrorMessage: {
+      default: true,
+      type: Boolean as PropType<FormProps['showErrorMessage']>,
+    },
     size: String as PropType<'large' | 'medium' | 'small'>,
     statusIcon: [Boolean, Object] as PropType<FormProps['statusIcon']>,
     submitWithWarningMessage: Boolean as PropType<FormProps['submitWithWarningMessage']>,
   },
-  setup(props: SchemaFormProps, { emit, expose }) {
+  setup(props: SchemaFormProps, { emit, expose, slots }) {
     const options = ref<InstanceType<typeof SchemaField>[]>([])
     const form = ref<InstanceType<typeof Form>>()
     const responsive = computed<SchemaFormProps['responsive'] & {}>(() => {
@@ -127,6 +160,8 @@ const SchemaForm = defineComponent({
                 />
               )
             })}
+
+            {slots?.default?.()}
           </GridLayout>
         </Form>
       )
@@ -360,7 +395,7 @@ const SchemaField = defineComponent<SchemaSubProps>({
             label={props.label}
             labelAlign={props.meta?.labelAlign}
             labelWidth={isInvalidLabel ? 0 : props.meta?.labelWidth}
-            name={props.meta?.name}
+            name={props.fieldKey}
             requiredMark={props.meta?.requiredMark}
             rules={props.rules}
             showErrorMessage={props.meta?.showErrorMessage}
