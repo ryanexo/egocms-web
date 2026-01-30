@@ -1,6 +1,7 @@
 import { createPinia } from 'pinia'
 import { createPersistedState } from 'pinia-plugin-persistedstate'
 
+import { authnService } from '@/stores/adapters/authn.service.ts'
 import { usePersistStorage } from '@/stores/adapters/persist-storage.ts'
 import { createAppStore } from '@/stores/modules/app.store.ts'
 import { createAuthStore } from '@/stores/modules/auth.store.ts'
@@ -19,5 +20,5 @@ export const pinia = createPinia().use(
 
 export const useAppStore = createAppStore(pinia)
 export const useRouterStore = createRouterStore(pinia)
-export const useAuthStore = createAuthStore(pinia)
+export const useAuthStore = createAuthStore(pinia, authnService)
 export const usePageStore = createPageStore(pinia)

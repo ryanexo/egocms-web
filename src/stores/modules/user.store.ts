@@ -4,7 +4,7 @@ import { defineStore } from 'pinia'
 
 import type { UserInfo, UserStoreState } from '@/stores/types/user'
 
-import { SessionExpiredException } from '@/core/exceptions/SessionExpired.ts'
+import { SessionExpiredException } from '@/core/exceptions'
 
 export function createUserStore(pinia: Pinia) {
   const store = defineStore('store.user', {

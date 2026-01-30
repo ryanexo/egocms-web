@@ -3,3 +3,9 @@ declare interface HttpResponse<T = any> {
   data?: T
   msg: string
 }
+
+declare interface QueryResult<T> {
+  abort(): void
+  result: Promise<T>
+  signal: AbortSignal
+}

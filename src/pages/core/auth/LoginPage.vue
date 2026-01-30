@@ -1,25 +1,33 @@
 <script setup lang="ts">
+import type { FormInstanceFunctions, SubmitContext } from 'tdesign-vue-next'
+
 import dayjs from 'dayjs'
 import {
+  LockOnIcon,
   LoginIcon,
   RocketFilledIcon,
-  SecuredIcon,
   User1Icon,
   UserAddIcon,
 } from 'tdesign-icons-vue-next'
-import { h, ref } from 'vue'
+import { h, ref, useTemplateRef } from 'vue'
 
-import type { UserCredentialParams } from '@/api/user/params'
-import type { ButtonGroupProps } from '@/components/button/types/button-group'
+import type { UserCredentialParams } from '@/api/user/types/params'
+import type {
+  ButtonGroupClickContext,
+  ButtonGroupProps,
+} from '@/components/button/types/button-group'
 import type { SchemaFormProps } from '@/components/form/types/schema-form'
 
 import ButtonGroup from '@/components/button/ButtonGroup.tsx'
 import SchemaForm from '@/components/form/SchemaForm.tsx'
 import { trans } from '@/locales'
+import { useAuthStore } from '@/stores'
+import { useLoading } from '@/utils/loading.ts'
 
 const year = dayjs().format('YYYY')
 const copyright = `Copyright©${year}`
 
+const form = useTemplateRef<FormInstanceFunctions>('form')
 const formData = ref<Partial<UserCredentialParams>>({})
 const formOptions: SchemaFormProps<UserCredentialParams>['options'] = [
   {
@@ -37,7 +45,13 @@ const formOptions: SchemaFormProps<UserCredentialParams>['options'] = [
       },
       placeholder: trans('auth.login.form.field.username.placeholder'),
     },
-    rules: [{ required: true }],
+    rules: [
+      {
+        message: trans('validation.required', [trans('user.username')]),
+        required: true,
+        trigger: 'change',
+      },
+    ],
     type: 'input',
   },
   {
@@ -48,25 +62,53 @@ const formOptions: SchemaFormProps<UserCredentialParams>['options'] = [
           'span',
           { class: 'inline-flex justify-center items-center gap-x-1 text-gray-500' },
           {
-            default: () => [h(SecuredIcon)],
+            default: () => [h(LockOnIcon)],
           },
         )
       },
       placeholder: trans('auth.login.form.field.password.placeholder'),
+      type: 'password',
     },
+    rules: [
+      {
+        message: trans('validation.required', [trans('user.password')]),
+        required: true,
+      },
+    ],
     type: 'input',
   },
 ]
 
 const actions: ButtonGroupProps['actions'] = [
-  { icon: (h) => h(LoginIcon), id: 'login', text: trans('auth.login.actions.login') },
   {
+    block: true,
+    icon: (h) => h(LoginIcon),
+    id: 'login',
+    text: trans('auth.login.actions.login'),
+    type: 'submit',
+  },
+  {
+    block: true,
     icon: (h) => h(UserAddIcon),
     id: 'forget',
     text: trans('auth.login.actions.forget'),
     theme: 'default',
   },
 ]
+
+const loading = useLoading()
+const authStore = useAuthStore()
+
+function onFormSubmit({ validateResult }: SubmitContext<UserCredentialParams>) {
+  if (validateResult === true) {
+    authStore.authenticate(formData.value as Required<UserCredentialParams>)
+  }
+}
+async function onButtonGroupClicked({ id }: ButtonGroupClickContext) {
+  if (id === 'forget') {
+    /* empty */
+  }
+}
 </script>
 
 <template>
@@ -85,15 +127,20 @@ const actions: ButtonGroupProps['actions'] = [
   <div class="login mt-4 max-w-lg">
     <div class="flex flex-col items-center gap-y-6">
       <schema-form
+        ref="form"
         :data="formData"
         :options="formOptions"
-        :responsive="{ gap: 4 }"
-      />
-      <button-group
-        class="flex-wrap md:flex-nowrap"
-        :actions="actions"
-        :gap="4"
-      />
+        :responsive="{ gap: 6 }"
+        @submit="onFormSubmit"
+      >
+        <button-group
+          class="flex-wrap md:flex-nowrap"
+          :loading="loading.isLoading"
+          :actions="actions"
+          :gap="4"
+          @click="onButtonGroupClicked"
+        />
+      </schema-form>
     </div>
   </div>
 
@@ -108,9 +155,6 @@ const actions: ButtonGroupProps['actions'] = [
   --td-border-level-2-color: var(--color-gray-200);
 }
 :deep(.button-group) {
-  width: 100%;
-}
-:deep(.t-button) {
   width: 100%;
 }
 </style>

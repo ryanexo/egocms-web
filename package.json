@@ -24,6 +24,7 @@
     "axios": "^1.13.2",
     "dayjs": "^1.11.19",
     "decimal.js": "^10.6.0",
+    "error-stack-parser": "^2.1.4",
     "es-toolkit": "^1.44.0",
     "nprogress": "^0.2.0",
     "pinia": "^3.0.4",

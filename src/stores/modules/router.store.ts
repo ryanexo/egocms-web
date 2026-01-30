@@ -13,7 +13,7 @@ import type {
 } from '@/stores/types/router'
 
 import { useAsyncComponentSkeleton } from '@/components/skeleton/AsyncComponentSkelton.tsx'
-import { messageService } from '@/core/services/MessageService.ts'
+import { messageService } from '@/core/services/messageService.ts'
 import { trans } from '@/locales'
 
 export function createRouterStore(pinia: Pinia) {

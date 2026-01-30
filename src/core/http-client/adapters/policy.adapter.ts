@@ -5,7 +5,7 @@ import type {
   HttpClientValidator,
 } from '@/core/http-client/types/http-client'
 
-import { messageService } from '@/core/services/MessageService.ts'
+import { messageService } from '@/core/services/messageService.ts'
 import { trans } from '@/locales'
 import { useAuthStore } from '@/stores'
 

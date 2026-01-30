@@ -6,12 +6,6 @@ export interface Query<T, R> {
   (httpClient: AxiosInstance, data: T, config: AxiosRequestConfig): Promise<AxiosResponse<R>>
 }
 
-export interface QueryResult<T> {
-  abort(): void
-  result: Promise<T>
-  signal: AbortSignal
-}
-
 function createQueryDefinition<T, R>(
   httpClient: AxiosInstance,
   query: Query<T, R>,

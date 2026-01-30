@@ -1,15 +1,22 @@
-import type { Arrayable } from '@vueuse/core'
 import type { Pinia } from 'pinia'
 
 import dayjs from 'dayjs'
 import { castArray } from 'es-toolkit/compat'
 import { defineStore } from 'pinia'
 
-import type { AuthStoreState } from '@/stores/types/auth'
+import type { AuthnParams, AuthnService, AuthStoreState, Permission } from '@/stores/types/auth'
 
-export function createAuthStore(pinia: Pinia) {
+export function createAuthStore(pinia: Pinia, authnService: AuthnService) {
   const store = defineStore('store.auth', {
     actions: {
+      /**
+       * 用户认证
+       */
+      async authenticate(credential: AuthnParams) {
+        const result = await authnService.login(credential)
+        this.setPermission(result.permission)
+        this.setToken(result.token, result.expires)
+      },
       /**
        * 检查当前用户是否含有指定权限，通用权限请使用scope = '/'
        */
@@ -41,15 +48,13 @@ export function createAuthStore(pinia: Pinia) {
       },
       /**
        * 设置当前用户权限
-       * @param perm 权限列表，Key为Scope（通常是路由Path），Value为权限值
+       * @param perms 权限列表，Key为Scope（通常是路由Path），Value为权限值
        * @param replace 替换现有权限，false时追加
        */
-      setPermission(perm: Record<string, Arrayable<string>>, replace: boolean = true) {
+      setPermission(perms: Permission[], replace: boolean = true) {
         const result: string[] = []
-        Object.entries(perm).forEach(([path, permList]) => {
-          castArray(permList).forEach((item) => {
-            result.push(formatPerm(path, item))
-          })
+        perms.forEach((item) => {
+          item.perm.forEach((perm) => result.push(formatPerm(item.scope, perm)))
         })
 
         if (replace) {
