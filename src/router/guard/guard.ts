@@ -27,7 +27,7 @@ export function useAccessGuard(router: Router) {
     }
 
     if (!authStore.isValid()) {
-      return authStore.notifySessionExpired(() => {
+      return authStore.sessionExpired(() => {
         const target: NavigationGuardReturn = {
           path: routerStore.unauthorizedRedirectPath,
         }

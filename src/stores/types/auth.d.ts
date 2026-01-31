@@ -1,9 +1,15 @@
+export interface CreateOptions {
+  authn: AuthnService
+  redirector: AuthnGateway
+}
+
 export interface AuthStoreState {
   expires: Date | number | string
   permission: Set<string>
   token: string
-  unauthorizedHandler?: () => Promise<boolean>
 }
+
+export type UnauthorizedHandler = () => Promise<boolean>
 
 export interface Permission {
   perm: string[]
@@ -18,6 +24,10 @@ export interface AuthnResult {
 
 export interface AuthnService {
   login(credential: AuthnParams): Promise<AuthnResult>
+}
+
+export interface AuthnGateway {
+  requireAuthentication(): void
 }
 
 export interface AuthnParams {

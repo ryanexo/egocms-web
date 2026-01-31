@@ -6,7 +6,7 @@ import type {
 
 import type { HttpClientPolicies } from '@/core/http-client/types/http-client'
 
-import { HttpRequestException } from '@/core/exceptions'
+import { HttpRequestException } from '@/core/errors/exceptions'
 
 export function useStandardResponseTransformer(
   policies: HttpClientPolicies,

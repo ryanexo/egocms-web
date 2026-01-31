@@ -4,16 +4,25 @@ import dayjs from 'dayjs'
 import { castArray } from 'es-toolkit/compat'
 import { defineStore } from 'pinia'
 
-import type { AuthnParams, AuthnService, AuthStoreState, Permission } from '@/stores/types/auth'
+import type {
+  AuthnGateway,
+  AuthnParams,
+  AuthStoreState,
+  CreateOptions,
+  Permission,
+  UnauthorizedHandler,
+} from '@/stores/types/auth'
 
-export function createAuthStore(pinia: Pinia, authnService: AuthnService) {
+export function createAuthStore(pinia: Pinia, options: CreateOptions) {
+  let unauthorizedHandler: UnauthorizedHandler | undefined
+
   const store = defineStore('store.auth', {
     actions: {
       /**
        * 用户认证
        */
       async authenticate(credential: AuthnParams) {
-        const result = await authnService.login(credential)
+        const result = await options.authn.login(credential)
         this.setPermission(result.permission)
         this.setToken(result.token, result.expires)
       },
@@ -40,11 +49,17 @@ export function createAuthStore(pinia: Pinia, authnService: AuthnService) {
       isValid() {
         return this.token !== '' && !this.isExpired()
       },
-      notifySessionExpired<T>(fallback: () => T) {
-        if (this.unauthorizedHandler) {
-          return this.unauthorizedHandler()
+      async sessionExpired<T>(fallback: (redirector: AuthnGateway) => T) {
+        const hasToken = this.token !== ''
+
+        this.$reset()
+
+        if (hasToken) {
+          const notify = unauthorizedHandler ?? fallback
+          return notify(options.redirector)
+        } else {
+          options.redirector.requireAuthentication()
         }
-        return fallback()
       },
       /**
        * 设置当前用户权限
@@ -66,8 +81,8 @@ export function createAuthStore(pinia: Pinia, authnService: AuthnService) {
       /**
        * 会话过期处理程序，未设置则使用notifySessionExpired的fallback处理
        */
-      setSessionExpiredHandler(handler: AuthStoreState['unauthorizedHandler']) {
-        this.unauthorizedHandler = handler
+      setSessionExpiredHandler(handler: UnauthorizedHandler) {
+        unauthorizedHandler = handler
       },
       setToken(token: string, expires: AuthStoreState['expires'] = 0) {
         this.token = token
@@ -80,7 +95,6 @@ export function createAuthStore(pinia: Pinia, authnService: AuthnService) {
         expires: 0,
         permission: new Set(),
         token: '',
-        unauthorizedHandler: undefined,
       }
     },
   })
