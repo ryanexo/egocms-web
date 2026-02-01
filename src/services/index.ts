@@ -1,10 +1,14 @@
-import { createAccountService } from '@/services/modules/account.service.ts'
-import { createPageService } from '@/services/modules/page.service.ts'
+import { createProgressService } from '@/services/modules/progress.service.ts'
 
-import { createAuthService } from './modules/auth.service.ts'
 import { createMessageService } from './modules/message.service.ts'
 
+export { useAccountService } from './modules/account.service.ts'
+export { useAuthService } from './modules/auth.service.ts'
+export { usePageService } from './modules/page.service.ts'
+
 export const messageService = createMessageService()
-export const authService = createAuthService()
-export const accountService = createAccountService()
-export const pageService = createPageService()
+export const progressService = createProgressService({
+  speed: 500,
+  trickle: true,
+  trickleSpeed: 200,
+})

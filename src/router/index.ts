@@ -1,6 +1,8 @@
 import { cloneDeep } from 'es-toolkit'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
+import type { VueRouterCreateOptions } from '@/router/types/router'
+
 import { CoreRouteNameEnum } from '@/router/constants/route.enum.ts'
 import {
   useAccessGuard,
@@ -9,8 +11,9 @@ import {
   useProgressGuard,
 } from '@/router/guard/guard.ts'
 import builtinRoutes from '@/router/routes/core.ts'
+import { progressService } from '@/services'
 
-function createVueRouter() {
+function createVueRouter(options: VueRouterCreateOptions) {
   /**
    * routes目录下所有文件均为自动注册的路由记录
    *
@@ -36,7 +39,7 @@ function createVueRouter() {
     cloneDeep(customRoutes).forEach((route) => router.addRoute(CoreRouteNameEnum.Home, route))
   }
 
-  useProgressGuard(router)
+  useProgressGuard(router, options.progressService)
   useAccessGuard(router)
   useDocumentTitleGuard(router)
   usePageRouteSync(router)
@@ -52,4 +55,6 @@ function convertGlobResult(result: Record<string, unknown>) {
     .flat()
 }
 
-export const { resetRoutes, router } = createVueRouter()
+export const { resetRoutes, router } = createVueRouter({
+  progressService,
+})

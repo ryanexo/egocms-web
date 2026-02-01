@@ -8,7 +8,7 @@ import type {
 
 export interface CapturedContext extends CaptureSource {
   actions: Array<{ name: string; trigger?: string }>
-  frames: StackFrame[]
+  frames: Promise<StackFrame[]>
   screen: { height: number; width: number }
   userAgent: string
 }

@@ -1,10 +1,11 @@
 import type { RouteLocationNormalizedGeneric, Router } from 'vue-router'
 
-import NProgress from 'nprogress'
 import { watch } from 'vue'
 
+import type { IProgressService } from '@/services/types/progress.service'
+
 import { CoreRouteNameEnum } from '@/router/constants/route.enum.ts'
-import { authService, pageService } from '@/services'
+import { useAuthService, usePageService } from '@/services'
 import { useAppStore, useAuthStore, useRouterStore } from '@/stores'
 import { useRouterStoreContextProvider } from '@/stores/adapters/router-context-provider.ts'
 
@@ -36,7 +37,7 @@ export function useAccessGuard(router: Router) {
     }
 
     if (!authStore.isValid()) {
-      authService.invalidateSession({ redirect: to.fullPath })
+      useAuthService().invalidateSession({ redirect: to.fullPath })
       return false
     }
 
@@ -60,16 +61,14 @@ export function useDocumentTitleGuard(router: Router) {
   })
 }
 
-export function useProgressGuard(router: Router) {
-  NProgress.configure({ speed: 500, trickle: true, trickleSpeed: 200 })
-
+export function useProgressGuard(router: Router, progress: IProgressService) {
   router.beforeEach(() => {
-    NProgress.start()
+    progress.start()
     return true
   })
-  router.afterEach(() => NProgress.done())
+  router.afterEach(() => progress.done())
 }
 
 export function usePageRouteSync(router: Router) {
-  watch(router.currentRoute, (route) => pageService.addOpenedPage(route))
+  watch(router.currentRoute, (route) => usePageService().addOpenedPage(route))
 }

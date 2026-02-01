@@ -4,6 +4,7 @@ export interface Page extends Pick<
   RouteMeta,
   'affix' | 'affixCancelable' | 'externalUrl' | 'icon' | 'title'
 > {
+  fullPath: string
   id: string
   path: string
   query?: LocationQueryRaw

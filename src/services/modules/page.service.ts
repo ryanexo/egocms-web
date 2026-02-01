@@ -1,3 +1,5 @@
+import type { Router } from 'vue-router'
+
 import { promiseTimeout } from '@vueuse/core'
 import { castArray } from 'es-toolkit/compat'
 import { nextTick } from 'vue'
@@ -9,7 +11,8 @@ import type { Page } from '@/stores/types/page'
 import { CoreRouteNameEnum } from '@/router/constants/route.enum.ts'
 import { usePageStore, useRouterStore } from '@/stores'
 
-export function createPageService(): IPageService {
+export function usePageService(router?: Router): IPageService {
+  const currentRouter = router ?? useRouter()
   const routerStore = useRouterStore()
   const pageStore = usePageStore()
 
@@ -18,6 +21,7 @@ export function createPageService(): IPageService {
       affix: route.meta?.affix,
       affixCancelable: route.meta?.affixCancelable,
       externalUrl: route.meta?.externalUrl,
+      fullPath: route.fullPath,
       icon: route.meta?.icon,
       id: String(route.name),
       path: route.path,
@@ -33,7 +37,7 @@ export function createPageService(): IPageService {
   }
   const openDefaultPage = async () => {
     const path = routerStore.homePath ?? CoreRouteNameEnum.Home
-    return useRouter().push(path)
+    return currentRouter.push(path)
   }
   const closeAll: IPageService['closeAll'] = () => {
     pageStore.$reset()
@@ -70,7 +74,7 @@ export function createPageService(): IPageService {
 
     const target = pageStore.opened[index] ?? pageStore.opened[index - 1]
     if (target) {
-      return useRouter().push({ name: target, query: pageStore.pages.get(target)?.query })
+      return currentRouter.push({ name: target, query: pageStore.pages.get(target)?.query })
     }
 
     return openDefaultPage()
@@ -102,12 +106,10 @@ export function createPageService(): IPageService {
   }
   const refreshCurrentPage: IPageService['refreshCurrentPage'] = async () => {
     pageStore.visible = false
-    pageStore.skipCache.add(pageStore.current)
 
     await nextTick()
-    await promiseTimeout(100)
+    await promiseTimeout(200)
 
-    pageStore.skipCache.delete(pageStore.current)
     pageStore.visible = true
   }
   /**

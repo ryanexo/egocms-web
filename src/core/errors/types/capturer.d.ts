@@ -1,5 +1,5 @@
 export interface IErrorCapturer {
-  capture(error: Error | PromiseRejectionEvent, context: CaptureContext): Promise<void>
+  capture(error: Error | PromiseRejectionEvent, context: CaptureContext): void
 }
 
 export type ErrorSource = 'runtime' | 'vue'
@@ -16,9 +16,9 @@ export type RuntimeErrorContext = CaptureSource & {
 }
 
 export type VueErrorContext = CaptureSource & {
-  component: string
-  file: string
-  name: string
+  component?: string
+  file?: string
+  name?: string
   source: 'vue'
   timing: string
 }

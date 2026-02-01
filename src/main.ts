@@ -4,6 +4,7 @@ import { useTitle } from '@vueuse/core'
 import { computed, createApp as createVueApp } from 'vue'
 
 import App from '@/App.vue'
+import { setupListeners } from '@/core/errors'
 import { i18n, restoreLocale } from '@/locales'
 import { router } from '@/router'
 import { CoreRoutePathEnum } from '@/router/constants/route.enum.ts'
@@ -11,7 +12,7 @@ import { pinia, useAppStore, useAuthStore, useRouterStore } from '@/stores'
 import { useAppUpdater } from '@/stores/adapters/app-updater.ts'
 
 export async function createApp() {
-  const app = createVueApp(App).use(pinia).use(i18n).use(router)
+  const app = createVueApp(App).use(pinia).use(i18n)
 
   const appStore = useAppStore()
   const authStore = useAuthStore()
@@ -36,7 +37,10 @@ export async function createApp() {
    *
    * router会在注册后立即生效，导致应用在异步初始化方法完成前不正常运行
    */
-  return app
+  return app.use(router)
 }
 
-createApp().then((app) => app.mount('#app'))
+createApp().then((app) => {
+  app.mount('#app')
+  setupListeners(app)
+})

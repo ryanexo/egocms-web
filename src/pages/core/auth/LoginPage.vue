@@ -21,7 +21,7 @@ import type { SchemaFormProps } from '@/components/form/types/schema-form'
 import ButtonGroup from '@/components/button/ButtonGroup.tsx'
 import SchemaForm from '@/components/form/SchemaForm.tsx'
 import { trans } from '@/locales'
-import { accountService } from '@/services'
+import { useAccountService } from '@/services'
 import { useLoading } from '@/utils/loading.ts'
 
 const year = dayjs().format('YYYY')
@@ -97,6 +97,7 @@ const actions: ButtonGroupProps['actions'] = [
 ]
 
 const loading = useLoading()
+const accountService = useAccountService()
 
 function onFormSubmit({ validateResult }: SubmitContext<UserCredentialParams>) {
   if (validateResult === true) {

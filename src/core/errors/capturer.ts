@@ -27,13 +27,6 @@ function useActionQueue(eventName: Arrayable<keyof DocumentEventMap>, size: numb
   return { destroy, events }
 }
 
-function normalizeError(e: unknown) {
-  if (e instanceof Error) {
-    return e
-  }
-  return new SilentException(e)
-}
-
 export function createErrorCapturer(handler: IErrorHandler): IErrorCapturer {
   const { events } = useActionQueue([
     'click',
@@ -45,6 +38,12 @@ export function createErrorCapturer(handler: IErrorHandler): IErrorCapturer {
     'contextmenu',
   ])
 
+  const normalizeError = (e: unknown) => {
+    if (e instanceof Error) {
+      return e
+    }
+    return new SilentException(e)
+  }
   const capture: IErrorCapturer['capture'] = (error, context) => {
     if (error instanceof PromiseRejectionEvent) {
       return capture(normalizeError(error.reason), {
@@ -62,18 +61,15 @@ export function createErrorCapturer(handler: IErrorHandler): IErrorCapturer {
     const actions: CapturedContext['actions'] = events.slice().map((item) => {
       return { name: item.type, trigger: (item.target as HTMLElement)?.nodeName }
     })
+    const frames = StackTrace.fromError(error, { offline: true })
 
-    return StackTrace.fromError(error, {
-      offline: true,
-    }).then((frames) =>
-      handler.handle(error, {
-        ...context,
-        actions,
-        frames,
-        screen,
-        userAgent,
-      }),
-    )
+    return handler.handle(error, {
+      ...context,
+      actions,
+      frames,
+      screen,
+      userAgent,
+    })
   }
 
   return { capture }

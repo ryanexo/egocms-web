@@ -21,11 +21,12 @@ const pageStore = usePageStore()
             mode="out-in"
           >
             <keep-alive
-              :key="route.fullPath"
+              :include="pageStore.opened"
               :exclude="pageStore.flatSkipCache"
             >
               <component
                 v-if="pageStore.visible"
+                :key="route.fullPath"
                 :is="Component"
               />
             </keep-alive>

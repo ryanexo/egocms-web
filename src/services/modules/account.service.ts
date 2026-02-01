@@ -6,7 +6,7 @@ import type { IAccountService } from '@/services/types/account.service'
 import { userApi } from '@/api/user'
 import { useAuthStore, useRouterStore } from '@/stores'
 
-export function createAccountService(): IAccountService {
+export function useAccountService(): IAccountService {
   const login: IAccountService['login'] = async (credential) => {
     const { token } = await userApi.login(credential as UserCredentialParams).result
 

@@ -79,16 +79,11 @@ export function createRouterStore(pinia: Pinia) {
 export function useAsyncComponentName(name: string, component: ImportFn) {
   return async () => {
     const originalComponent = defineAsyncComponent({
-      loader: () =>
-        new Promise((resolve) =>
-          setTimeout(async () => {
-            resolve((await component()).default)
-          }, 3000),
-        ),
+      loader: () => component().then((result) => result.default ?? result),
       loadingComponent: useAsyncComponentSkeleton('article'),
     })
     return defineComponent({
-      name: `route-${name}`,
+      name,
       setup(props, { attrs, slots }) {
         return () => h(originalComponent, { ...props, ...attrs }, slots)
       },
