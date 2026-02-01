@@ -1,6 +1,6 @@
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 
-import { httpClient } from '@/core/http-client/client.ts'
+import { httpClient } from '@/core/http-client'
 
 export interface Query<T, R> {
   (httpClient: AxiosInstance, data: T, config: AxiosRequestConfig): Promise<AxiosResponse<R>>

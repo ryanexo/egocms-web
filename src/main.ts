@@ -4,7 +4,7 @@ import { useTitle } from '@vueuse/core'
 import { computed, createApp as createVueApp } from 'vue'
 
 import App from '@/App.vue'
-import { setupListeners } from '@/core/errors'
+import { startErrorCapture } from '@/core/errors'
 import { i18n, restoreLocale } from '@/locales'
 import { router } from '@/router'
 import { CoreRoutePathEnum } from '@/router/constants/route.enum.ts'
@@ -30,17 +30,18 @@ export async function createApp() {
   /**
    * APP依赖Token运行，开发环境可设置一个非空Token以运行
    */
-  authStore.setToken('test')
+  authStore.setToken('')
 
   /**
    * router必须最后注册
    *
    * router会在注册后立即生效，导致应用在异步初始化方法完成前不正常运行
    */
-  return app.use(router)
+  app.use(router)
+
+  startErrorCapture(app, router)
+
+  return app
 }
 
-createApp().then((app) => {
-  app.mount('#app')
-  setupListeners(app)
-})
+createApp().then((app) => app.mount('#app'))

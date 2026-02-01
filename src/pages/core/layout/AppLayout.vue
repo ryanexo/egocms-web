@@ -1,9 +1,16 @@
 <script setup lang="ts">
+import { watch } from 'vue'
+import { useRouter } from 'vue-router'
+
 import HeaderLayout from '@/pages/core/layout/components/HeaderLayout.vue'
 import SidebarLayout from '@/pages/core/layout/components/SidebarLayout.vue'
+import { usePageService } from '@/services'
 import { usePageStore } from '@/stores'
 
+const router = useRouter()
 const pageStore = usePageStore()
+
+watch(router.currentRoute, (route) => usePageService().addOpenedPage(route))
 </script>
 
 <template>

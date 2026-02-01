@@ -5,6 +5,7 @@ import { trimStart } from 'es-toolkit'
 import type { RouterContextProvider } from '@/stores/types/router'
 
 import { CoreRouteNameEnum } from '@/router/constants/route.enum.ts'
+import { messageService } from '@/services'
 
 export function useRouterStoreContextProvider(router: Router): RouterContextProvider {
   const addRoute: RouterContextProvider['addRoute'] = (route) => {
@@ -21,7 +22,13 @@ export function useRouterStoreContextProvider(router: Router): RouterContextProv
 
     return result
   }
-  const fetchRoutes: RouterContextProvider['fetchRoutes'] = () => Promise.resolve([])
+  const fetchRoutes: RouterContextProvider['fetchRoutes'] = () => {
+    const message = messageService.loading('common.app.router.loadingMenus', { duration: 0 })
+    const result = Promise.resolve([])
+    message.then((closer) => closer.close())
+
+    return result
+  }
   const resolveNotExistsComponent: RouterContextProvider['resolveNotExistsComponent'] = () => {
     return () => import('@/pages/core/fallback/NotFound.vue')
   }

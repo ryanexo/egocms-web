@@ -1,11 +1,7 @@
 import type { RouteLocationNormalizedGeneric, Router } from 'vue-router'
 
-import { watch } from 'vue'
-
-import type { IProgressService } from '@/services/types/progress.service'
-
 import { CoreRouteNameEnum } from '@/router/constants/route.enum.ts'
-import { useAuthService, usePageService } from '@/services'
+import { progressService, useAuthService } from '@/services'
 import { useAppStore, useAuthStore, useRouterStore } from '@/stores'
 import { useRouterStoreContextProvider } from '@/stores/adapters/router-context-provider.ts'
 
@@ -61,14 +57,10 @@ export function useDocumentTitleGuard(router: Router) {
   })
 }
 
-export function useProgressGuard(router: Router, progress: IProgressService) {
+export function useProgressGuard(router: Router) {
   router.beforeEach(() => {
-    progress.start()
+    progressService.start()
     return true
   })
-  router.afterEach(() => progress.done())
-}
-
-export function usePageRouteSync(router: Router) {
-  watch(router.currentRoute, (route) => usePageService().addOpenedPage(route))
+  router.afterEach(() => progressService.done())
 }

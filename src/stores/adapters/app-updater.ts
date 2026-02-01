@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 import type { AppUpdater } from '@/stores/types/app'
 
 import { openConfirmDialog } from '@/components/dialog/ConfirmDialog.tsx'
-import { httpClient } from '@/core/http-client/client.ts'
+import { httpClient } from '@/core/http-client'
 import { trans } from '@/locales'
 
 /**
@@ -30,7 +30,7 @@ export function useAppUpdater(interval: number = 10): AppUpdater {
   const getUpdateFrequencySeconds: AppUpdater['getUpdateFrequencySeconds'] = () => interval
   const isLatestVersion = async (signal: AbortSignal) => {
     const latestModified = await httpClient
-      .head('/', { signal })
+      .head('/', { baseURL: '', signal })
       .then(({ headers }) =>
         headers['last-modified'] ? dayjs(headers['last-modified']) : zeroDate,
       )

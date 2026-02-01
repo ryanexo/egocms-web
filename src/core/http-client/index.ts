@@ -8,8 +8,9 @@ import { useHttpClientDefaultConfig } from '@/core/http-client/adapters/policy.a
 import {
   useCredentialInterceptor,
   useCustomConfigInterceptor,
+  useRejectionInterceptor,
+  useStandardResponseInterceptor,
 } from '@/core/http-client/interceptor.ts'
-import { useStandardResponseTransformer } from '@/core/http-client/transformer.ts'
 
 function createHttpClient(policies: HttpClientPolicies): AxiosInstance {
   const httpClient = axios.create({
@@ -18,15 +19,14 @@ function createHttpClient(policies: HttpClientPolicies): AxiosInstance {
       'Content-Type': 'application/json',
     },
     timeout: 1000 * 10,
-    transformResponse: [useStandardResponseTransformer(policies)],
   })
 
   useCredentialInterceptor(httpClient, policies)
   useCustomConfigInterceptor(httpClient, policies)
+  useStandardResponseInterceptor(httpClient, policies)
+  useRejectionInterceptor(httpClient, policies)
 
   return httpClient
 }
 
-const httpClient = createHttpClient(useHttpClientDefaultConfig())
-
-export { httpClient }
+export const httpClient = createHttpClient(useHttpClientDefaultConfig())

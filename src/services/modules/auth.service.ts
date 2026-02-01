@@ -2,21 +2,19 @@ import type { Router } from 'vue-router'
 
 import { useRouter } from 'vue-router'
 
-import type { AuthenticationContext, IAuthService } from '@/services/types/authn.service'
+import type { AuthenticationContext, IAuthService } from '@/services/types/auth.service'
 
 import { resetRoutes } from '@/router'
 import { CoreRouteNameEnum } from '@/router/constants/route.enum.ts'
 import { useAuthStore } from '@/stores'
 
-export function useAuthService(router?: Router): IAuthService {
-  const currentRouter = router ?? useRouter()
-
+export function useAuthServiceWithRouter(router: Router): IAuthService {
   const startAuthentication = (context: AuthenticationContext) => {
     const query: Record<string, any> = {}
     if (context.redirect) {
       query.redirect = encodeURIComponent(context.redirect)
     }
-    currentRouter.push({ name: CoreRouteNameEnum.Login, query })
+    router.push({ name: CoreRouteNameEnum.Login, query })
   }
   const reauthentication = (context: AuthenticationContext) => {
     startAuthentication(context)
@@ -36,4 +34,8 @@ export function useAuthService(router?: Router): IAuthService {
   }
 
   return { invalidateSession }
+}
+
+export function useAuthService() {
+  return useAuthServiceWithRouter(useRouter())
 }

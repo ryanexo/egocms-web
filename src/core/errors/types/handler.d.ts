@@ -18,5 +18,5 @@ export type CapturedRuntimeContext = CapturedContext & RuntimeErrorContext
 export type HandlerContext = CapturedRuntimeContext | CapturedVueContext
 
 export interface IErrorHandler {
-  handle(error: Error, source: HandlerContext): void
+  handle(error: Error, source: HandlerContext): boolean
 }

@@ -27,6 +27,32 @@ function useActionQueue(eventName: Arrayable<keyof DocumentEventMap>, size: numb
   return { destroy, events }
 }
 
+function getElementSelector(element: HTMLElement) {
+  const path: string[] = []
+  let currentElement: Element | null = element
+
+  while (currentElement && currentElement.nodeType === Node.ELEMENT_NODE) {
+    let selector = currentElement.nodeName.toLowerCase()
+
+    if (currentElement.id) {
+      selector = `#${currentElement.id}`
+    } else if (currentElement.className) {
+      selector += '.' + currentElement.className.trim().split(/\s+/).join('.')
+    }
+
+    const siblings = currentElement.parentNode ? currentElement.parentNode.children : []
+    const index = Array.prototype.indexOf.call(siblings, currentElement) + 1
+    if (siblings.length > 1) {
+      selector += `:nth-of-type(${index})`
+    }
+
+    path.unshift(selector)
+    currentElement = currentElement.parentNode as Element | null
+  }
+
+  return path.join(' > ')
+}
+
 export function createErrorCapturer(handler: IErrorHandler): IErrorCapturer {
   const { events } = useActionQueue([
     'click',
@@ -53,13 +79,18 @@ export function createErrorCapturer(handler: IErrorHandler): IErrorCapturer {
       })
     }
 
+    error = normalizeError(error)
+
     const userAgent: CapturedContext['userAgent'] = navigator.userAgent
     const screen: CapturedContext['screen'] = {
       height: window.screen.height,
       width: window.screen.width,
     }
     const actions: CapturedContext['actions'] = events.slice().map((item) => {
-      return { name: item.type, trigger: (item.target as HTMLElement)?.nodeName }
+      return {
+        name: item.type,
+        trigger: item.target instanceof HTMLElement ? getElementSelector(item.target) : undefined,
+      }
     })
     const frames = StackTrace.fromError(error, { offline: true })
 
