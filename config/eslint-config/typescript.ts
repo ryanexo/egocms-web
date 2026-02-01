@@ -65,4 +65,9 @@ export default defineConfig([
       'unused-imports/no-unused-vars': 'off',
     },
   },
+  {
+    rules: {
+      '@typescript-eslint/no-invalid-void-type': 'off',
+    },
+  },
 ])

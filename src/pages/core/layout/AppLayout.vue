@@ -25,7 +25,7 @@ const pageStore = usePageStore()
               :exclude="pageStore.flatSkipCache"
             >
               <component
-                v-if="pageStore.pageVisible"
+                v-if="pageStore.visible"
                 :is="Component"
               />
             </keep-alive>

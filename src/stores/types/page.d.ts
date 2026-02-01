@@ -1,25 +1,19 @@
-import type { RouteMeta } from 'vue-router'
+import type { LocationQueryRaw, RouteMeta } from 'vue-router'
 
-export interface PageMeta extends Pick<
+export interface Page extends Pick<
   RouteMeta,
   'affix' | 'affixCancelable' | 'externalUrl' | 'icon' | 'title'
 > {
   id: string
+  path: string
+  query?: LocationQueryRaw
 }
 
 export interface PageStoreState {
-  currentPage: string
-  openedPages: string[]
-  pages: Map<string, PageMeta>
-  pageVisible: boolean
+  current: string
+  opened: string[]
+  pages: Map<string, Page>
   pined: Set<string>
-  repo?: PageStoreRepo
   skipCache: Set<string>
-}
-
-export type PersistableState = Omit<PageStoreState, 'pageVisible' | 'repo'>
-
-export interface PageStoreRepo {
-  pull(): PersistableState
-  push(state: PersistableState): void
+  visible: boolean
 }

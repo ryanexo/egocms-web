@@ -9,6 +9,9 @@
     },
     "error": {
       "setHomePath": "HomePath不能为'/'"
+    },
+    "router": {
+      "loadingMenus": "正在加载菜单..."
     }
   }
 }

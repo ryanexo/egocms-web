@@ -4,28 +4,11 @@ import dayjs from 'dayjs'
 import { castArray } from 'es-toolkit/compat'
 import { defineStore } from 'pinia'
 
-import type {
-  AuthnGateway,
-  AuthnParams,
-  AuthStoreState,
-  CreateOptions,
-  Permission,
-  UnauthorizedHandler,
-} from '@/stores/types/auth'
+import type { AuthStoreState, Permission } from '@/stores/types/auth'
 
-export function createAuthStore(pinia: Pinia, options: CreateOptions) {
-  let unauthorizedHandler: UnauthorizedHandler | undefined
-
+export function createAuthStore(pinia: Pinia) {
   const store = defineStore('store.auth', {
     actions: {
-      /**
-       * 用户认证
-       */
-      async authenticate(credential: AuthnParams) {
-        const result = await options.authn.login(credential)
-        this.setPermission(result.permission)
-        this.setToken(result.token, result.expires)
-      },
       /**
        * 检查当前用户是否含有指定权限，通用权限请使用scope = '/'
        */
@@ -49,18 +32,6 @@ export function createAuthStore(pinia: Pinia, options: CreateOptions) {
       isValid() {
         return this.token !== '' && !this.isExpired()
       },
-      async sessionExpired<T>(fallback: (redirector: AuthnGateway) => T) {
-        const hasToken = this.token !== ''
-
-        this.$reset()
-
-        if (hasToken) {
-          const notify = unauthorizedHandler ?? fallback
-          return notify(options.redirector)
-        } else {
-          options.redirector.requireAuthentication()
-        }
-      },
       /**
        * 设置当前用户权限
        * @param perms 权限列表，Key为Scope（通常是路由Path），Value为权限值
@@ -77,12 +48,6 @@ export function createAuthStore(pinia: Pinia, options: CreateOptions) {
         } else {
           result.forEach((item) => this.permission.add(item))
         }
-      },
-      /**
-       * 会话过期处理程序，未设置则使用notifySessionExpired的fallback处理
-       */
-      setSessionExpiredHandler(handler: UnauthorizedHandler) {
-        unauthorizedHandler = handler
       },
       setToken(token: string, expires: AuthStoreState['expires'] = 0) {
         this.token = token

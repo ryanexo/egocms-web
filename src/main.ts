@@ -11,7 +11,7 @@ import { pinia, useAppStore, useAuthStore, useRouterStore } from '@/stores'
 import { useAppUpdater } from '@/stores/adapters/app-updater.ts'
 
 export async function createApp() {
-  const app = createVueApp(App).use(pinia).use(i18n)
+  const app = createVueApp(App).use(pinia).use(i18n).use(router)
 
   const appStore = useAppStore()
   const authStore = useAuthStore()
@@ -36,7 +36,7 @@ export async function createApp() {
    *
    * router会在注册后立即生效，导致应用在异步初始化方法完成前不正常运行
    */
-  return app.use(router)
+  return app
 }
 
 createApp().then((app) => app.mount('#app'))

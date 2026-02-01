@@ -2,7 +2,12 @@ import { cloneDeep } from 'es-toolkit'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 import { CoreRouteNameEnum } from '@/router/constants/route.enum.ts'
-import { useAccessGuard, useDocumentTitleGuard, useProgressGuard } from '@/router/guard/guard.ts'
+import {
+  useAccessGuard,
+  useDocumentTitleGuard,
+  usePageRouteSync,
+  useProgressGuard,
+} from '@/router/guard/guard.ts'
 import builtinRoutes from '@/router/routes/core.ts'
 
 function createVueRouter() {
@@ -34,6 +39,7 @@ function createVueRouter() {
   useProgressGuard(router)
   useAccessGuard(router)
   useDocumentTitleGuard(router)
+  usePageRouteSync(router)
 
   resetRoutes()
 
