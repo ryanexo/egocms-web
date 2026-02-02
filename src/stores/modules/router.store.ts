@@ -2,6 +2,7 @@ import type { Arrayable } from '@vueuse/core'
 import type { Pinia } from 'pinia'
 import type { RouteRecordRaw } from 'vue-router'
 
+import { isNil } from 'es-toolkit'
 import { castArray } from 'es-toolkit/compat'
 import { defineStore } from 'pinia'
 import { defineAsyncComponent, defineComponent, h } from 'vue'
@@ -14,6 +15,7 @@ import type {
 
 import { useAsyncComponentSkeleton } from '@/components/skeleton/AsyncComponentSkelton.tsx'
 import { trans } from '@/locales'
+import { getLocalRoutes } from '@/router'
 
 export function createRouterStore(pinia: Pinia) {
   const store = defineStore('store.router', {
@@ -33,6 +35,12 @@ export function createRouterStore(pinia: Pinia) {
         this.routeMap = routeMap
         this.parentRouteMap = parentRouteMap
         this.loaded = true
+      },
+      getRootRoutes() {
+        return this.routes.filter((route) => {
+          const children = this.routeMap.get(route.name as string)?.children
+          return !Array.isArray(children) || children.length === 0
+        })
       },
       isRouteInWhitelist(path: string) {
         return this.whitelist.has(path)
@@ -88,6 +96,34 @@ export function useAsyncComponentName(name: string, component: ImportFn) {
   }
 }
 
+function getFlatLocalRoutes() {
+  const flatRoutes = (routes: RouteRecordRaw[]): RouteRecordRaw[] => {
+    const result: RouteRecordRaw[] = []
+    const flatStack: RouteRecordRaw[] = []
+
+    for (let i = routes.length - 1; i >= 0; i--) {
+      flatStack.push(routes[i] as RouteRecordRaw)
+    }
+
+    while (flatStack.length > 0) {
+      const route = flatStack.pop() as RouteRecordRaw
+
+      if (route.children && route.children.length > 0) {
+        for (let i = route.children.length - 1; i >= 0; i--) {
+          const child = route.children?.[i] as RouteRecordRaw
+          flatStack.push({ ...child, meta: { ...child.meta, parent: route.name as string } })
+        }
+      }
+
+      result.push(route)
+    }
+
+    return result
+  }
+
+  return flatRoutes(getLocalRoutes())
+}
+
 async function generateRoutes(srv: RouterContextProvider) {
   const originalRoutes = await srv.fetchRoutes()
   const components = srv.fetchComponents()
@@ -126,14 +162,25 @@ async function generateRoutes(srv: RouterContextProvider) {
     routeMap.set(item.id, route)
   })
 
-  originalRoutes.forEach((item) => {
-    const route = routeMap.get(item.id)
-    if (route) {
-      if (routeMap.has(item.parentId)) {
-        routeMap.get(item.parentId)?.children?.push(route)
-      } else {
-        routes.push(route)
-      }
+  getFlatLocalRoutes().forEach((route) => {
+    if (typeof route.name === 'string' && route.name.length > 0) {
+      routeMap.set(route.name, route)
+    }
+  })
+
+  routeMap.forEach((route) => {
+    const parent = isNil(route.meta?.parent) ? undefined : routeMap.get(route.meta.parent)
+    if (parent) {
+      parentRouteMap.set(route.name as string, parent)
+      parent.children?.push(route)
+    } else {
+      routes.push(route)
+    }
+  })
+
+  routeMap.forEach((route) => {
+    if (route.children && route.children.length > 0) {
+      route.redirect = { name: route.children?.[0]?.name }
     }
   })
 

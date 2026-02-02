@@ -1,16 +1,29 @@
 <script setup lang="ts">
-import { watch } from 'vue'
-import { useRouter } from 'vue-router'
+import type { VNode } from 'vue'
+import type { RouteLocationNormalizedGeneric } from 'vue-router'
 
 import HeaderLayout from '@/pages/core/layout/components/HeaderLayout.vue'
 import SidebarLayout from '@/pages/core/layout/components/SidebarLayout.vue'
-import { usePageService } from '@/services'
 import { usePageStore } from '@/stores'
 
-const router = useRouter()
 const pageStore = usePageStore()
 
-watch(router.currentRoute, (route) => usePageService().addOpenedPage(route))
+function renameUsingRoute(route: RouteLocationNormalizedGeneric, component: VNode) {
+  const newName = route.name
+  if (typeof newName !== 'string' || newName.length === 0) {
+    return component
+  }
+
+  const originalName = (component.type as Record<string, string>)?.name
+  if (newName === originalName) {
+    return component
+  }
+
+  const type: Record<string, any> = typeof component.type === 'object' ? component.type : {}
+  type.name = newName
+
+  return component
+}
 </script>
 
 <template>
@@ -34,7 +47,7 @@ watch(router.currentRoute, (route) => usePageService().addOpenedPage(route))
               <component
                 v-if="pageStore.visible"
                 :key="route.fullPath"
-                :is="Component"
+                :is="renameUsingRoute(route, Component)"
               />
             </keep-alive>
           </transition>

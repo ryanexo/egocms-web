@@ -34,7 +34,7 @@ export function createErrorHandler(router: Router) {
       return true
     }
 
-    console.debug(context)
+    console.debug('[未处理的异常]', context)
     return false
   }
 

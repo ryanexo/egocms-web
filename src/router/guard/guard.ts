@@ -21,7 +21,7 @@ export function useAccessGuard(router: Router) {
       return { path: routerStore.homePath, replace: true }
     }
 
-    if (!to.meta.requiresAuth || routerStore.isRouteInWhitelist(to.path)) {
+    if (to.meta.requiresAuth === false || routerStore.isRouteInWhitelist(to.path)) {
       if (to.path === routerStore.unauthorizedRedirectPath && authStore.isValid()) {
         const redirect = extractRedirectURI(to)
         return redirect
@@ -41,10 +41,8 @@ export function useAccessGuard(router: Router) {
       const service = useRouterStoreContextProvider(router)
       await routerStore.generateRoutes(service)
 
-      const redirect = extractRedirectURI(to)
-      if (redirect) {
-        return { ...redirect, replace: true }
-      }
+      const redirect = extractRedirectURI(to) ?? router.resolve(to.fullPath)
+      return { ...redirect, replace: true }
     }
 
     return true
@@ -53,7 +51,7 @@ export function useAccessGuard(router: Router) {
 
 export function useDocumentTitleGuard(router: Router) {
   router.afterEach((to) => {
-    useAppStore().setPageTitle(to.meta.title)
+    useAppStore().setPageTitle(to.meta?.title ?? '')
   })
 }
 

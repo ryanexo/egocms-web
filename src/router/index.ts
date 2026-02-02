@@ -1,15 +1,20 @@
+import type { RouteRecordRaw } from 'vue-router'
+
 import { cloneDeep } from 'es-toolkit'
+import { watch } from 'vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
-import { CoreRouteNameEnum } from '@/router/constants/route.enum.ts'
 import { useAccessGuard, useDocumentTitleGuard, useProgressGuard } from '@/router/guard/guard.ts'
 import builtinRoutes from '@/router/routes/core.ts'
+import { usePageService } from '@/services'
 
 function createVueRouter() {
   /**
    * routes目录下所有文件均为自动注册的路由记录
    *
    * 所有非core.ts内注册的路由文件均被挂载在根节点下(path = '/')，统一布局
+   *
+   * 没有name的路由无法显示在菜单中
    */
   const customFiles = import.meta.glob('./routes/!(core).ts', { eager: true })
   const customRoutes = convertGlobResult(customFiles)
@@ -25,19 +30,21 @@ function createVueRouter() {
     },
   })
 
+  const getLocalRoutes = (): RouteRecordRaw[] => cloneDeep(customRoutes)
   const resetRoutes = () => {
     router.clearRoutes()
     cloneDeep(builtinRoutes).forEach((route) => router.addRoute(route))
-    cloneDeep(customRoutes).forEach((route) => router.addRoute(CoreRouteNameEnum.Home, route))
   }
 
   useProgressGuard(router)
   useAccessGuard(router)
   useDocumentTitleGuard(router)
 
+  watch(router.currentRoute, (route) => usePageService(router).addOpenedPage(route))
+
   resetRoutes()
 
-  return { resetRoutes, router }
+  return { getLocalRoutes, resetRoutes, router }
 }
 
 function convertGlobResult(result: Record<string, unknown>) {
@@ -46,4 +53,4 @@ function convertGlobResult(result: Record<string, unknown>) {
     .flat()
 }
 
-export const { resetRoutes, router } = createVueRouter()
+export const { getLocalRoutes, resetRoutes, router } = createVueRouter()
