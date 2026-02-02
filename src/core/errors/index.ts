@@ -11,7 +11,7 @@ export function startErrorCapture(app: App, router: Router) {
   const errorCapturer = createErrorCapturer(errorHandler)
 
   app.config.errorHandler = (err, instance, info) => {
-    if (err instanceof Error) {
+    if (errorCapturer.isResolvable(err)) {
       const handled = errorCapturer.capture(err, {
         file: instance?.$options?.__file,
         name: instance?.$options?.__name,

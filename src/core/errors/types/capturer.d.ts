@@ -1,5 +1,8 @@
+export type Resolvable = Error | number | object | PromiseRejectionEvent | string
+
 export interface IErrorCapturer {
-  capture(error: Error | PromiseRejectionEvent, context: CaptureContext): boolean
+  capture(error: Resolvable, context: CaptureContext): boolean
+  isResolvable(error: any): error is Resolvable
 }
 
 export type ErrorSource = 'runtime' | 'vue'

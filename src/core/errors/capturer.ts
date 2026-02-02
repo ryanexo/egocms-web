@@ -70,17 +70,16 @@ export function createErrorCapturer(handler: IErrorHandler): IErrorCapturer {
     }
     return new SilentException(e)
   }
-  const capture: IErrorCapturer['capture'] = (error, context) => {
-    if (error instanceof PromiseRejectionEvent) {
-      return capture(normalizeError(error.reason), {
+  const capture: IErrorCapturer['capture'] = (resolvable, context) => {
+    if (resolvable instanceof PromiseRejectionEvent) {
+      return capture(normalizeError(resolvable.reason), {
         promise: true,
         source: 'runtime',
         timestamp: context.timestamp,
       })
     }
 
-    error = normalizeError(error)
-
+    const error = normalizeError(resolvable)
     const userAgent: CapturedContext['userAgent'] = navigator.userAgent
     const screen: CapturedContext['screen'] = {
       height: window.screen.height,
@@ -102,6 +101,14 @@ export function createErrorCapturer(handler: IErrorHandler): IErrorCapturer {
       userAgent,
     })
   }
+  /**
+   * 非Error类型也会被normalizeError转换为Error
+   *
+   * 如有必要可自行在下面放宽类型
+   */
+  const isResolvable: IErrorCapturer['isResolvable'] = (error) => {
+    return error instanceof Error || error instanceof PromiseRejectionEvent
+  }
 
-  return { capture }
+  return { capture, isResolvable }
 }
