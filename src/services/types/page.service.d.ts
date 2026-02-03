@@ -1,7 +1,6 @@
 import type { NavigationFailure, RouteLocationNormalizedLoadedGeneric } from 'vue-router'
 
 export interface IPageService {
-  addOpenedPage(route: RouteLocationNormalizedLoadedGeneric): void
   /**
    * closeAll 关闭所有页面
    *
@@ -18,6 +17,7 @@ export interface IPageService {
   closePage(id: string): Promise<NavigationFailure | undefined | void>
   closeTrailingPages(): void
   movePage(id: string, pos: number): void
+  openPage(route: RouteLocationNormalizedLoadedGeneric): void
   pin(id: string): void
   /**
    * 刷新当前页面

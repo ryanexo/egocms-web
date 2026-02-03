@@ -33,11 +33,11 @@ function renameUsingRoute(route: RouteLocationNormalizedGeneric, component: VNod
 </script>
 
 <template>
-  <div class="base-layout flex h-full w-full">
-    <div class="h-full w-60 shrink-0">
+  <div class="app-layout flex h-full w-full">
+    <div class="relative h-full w-60 shrink-0 shadow-xl">
       <sidebar-layout></sidebar-layout>
     </div>
-    <div class="h-full w-0 grow">
+    <div class="relative h-full w-0 grow">
       <header-layout></header-layout>
       <router-view>
         <template #default="{ Component, route }">
@@ -64,6 +64,6 @@ function renameUsingRoute(route: RouteLocationNormalizedGeneric, component: VNod
 </template>
 
 <style scoped lang="scss">
-.base-layout {
+.app-layout {
 }
 </style>

@@ -16,7 +16,7 @@ export function usePageService(router?: Router): IPageService {
   const routerStore = useRouterStore()
   const pageStore = usePageStore()
 
-  const addOpenedPage: IPageService['addOpenedPage'] = (route) => {
+  const openPage: IPageService['openPage'] = (route) => {
     const page: Page = {
       affix: route.meta?.affix,
       affixCancelable: route.meta?.affixCancelable,
@@ -28,8 +28,10 @@ export function usePageService(router?: Router): IPageService {
       query: route.query,
       title: route.meta?.title ?? '',
     }
+    if (!pageStore.pages.has(page.id)) {
+      pageStore.opened.push(page.id)
+    }
     pageStore.pages.set(page.id, page)
-    pageStore.opened.push(page.id)
     pageStore.current = page.id
     if (page.affix) {
       pageStore.pined.add(page.id)
@@ -134,13 +136,13 @@ export function usePageService(router?: Router): IPageService {
   }
 
   return {
-    addOpenedPage,
     closeAll,
     closeAllExceptCurrent,
     closeLeadingPages,
     closePage,
     closeTrailingPages,
     movePage,
+    openPage,
     pin,
     refreshCurrentPage,
     unpin,

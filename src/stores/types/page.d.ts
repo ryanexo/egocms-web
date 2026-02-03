@@ -1,9 +1,9 @@
 import type { LocationQueryRaw, RouteMeta } from 'vue-router'
 
-export interface Page extends Pick<
+export type Page = Pick<
   RouteMeta,
   'affix' | 'affixCancelable' | 'externalUrl' | 'icon' | 'title'
-> {
+> & {
   fullPath: string
   id: string
   path: string

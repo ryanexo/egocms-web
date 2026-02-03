@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
-import AppMenu from '@/pages/core/layout/components/Menu.tsx'
+import NestedMenuItem from '@/pages/core/layout/components/NestedMenuItem.tsx'
 import { useRouterStore } from '@/stores'
 
 const route = useRoute()
@@ -15,10 +15,9 @@ const currentActivatedMenu = computed(() => String(route.name))
   <div class="menu flex h-full">
     <t-menu
       class="w-full!"
-      theme="dark"
       :value="currentActivatedMenu"
     >
-      <AppMenu :menus="routerStore.routes"></AppMenu>
+      <nested-menu-item :menus="routerStore.routes"></nested-menu-item>
     </t-menu>
   </div>
 </template>

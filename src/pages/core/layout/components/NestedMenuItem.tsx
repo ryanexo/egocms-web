@@ -7,8 +7,8 @@ import { useRouter } from 'vue-router'
 
 import type { MenuProps } from '@/pages/core/layout/types/menu'
 
-const AppMenuItem = defineComponent<MenuProps>({
-  name: 'AppMenuItem',
+const NestedMenuItem = defineComponent<MenuProps>({
+  name: 'NestedMenuItem',
   props: {
     menus: {
       required: true,
@@ -53,7 +53,7 @@ const AppMenuItem = defineComponent<MenuProps>({
               value={uniqueName}
             >
               {{
-                default: () => <AppMenuItem menus={children}></AppMenuItem>,
+                default: () => <NestedMenuItem menus={children}></NestedMenuItem>,
                 icon: () => (meta.icon ? <Icon name={meta.icon} /> : undefined),
               }}
             </Submenu>,
@@ -66,4 +66,4 @@ const AppMenuItem = defineComponent<MenuProps>({
   },
 })
 
-export { AppMenuItem as default }
+export { NestedMenuItem as default }

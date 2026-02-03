@@ -39,6 +39,8 @@ declare module 'vue' {
     TMenu: typeof import('tdesign-vue-next')['Menu']
     TMenuItem: typeof import('tdesign-vue-next')['MenuItem']
     TSubmenu: typeof import('tdesign-vue-next')['Submenu']
+    TTabPanel: typeof import('tdesign-vue-next')['TabPanel']
+    TTabs: typeof import('tdesign-vue-next')['Tabs']
     WelcomeItem: typeof import('./src/components/WelcomeItem.vue')['default']
   }
 }
@@ -72,5 +74,7 @@ declare global {
   const TMenu: (typeof import('tdesign-vue-next'))['Menu']
   const TMenuItem: (typeof import('tdesign-vue-next'))['MenuItem']
   const TSubmenu: (typeof import('tdesign-vue-next'))['Submenu']
+  const TTabPanel: (typeof import('tdesign-vue-next'))['TabPanel']
+  const TTabs: (typeof import('tdesign-vue-next'))['Tabs']
   const WelcomeItem: (typeof import('./src/components/WelcomeItem.vue'))['default']
 }
