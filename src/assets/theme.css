@@ -9,4 +9,13 @@
   --color-t-base: var(--color-gray-700);
   --color-t-secondary: var(--color-gray-500);
   --color-t-muted: var(--color-gray-400);
+
+  --app-header-size: var(--text-6xl);
+  --app-sidebar-size: calc(var(--spacing) * 60);
+
+  --app-background-color: var(--color-zinc-100);
+  --app-background-color-hover: var(--color-zinc-200);
+
+  --app-border-color: var(--color-zinc-200);
+  --app-border-color-hover: var(--color-zinc-300);
 }

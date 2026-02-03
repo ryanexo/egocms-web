@@ -9,7 +9,7 @@ const routes: RouteRecordRaw[] = [
     meta: {
       affix: true,
       affixCancelable: false,
-      icon: '',
+      icon: 'home',
       permission: [],
       requiresAuth: true,
       title: '控制台',

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 import NestedMenuItem from '@/pages/core/layout/components/NestedMenuItem.tsx'
@@ -8,24 +8,29 @@ import { useRouterStore } from '@/stores'
 const route = useRoute()
 const routerStore = useRouterStore()
 
-const currentActivatedMenu = computed(() => String(route.name))
+const activeMenu = computed(() => String(route.name))
+const expanded = ref<string[]>([])
+
+watch(
+  () => route.name,
+  (name) => {
+    expanded.value = routerStore.findAncestor(String(name)).map((item) => item.name as string)
+  },
+  { flush: 'sync', immediate: true },
+)
 </script>
 
 <template>
   <div class="menu flex h-full">
     <t-menu
       class="w-full!"
-      :value="currentActivatedMenu"
+      v-model:expanded="expanded"
+      :value="activeMenu"
+      :expand-mutex="true"
     >
       <nested-menu-item :menus="routerStore.routes"></nested-menu-item>
     </t-menu>
   </div>
 </template>
 
-<style scoped lang="scss">
-.menu {
-  --td-gray-color-13: var(--color-gray-900);
-
-  background: var(--color-gray-900);
-}
-</style>
+<style scoped lang="scss"></style>

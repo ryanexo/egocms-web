@@ -12,6 +12,13 @@
     },
     "router": {
       "loadingMenus": "正在加载菜单..."
+    },
+    "tab": {
+      "close": "关闭",
+      "refresh": "刷新",
+      "closeBefore": "关闭左侧",
+      "closeAfter": "关闭右侧",
+      "closeOther": "关闭其他"
     }
   }
 }

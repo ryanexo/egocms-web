@@ -69,6 +69,7 @@ export default defineConfig([
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-invalid-void-type': 'off',
+      '@typescript-eslint/unified-signatures': 'off',
     },
   },
 ])

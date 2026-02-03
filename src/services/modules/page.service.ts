@@ -16,7 +16,10 @@ export function usePageService(router?: Router): IPageService {
   const routerStore = useRouterStore()
   const pageStore = usePageStore()
 
-  const openPage: IPageService['openPage'] = (route) => {
+  const findIndexByIdOrIndex = (idOrIndex: number | string) => {
+    return typeof idOrIndex === 'number' ? idOrIndex : pageStore.opened.indexOf(idOrIndex)
+  }
+  const open: IPageService['open'] = (route) => {
     const page: Page = {
       affix: route.meta?.affix,
       affixCancelable: route.meta?.affixCancelable,
@@ -45,30 +48,43 @@ export function usePageService(router?: Router): IPageService {
     pageStore.$reset()
     return openDefaultPage()
   }
-  const closeAllExceptCurrent: IPageService['closeAllExceptCurrent'] = () => {
-    closeLeadingPages()
-    closeTrailingPages()
-  }
-  const closeLeadingPages: IPageService['closeLeadingPages'] = () => {
-    if (pageStore.currentIndex === -1) {
-      return
+  const closeOther: IPageService['closeOther'] = (idOrIndex: number | string) => {
+    const currentIndex = pageStore.currentIndex
+    const index = findIndexByIdOrIndex(idOrIndex)
+    const id = pageStore.opened?.[index]
+
+    if (index !== currentIndex && id) {
+      currentRouter.push({ name: id })
     }
-    purgePages(pageStore.opened.slice(0, pageStore.currentIndex))
+
+    closeBefore(index)
+    closeAfter(index)
   }
-  const closeTrailingPages: IPageService['closeTrailingPages'] = () => {
-    if (pageStore.currentIndex === -1) {
-      return
+  const closeBefore: IPageService['closeBefore'] = (idOrIndex: number | string) => {
+    const index = findIndexByIdOrIndex(idOrIndex)
+    if (index > 0) {
+      purgePages(pageStore.opened.slice(0, index))
     }
-    purgePages(pageStore.opened.slice(pageStore.currentIndex + 1, pageStore.opened.length))
   }
-  const closePage: IPageService['closePage'] = async (id: string) => {
-    const index = pageStore.opened.findIndex((item) => item === id)
+  const closeAfter: IPageService['closeAfter'] = (idOrIndex: number | string) => {
+    const index = findIndexByIdOrIndex(idOrIndex)
+    if (index >= 0 && index < pageStore.opened.length - 1) {
+      purgePages(pageStore.opened.slice(index + 1, pageStore.opened.length))
+    }
+  }
+  const close: IPageService['close'] = async (idOrIndex: number | string) => {
+    const index = findIndexByIdOrIndex(idOrIndex)
     if (index === -1) {
       return
     }
 
-    pageStore.pages.delete(id)
+    const id = pageStore.opened?.[index] as string
+    if (pageStore.pined.has(id)) {
+      return
+    }
+
     pageStore.opened.splice(index, 1)
+    pageStore.pages.delete(id)
 
     if (pageStore.current !== id) {
       return
@@ -81,20 +97,18 @@ export function usePageService(router?: Router): IPageService {
 
     return openDefaultPage()
   }
-  const movePage: IPageService['movePage'] = (id: string, pos: number) => {
-    if (pageStore.currentIndex === -1) {
+  const move: IPageService['move'] = (idOrIndex: number | string, targetIndex: number) => {
+    const currentIndex = findIndexByIdOrIndex(idOrIndex)
+    if (currentIndex === targetIndex || targetIndex < 0 || targetIndex >= pageStore.opened.length) {
       return
     }
-    if (pageStore.currentIndex === pos || pos < 0 || pos >= pageStore.opened.length) {
-      return
+    if (targetIndex > currentIndex) {
+      targetIndex -= 1
     }
-    if (pos > pageStore.currentIndex) {
-      pos -= 1
-    }
-    const index = pageStore.opened.findIndex((item) => item === id)
-    if (index !== -1) {
-      pageStore.opened.splice(index, 1)
-      pageStore.opened.splice(pos, 0, id)
+    const id = pageStore.opened?.[currentIndex]
+    if (id) {
+      pageStore.opened.splice(currentIndex, 1)
+      pageStore.opened.splice(targetIndex, 0, id)
     }
   }
   const pin: IPageService['pin'] = (id: string) => {
@@ -106,7 +120,7 @@ export function usePageService(router?: Router): IPageService {
       pageStore.pined.delete(id)
     }
   }
-  const refreshCurrentPage: IPageService['refreshCurrentPage'] = async () => {
+  const refresh: IPageService['refresh'] = async () => {
     pageStore.visible = false
 
     await nextTick()
@@ -136,15 +150,15 @@ export function usePageService(router?: Router): IPageService {
   }
 
   return {
+    close,
+    closeAfter,
     closeAll,
-    closeAllExceptCurrent,
-    closeLeadingPages,
-    closePage,
-    closeTrailingPages,
-    movePage,
-    openPage,
+    closeBefore,
+    closeOther,
+    move,
+    open,
     pin,
-    refreshCurrentPage,
+    refresh,
     unpin,
   }
 }

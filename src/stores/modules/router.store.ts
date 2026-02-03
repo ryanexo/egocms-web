@@ -27,6 +27,25 @@ export function createRouterStore(pinia: Pinia) {
         this.routes = []
         this.whitelist = new Set()
       },
+      findAncestor(name: string) {
+        const result: RouteRecordRaw[] = []
+        const visited = new Set<string>()
+        let current = this.routeMap.get(name)
+
+        while (current?.meta?.parent) {
+          const parent = this.routeMap.get(current.meta?.parent as string)
+          if (!parent) {
+            break
+          }
+          if (visited.has(parent.name as string)) {
+            break
+          }
+          result.push(parent)
+          current = parent
+        }
+
+        return result
+      },
       async generateRoutes(srv: RouterContextProvider) {
         const { parentRouteMap, routeMap, routes } = await generateRoutes(srv)
         routes.forEach((route) => srv.addRoute(route))
@@ -35,12 +54,6 @@ export function createRouterStore(pinia: Pinia) {
         this.routeMap = routeMap
         this.parentRouteMap = parentRouteMap
         this.loaded = true
-      },
-      getRootRoutes() {
-        return this.routes.filter((route) => {
-          const children = this.routeMap.get(route.name as string)?.children
-          return !Array.isArray(children) || children.length === 0
-        })
       },
       isRouteInWhitelist(path: string) {
         return this.whitelist.has(path)
