@@ -4,7 +4,7 @@ import axios from 'axios'
 
 import type { HttpClientPolicies } from '@/core/http-client/types/http-client'
 
-import { useHttpClientDefaultConfig } from '@/core/http-client/adapters/policy.adapter.ts'
+import { useHttpClientDefaultPolicies } from '@/core/http-client/adapters/policy.adapter.ts'
 import {
   useCredentialInterceptor,
   useCustomConfigInterceptor,
@@ -29,4 +29,4 @@ function createHttpClient(policies: HttpClientPolicies): AxiosInstance {
   return httpClient
 }
 
-export const httpClient = createHttpClient(useHttpClientDefaultConfig())
+export const httpClient = createHttpClient(useHttpClientDefaultPolicies())

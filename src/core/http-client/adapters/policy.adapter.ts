@@ -44,7 +44,7 @@ export function createHttpClientNotifier(): HttpClientNotifier {
   return { sendSuccessMessage }
 }
 
-export function useHttpClientDefaultConfig(): HttpClientPolicies {
+export function useHttpClientDefaultPolicies(): HttpClientPolicies {
   return {
     authorizer: createHttpClientAuthorizer(),
     notifier: createHttpClientNotifier(),
