@@ -2,6 +2,8 @@
 import type { VNode } from 'vue'
 import type { RouteLocationNormalizedGeneric } from 'vue-router'
 
+import { isNil } from 'es-toolkit'
+
 import HeaderLayout from '@/pages/core/layout/components/HeaderLayout.vue'
 import SidebarLayout from '@/pages/core/layout/components/SidebarLayout.vue'
 import { usePageStore } from '@/stores'
@@ -19,8 +21,12 @@ function renameUsingRoute(route: RouteLocationNormalizedGeneric, component: VNod
     return component
   }
 
-  const type: Record<string, any> = typeof component.type === 'object' ? component.type : {}
-  type.name = newName
+  if (isNil(component.type)) {
+    component.type = { name: newName }
+  } else if (typeof component.type === 'object') {
+    const type = component.type as Record<string, any>
+    type.name = newName
+  }
 
   return component
 }
@@ -28,10 +34,10 @@ function renameUsingRoute(route: RouteLocationNormalizedGeneric, component: VNod
 
 <template>
   <div class="base-layout flex h-full w-full">
-    <div class="w-[20%] max-w-60">
+    <div class="h-full w-60 shrink-0">
       <sidebar-layout></sidebar-layout>
     </div>
-    <div>
+    <div class="h-full w-0 grow">
       <header-layout></header-layout>
       <router-view>
         <template #default="{ Component, route }">

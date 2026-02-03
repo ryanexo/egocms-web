@@ -2,7 +2,7 @@ import type { Arrayable } from '@vueuse/core'
 import type { Pinia } from 'pinia'
 import type { RouteRecordRaw } from 'vue-router'
 
-import { isNil } from 'es-toolkit'
+import { isNil, trimEnd } from 'es-toolkit'
 import { castArray } from 'es-toolkit/compat'
 import { defineStore } from 'pinia'
 import { defineAsyncComponent, defineComponent, h } from 'vue'
@@ -111,7 +111,9 @@ function getFlatLocalRoutes() {
       if (route.children && route.children.length > 0) {
         for (let i = route.children.length - 1; i >= 0; i--) {
           const child = route.children?.[i] as RouteRecordRaw
-          flatStack.push({ ...child, meta: { ...child.meta, parent: route.name as string } })
+          const path = child.path.startsWith('/') ? child.path : [route.path, child.path].join('/')
+
+          flatStack.push({ ...child, meta: { ...child.meta, parent: route.name as string }, path })
         }
       }
 
@@ -130,8 +132,41 @@ async function generateRoutes(srv: RouterContextProvider) {
   const parentRouteMap = new Map<string, RouteRecordRaw>()
   const routeMap = new Map<string, RouteRecordRaw>()
   const routes: RouteRecordRaw[] = []
+  const resolvedPath = new Map<string, string>()
+
+  const composeFullPath = (name: string): string | undefined => {
+    const resolved = resolvedPath.get(name)
+    if (resolved) {
+      return resolved
+    }
+
+    const route = routeMap.get(name)
+    if (!route) {
+      return
+    }
+
+    const currentPath = trimEnd(route.path, '/')
+    const parentPath = route.meta?.parent ? composeFullPath(route.meta.parent) : undefined
+    const path = [parentPath, currentPath].filter((path) => !isNil(path)).join('/')
+    const finalPath = path.startsWith('/') ? path : '/' + path
+
+    resolvedPath.set(name, finalPath)
+
+    return finalPath
+  }
+
+  getFlatLocalRoutes().forEach((route) => {
+    if (typeof route.name === 'string' && route.name.length > 0) {
+      routeMap.set(route.name, route)
+    }
+  })
 
   originalRoutes.forEach((item) => {
+    if (routeMap.has(item.id)) {
+      console.error(`页面id / 静态路由name 发生冲突: ${item.id}`, routeMap.get(item.id))
+      return
+    }
+
     const hasSuffix = ['vue', 'tsx', 'ts'].some((suffix) => item.component.endsWith('.' + suffix))
     const endIndex = hasSuffix ? item.component.lastIndexOf('.') : item.component.length
     const componentPath = item.component.substring(0, endIndex)
@@ -162,12 +197,6 @@ async function generateRoutes(srv: RouterContextProvider) {
     routeMap.set(item.id, route)
   })
 
-  getFlatLocalRoutes().forEach((route) => {
-    if (typeof route.name === 'string' && route.name.length > 0) {
-      routeMap.set(route.name, route)
-    }
-  })
-
   routeMap.forEach((route) => {
     const parent = isNil(route.meta?.parent) ? undefined : routeMap.get(route.meta.parent)
     if (parent) {
@@ -179,6 +208,10 @@ async function generateRoutes(srv: RouterContextProvider) {
   })
 
   routeMap.forEach((route) => {
+    const path = composeFullPath(route.name as string)
+    if (path) {
+      route.path = path
+    }
     if (route.children && route.children.length > 0) {
       route.redirect = { name: route.children?.[0]?.name }
     }

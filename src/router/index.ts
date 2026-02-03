@@ -1,12 +1,10 @@
 import type { RouteRecordRaw } from 'vue-router'
 
 import { cloneDeep } from 'es-toolkit'
-import { watch } from 'vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 import { useAccessGuard, useDocumentTitleGuard, useProgressGuard } from '@/router/guard/guard.ts'
 import builtinRoutes from '@/router/routes/core.ts'
-import { usePageService } from '@/services'
 
 function createVueRouter() {
   /**
@@ -39,8 +37,6 @@ function createVueRouter() {
   useProgressGuard(router)
   useAccessGuard(router)
   useDocumentTitleGuard(router)
-
-  watch(router.currentRoute, (route) => usePageService(router).addOpenedPage(route))
 
   resetRoutes()
 

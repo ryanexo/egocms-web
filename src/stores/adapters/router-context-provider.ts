@@ -5,6 +5,7 @@ import { trimStart } from 'es-toolkit'
 import type { IRoute } from '@/router/types/common'
 import type { RouterContextProvider } from '@/stores/types/router'
 
+import { trans } from '@/locales'
 import { CoreRouteNameEnum } from '@/router/constants/route.enum.ts'
 import { messageService } from '@/services'
 
@@ -23,9 +24,9 @@ export function useRouterStoreContextProvider(router: Router): RouterContextProv
 
     return result
   }
-  const fetchRoutes: RouterContextProvider['fetchRoutes'] = () => {
-    const message = messageService.loading('common.app.router.loadingMenus', { duration: 0 })
-    const result = Promise.resolve<IRoute[]>([
+  const fetchRoutes: RouterContextProvider['fetchRoutes'] = async () => {
+    const message = messageService.loading(trans('common.app.router.loadingMenus'), { duration: 0 })
+    const result: IRoute[] = [
       {
         component: '/',
         id: '1',
@@ -77,7 +78,7 @@ export function useRouterStoreContextProvider(router: Router): RouterContextProv
         parentId: '0',
         path: '/root2',
       },
-    ])
+    ]
     message.then((closer) => closer.close())
 
     return result

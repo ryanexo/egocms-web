@@ -41,8 +41,6 @@ export function useStandardResponseInterceptor(axios: AxiosInstance, policies: H
   axios.interceptors.response.use((response) => {
     const data = response.data
 
-    Promise.reject('test')
-
     if (policies.validator.isValidJsonData(data)) {
       if (!policies.validator.isValidCode(data.code)) {
         throw new HttpResponseException(data.msg).withContext(response)

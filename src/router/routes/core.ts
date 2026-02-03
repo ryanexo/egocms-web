@@ -26,7 +26,7 @@ const routes: RouteRecordRaw[] = [
     },
     name: CoreRouteNameEnum.Home,
     path: CoreRoutePathEnum.Home,
-    redirect: { name: CoreRouteNameEnum.Dashboard },
+    redirect: { path: CoreRoutePathEnum.Dashboard },
   },
   {
     children: [

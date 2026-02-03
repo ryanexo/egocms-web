@@ -5,10 +5,17 @@ import { useRouter } from 'vue-router'
 import { trans } from '@/locales'
 import FullscreenLayout from '@/pages/core/layout/FullscreenLayout.vue'
 import { CoreRoutePathEnum } from '@/router/constants/route.enum.ts'
+import { useRouterStore } from '@/stores'
 
 import notfound from './images/notfound.svg'
 
 const router = useRouter()
+const routerStore = useRouterStore()
+
+function onGobackHome() {
+  const homePath = routerStore.homePath ?? CoreRoutePathEnum.Home
+  router.replace(homePath)
+}
 </script>
 
 <template>
@@ -21,11 +28,11 @@ const router = useRouter()
         <span class="text-3xl leading-8 font-bold">{{ trans('fallback.notFound.title') }}</span>
         <span class="text-t-secondary leading-3">{{ trans('fallback.notFound.subtitle') }}</span>
       </div>
-      <t-button @click="router.replace(CoreRoutePathEnum.Home)">
+      <t-button @click="onGobackHome">
         <template #icon>
           <arrow-left-icon />
         </template>
-        {{ trans('fallback.notFound.subtitle') }}
+        {{ trans('fallback.notFound.goback') }}
       </t-button>
     </div>
   </fullscreen-layout>

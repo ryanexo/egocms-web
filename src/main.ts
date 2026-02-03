@@ -11,7 +11,7 @@ import { CoreRoutePathEnum } from '@/router/constants/route.enum.ts'
 import { pinia, useAppStore, useAuthStore, useRouterStore } from '@/stores'
 import { useAppUpdater } from '@/stores/adapters/app-updater.ts'
 
-export async function createApp() {
+async function createApp() {
   const app = createVueApp(App).use(pinia).use(i18n)
 
   const appStore = useAppStore()
@@ -27,21 +27,24 @@ export async function createApp() {
   routerStore.setWhitelist([CoreRoutePathEnum.Login, CoreRoutePathEnum.Register])
   routerStore.setUnauthorizedRedirectPath(CoreRoutePathEnum.Login)
 
-  /**
-   * APP依赖Token运行，开发环境可设置一个非空Token以运行
-   */
-  authStore.setToken('test')
+  if (import.meta.env.DEV) {
+    /**
+     * APP依赖Token运行，开发环境可设置一个非空Token以运行
+     */
+    authStore.setToken('dev')
+  }
 
   /**
-   * router必须最后注册
+   * router依赖store运行
    *
-   * router会在注册后立即生效，导致应用在异步初始化方法完成前不正常运行
+   * 必须在store完成初始化后注册
    */
   app.use(router)
+  app.mount('#app')
 
   startErrorCapture(app, router)
 
   return app
 }
 
-createApp().then((app) => app.mount('#app'))
+createApp()

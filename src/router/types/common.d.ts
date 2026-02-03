@@ -3,7 +3,7 @@ import 'vue-router'
 export interface IRoute {
   component: string
   id: string
-  meta: IRouteMeta
+  meta: Partial<IRouteMeta>
   parentId: string
   path: string
 }
