@@ -14,7 +14,7 @@ export interface RouterContextProvider {
 }
 
 export interface RouterStoreState {
-  homePath: string
+  homePath?: string
   loaded: boolean
   parentRouteMap: Map<string, RouteRecordRaw>
   routeMap: Map<string, RouteRecordRaw>

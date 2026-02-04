@@ -80,7 +80,7 @@ export function createRouterStore(pinia: Pinia) {
     },
     state: (): RouterStoreState => {
       return {
-        homePath: '',
+        homePath: undefined,
         loaded: false,
         parentRouteMap: new Map(),
         routeMap: new Map(),

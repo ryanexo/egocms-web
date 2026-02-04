@@ -31,7 +31,7 @@ import { usePageService } from '@/services'
 import { usePageStore, useRouterStore } from '@/stores'
 import { useClassNs } from '@/utils/bem.ts'
 
-import '../styles/page-tabs.scss'
+import styles from '../styles/page-tabs.module.css'
 
 const TabPanelLabel = defineComponent<TabPanelLabelProps>({
   emits: [
@@ -224,18 +224,18 @@ const PageTabs = defineComponent({
 
     const contextmenuActiveName = ref()
 
-    function onTabChange(value: TabValue) {
+    const onTabChange = (value: TabValue) => {
       const name = String(value)
       router.push({ name })
     }
-    function onTabRemove(options: { value: TabValue }) {
+    const onTabRemove = (options: { value: TabValue }) => {
       const name = String(options.value)
       pageService.close(name)
     }
-    function onTabSort(context: TabsDragSortContext) {
+    const onTabSort = (context: TabsDragSortContext) => {
       pageService.move(context.currentIndex, context.targetIndex)
     }
-    function onPopupVisibleChange(page: Page, visible: boolean, ctx: PopupVisibleChangeContext) {
+    const onPopupVisibleChange = (page: Page, visible: boolean, ctx: PopupVisibleChangeContext) => {
       if (ctx.trigger === 'document') {
         contextmenuActiveName.value = undefined
       } else if (visible) {
@@ -273,7 +273,7 @@ const PageTabs = defineComponent({
             key={item.id}
             label={item.title}
             onRemove={onTabRemove}
-            removable={!item.defaultPined || item.alwaysPined}
+            removable={!item.defaultPined || !item.alwaysPined}
             value={item.id}
           >
             {{
@@ -297,7 +297,7 @@ const PageTabs = defineComponent({
       })
 
       return (
-        <div class={[ns.b()]}>
+        <div class={[ns.b(), styles.pageTabs]}>
           <Tabs
             class="bg-transparent!"
             dragSort={true}
