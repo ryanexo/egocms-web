@@ -2,7 +2,7 @@ import type { LocationQueryRaw, RouteMeta } from 'vue-router'
 
 export type Page = Pick<
   RouteMeta,
-  'affix' | 'affixCancelable' | 'externalUrl' | 'icon' | 'title'
+  'alwaysPined' | 'defaultPined' | 'externalUrl' | 'icon' | 'title'
 > & {
   fullPath: string
   id: string

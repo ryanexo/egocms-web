@@ -1,0 +1,48 @@
+@import "@/assets/theme.css";
+
+.page-tabs {
+  --td-comp-size-xxl: var(--text-4xl);
+  --td-bg-color-secondarycontainer-hover: var(--color-gray-100);
+
+  background: var(--color-white);
+  padding: calc(var(--spacing) * 1);
+
+  .t-tabs__nav-container.t-tabs__nav--card {
+    background-color: white;
+  }
+
+  .t-tabs__nav-wrap {
+    row-gap: calc(var(--spacing) * 1);
+    column-gap: calc(var(--spacing) * 1);
+  }
+
+  .t-tabs__nav--card.t-tabs__nav-item {
+    transition-timing-function: linear;
+    transition-duration: 0.1s;
+    transition-property: border-color, background-color;
+    background: white;
+    border-radius: var(--radius-md);
+    border: none;
+
+    &:not(.t-is-disabled):not(.t-is-active):hover {
+      background-color: var(--app-background-color);
+      border-color: var(--app-border-color);
+    }
+
+    &.t-is-active {
+      background-color: var(--app-background-color);
+    }
+
+    .t-icon-close {
+      width: var(--text-xl);
+      height: var(--text-xl);
+      padding: 0.125rem;
+
+      &:hover {
+        background: var(--app-background-color-hover);
+        transition: 0.05s linear all;
+        border-radius: 100%;
+      }
+    }
+  }
+}

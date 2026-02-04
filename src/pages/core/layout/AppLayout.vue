@@ -3,19 +3,37 @@ import AppLogo from '@/pages/core/layout/components/AppLogo.vue'
 import LayoutContent from '@/pages/core/layout/components/LayoutContent.vue'
 import LayoutHeader from '@/pages/core/layout/components/LayoutHeader.vue'
 import LayoutSidebar from '@/pages/core/layout/components/LayoutSidebar.vue'
+import { useClassNs } from '@/utils/bem.ts'
+
+const ns = useClassNs('app-layout')
 </script>
 
 <template>
-  <div class="layout flex h-full w-full">
+  <div
+    class="flex h-full w-full"
+    :class="[ns.b()]"
+  >
     <div
       class="relative flex h-full w-(--app-sidebar-size) shrink-0 flex-col border-r border-(--app-border-color) bg-white"
     >
-      <app-logo class="shrink-0" />
-      <layout-sidebar class="h-0 grow" />
+      <app-logo
+        class="shrink-0"
+        :class="[ns.e('logo')]"
+      />
+      <layout-sidebar
+        class="h-0 grow"
+        :class="[ns.e('sidebar')]"
+      />
     </div>
     <div class="relative flex h-full min-w-3xl grow flex-col">
-      <layout-header class="shrink-0"></layout-header>
-      <div class="h-auto overflow-y-auto lg:h-0 lg:grow">
+      <layout-header
+        class="shrink-0"
+        :class="ns.e('header')"
+      ></layout-header>
+      <div
+        class="h-auto overflow-y-auto lg:h-0 lg:grow"
+        :class="[ns.e('content')]"
+      >
         <layout-content />
       </div>
     </div>

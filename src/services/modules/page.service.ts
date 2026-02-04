@@ -20,10 +20,13 @@ export function usePageService(router?: Router): IPageService {
   const findIndexByIdOrIndex = (idOrIndex: number | string) => {
     return typeof idOrIndex === 'number' ? idOrIndex : pageStore.opened.indexOf(idOrIndex)
   }
+  const jumpToPage = (id: string) => {
+    return currentRouter.push({ name: id, query: pageStore.pages.get(id)?.query })
+  }
   const open: IPageService['open'] = (route) => {
     const page: Page = {
-      affix: route.meta?.affix,
-      affixCancelable: route.meta?.affixCancelable,
+      alwaysPined: route.meta?.alwaysPined,
+      defaultPined: route.meta?.defaultPined,
       externalUrl: route.meta?.externalUrl,
       fullPath: route.fullPath,
       icon: route.meta?.icon,
@@ -37,7 +40,7 @@ export function usePageService(router?: Router): IPageService {
     }
     pageStore.pages.set(page.id, page)
     pageStore.current = page.id
-    if (page.affix) {
+    if (page.defaultPined) {
       pageStore.pined.add(page.id)
     }
   }
@@ -55,7 +58,7 @@ export function usePageService(router?: Router): IPageService {
     const id = pageStore.opened?.[index]
 
     if (index !== currentIndex && id) {
-      currentRouter.push({ name: id })
+      jumpToPage(id)
     }
 
     closeBefore(index)
@@ -125,7 +128,7 @@ export function usePageService(router?: Router): IPageService {
   }
   const unpin: IPageService['unpin'] = (id: string) => {
     const page = pageStore.pages.get(id)
-    if (page?.affixCancelable !== true) {
+    if (page?.alwaysPined !== true) {
       pageStore.pined.delete(id)
       partitionByPined()
     }

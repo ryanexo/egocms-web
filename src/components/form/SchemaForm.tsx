@@ -155,6 +155,7 @@ const SchemaForm = defineComponent({
             {...props.options.map((item) => {
               return (
                 <SchemaField
+                  key={item.fieldKey}
                   ref={options}
                   {...item}
                 />

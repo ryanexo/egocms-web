@@ -17,6 +17,11 @@ export default defineConfig((context) => {
     build: {
       target: 'es6',
     },
+    css: {
+      modules: {
+        localsConvention: 'camelCaseOnly',
+      },
+    },
     plugins: [
       vue(),
       vueJsx(),

@@ -31,8 +31,8 @@ export function useRouterStoreContextProvider(router: Router): RouterContextProv
         component: '/',
         id: '1',
         meta: {
-          affix: true,
-          affixCancelable: false,
+          alwaysPined: false,
+          defaultPined: true,
           externalUrl: '',
           icon: '',
           isRoot: false,
@@ -48,8 +48,8 @@ export function useRouterStoreContextProvider(router: Router): RouterContextProv
         component: '/',
         id: '2',
         meta: {
-          affix: true,
-          affixCancelable: false,
+          alwaysPined: false,
+          defaultPined: true,
           externalUrl: '',
           icon: '',
           isRoot: false,
@@ -65,8 +65,8 @@ export function useRouterStoreContextProvider(router: Router): RouterContextProv
         component: '/',
         id: '3',
         meta: {
-          affix: false,
-          affixCancelable: false,
+          alwaysPined: false,
+          defaultPined: false,
           externalUrl: '',
           icon: '',
           isRoot: false,

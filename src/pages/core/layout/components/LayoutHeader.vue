@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PageTabs from '@/pages/core/layout/components/PageTabs.vue'
+import PageTabs from '@/pages/core/layout/components/PageTabs.tsx'
 </script>
 
 <template>
@@ -8,5 +8,3 @@ import PageTabs from '@/pages/core/layout/components/PageTabs.vue'
     <page-tabs />
   </div>
 </template>
-
-<style scoped></style>

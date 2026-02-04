@@ -9,8 +9,8 @@ export interface IRoute {
 }
 
 export interface IRouteMeta {
-  affix: boolean
-  affixCancelable: boolean
+  alwaysPined: boolean
+  defaultPined: boolean
   externalUrl: string
   hiddenInMenu: boolean
   icon: string

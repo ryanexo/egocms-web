@@ -7,8 +7,8 @@ const routes: RouteRecordRaw[] = [
   {
     component: DashboardPage,
     meta: {
-      affix: true,
-      affixCancelable: false,
+      alwaysPined: true,
+      defaultPined: true,
       icon: 'home',
       permission: [],
       requiresAuth: true,

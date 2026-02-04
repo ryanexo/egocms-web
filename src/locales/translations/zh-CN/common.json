@@ -14,11 +14,13 @@
       "loadingMenus": "正在加载菜单..."
     },
     "tab": {
-      "close": "关闭",
-      "refresh": "刷新",
-      "closeBefore": "关闭左侧",
-      "closeAfter": "关闭右侧",
-      "closeOther": "关闭其他"
+      "close": "关闭标签",
+      "refresh": "重新加载",
+      "closeBefore": "关闭左侧标签",
+      "closeAfter": "关闭右侧标签",
+      "closeOther": "关闭其他标签",
+      "pin": "固定标签",
+      "unpin": "取消固定标签"
     }
   }
 }

@@ -31,11 +31,6 @@ export interface IPageService {
   open(route: RouteLocationNormalizedLoadedGeneric): void
 
   pin(id: string): void
-  /**
-   * 刷新当前页面
-   *
-   * 返回结果fulfilled时表示刷新完成，但不保证组件已加载完成
-   */
   refresh(): Promise<void>
   unpin(id: string): void
 }

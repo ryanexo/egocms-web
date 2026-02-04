@@ -17,22 +17,7 @@ export function createPageStore(pinia: Pinia) {
         return [...state.skipCache]
       },
       openedPages: (state) => {
-        const stickied: Page[] = []
-        const statics: Page[] = []
-
-        state.opened.forEach((id) => {
-          const pageMeta = state.pages.get(id)
-          if (!pageMeta) {
-            return
-          }
-          if (state.pined.has(id)) {
-            stickied.push(pageMeta)
-          } else {
-            statics.push(pageMeta)
-          }
-        })
-
-        return [...stickied, ...statics]
+        return state.opened.map((id) => state.pages.get(id) as Page)
       },
     },
     persist: {

@@ -43,6 +43,7 @@ const NestedMenuItem = defineComponent<MenuProps>({
             <MenuItem
               content={meta.title}
               href={meta.externalUrl}
+              key={uniqueName}
               router={meta.externalUrl ? undefined : router}
               routerLink={!meta.externalUrl}
               target={meta.externalUrl ? '_blank' : undefined}
@@ -57,6 +58,7 @@ const NestedMenuItem = defineComponent<MenuProps>({
         } else {
           result.push(
             <Submenu
+              key={uniqueName}
               title={meta.title}
               value={uniqueName}
             >
