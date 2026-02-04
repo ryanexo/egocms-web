@@ -1,6 +1,6 @@
 import { reactive, ref } from 'vue'
 
-import { createPromiseWithResolver } from '@/utils/promise.ts'
+import { useResolver } from '@/utils/promise.ts'
 
 type PromiseResolve<T> = (value: T) => void
 
@@ -43,7 +43,7 @@ function useLoading(duration: number = 200): Loading {
   }
 
   const startLoading = <T>() => {
-    const { promise, reject, resolve } = createPromiseWithResolver<T>()
+    const { promise, reject, resolve } = useResolver<T>()
 
     if (context.beginTime === 0) {
       context.beginTime = Date.now()

@@ -1,12 +1,15 @@
 <script setup lang="ts">
-const onError = async () => {
-  throw new Error('123123')
-}
+import { useIntervalFn } from '@vueuse/core'
+import { ref } from 'vue'
+
+const count = ref(0)
+
+useIntervalFn(() => count.value++, 500)
 </script>
 
 <template>
   <div>
-    <t-button @click="onError">test</t-button>
+    {{ count }}
   </div>
 </template>
 

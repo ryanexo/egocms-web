@@ -44,7 +44,7 @@ function onTabRemove(options: { value: TabValue }) {
   pageService.close(name)
 }
 function onTabSort(context: TabsDragSortContext) {
-  pageService.move(String(context.current), context.targetIndex)
+  pageService.move(context.currentIndex, context.targetIndex)
 }
 function onPopupVisibleChange(page: Page, visible: boolean, ctx: PopupVisibleChangeContext) {
   if (ctx.trigger === 'document') {
@@ -155,7 +155,7 @@ watch(
   </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 .tab-area {
   --td-comp-size-xxl: var(--text-4xl);
   --td-bg-color-secondarycontainer-hover: var(--color-gray-100);
@@ -163,16 +163,16 @@ watch(
   background: var(--color-white);
   padding: calc(var(--spacing) * 1);
 
-  :deep(.t-tabs__nav-container.t-tabs__nav--card) {
+  .t-tabs__nav-container.t-tabs__nav--card {
     background-color: white;
   }
 
-  :deep(.t-tabs__nav-wrap) {
+  .t-tabs__nav-wrap {
     row-gap: calc(var(--spacing) * 1);
     column-gap: calc(var(--spacing) * 1);
   }
 
-  :deep(.t-tabs__nav--card.t-tabs__nav-item) {
+  .t-tabs__nav--card.t-tabs__nav-item {
     transition-timing-function: linear;
     transition-duration: 0.1s;
     transition-property: border-color, background-color;
@@ -181,12 +181,12 @@ watch(
     border: none;
 
     &:not(.t-is-disabled):not(.t-is-active):hover {
-      background-color: var(--app-background-color);
+      background-color: var(--app-background-color-hover);
       border-color: var(--app-border-color);
     }
 
     &.t-is-active {
-      background-color: var(--app-background-color);
+      background: rgba(var(--primary) / 0.1);
     }
 
     .t-icon-close {
@@ -195,9 +195,10 @@ watch(
       padding: 0.125rem;
 
       &:hover {
-        background: var(--app-background-color-hover);
-        transition: 0.05s linear all;
+        background: rgba(var(--danger) / 0.05);
+        transition: 0.1s linear all;
         border-radius: 100%;
+        color: var(--color-danger);
       }
     }
   }

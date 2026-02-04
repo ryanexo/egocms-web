@@ -3,7 +3,7 @@ import type { RouteRecordRaw } from 'vue-router'
 import AuthPage from '@/pages/core/auth/AuthPage.vue'
 import LoginPage from '@/pages/core/auth/LoginPage.vue'
 import NotFound from '@/pages/core/fallback/NotFound.vue'
-import UniversalLayout from '@/pages/core/layout/UniversalLayout.vue'
+import AppLayout from '@/pages/core/layout/AppLayout.vue'
 import { CoreRouteNameEnum, CoreRoutePathEnum } from '@/router/constants/route.enum.ts'
 
 const routes: RouteRecordRaw[] = [
@@ -17,7 +17,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     children: [],
-    component: UniversalLayout,
+    component: AppLayout,
     meta: {
       icon: '',
       permission: [],

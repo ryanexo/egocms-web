@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import AppLogo from '@/pages/core/layout/components/AppLogo.vue'
 import LayoutContent from '@/pages/core/layout/components/LayoutContent.vue'
 import LayoutHeader from '@/pages/core/layout/components/LayoutHeader.vue'
 import LayoutSidebar from '@/pages/core/layout/components/LayoutSidebar.vue'
-import LogoArea from '@/pages/core/layout/components/LogoArea.vue'
 </script>
 
 <template>
@@ -10,7 +10,7 @@ import LogoArea from '@/pages/core/layout/components/LogoArea.vue'
     <div
       class="relative flex h-full w-(--app-sidebar-size) shrink-0 flex-col border-r border-(--app-border-color) bg-white"
     >
-      <logo-area class="shrink-0" />
+      <app-logo class="shrink-0" />
       <layout-sidebar class="h-0 grow" />
     </div>
     <div class="relative flex h-full min-w-3xl grow flex-col">

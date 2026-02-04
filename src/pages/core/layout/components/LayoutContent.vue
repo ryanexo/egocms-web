@@ -39,12 +39,13 @@ function renameUsingRoute(route: RouteLocationNormalizedGeneric, component: VNod
         mode="out-in"
       >
         <keep-alive
+          ref="keepAliveRef"
           :include="pageStore.opened"
           :exclude="pageStore.flatSkipCache"
         >
           <component
             v-if="pageStore.visible"
-            :key="route.fullPath"
+            :key="route.name"
             :is="renameUsingRoute(route, Component)"
           />
         </keep-alive>

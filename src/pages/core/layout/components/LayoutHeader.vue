@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import TabArea from '@/pages/core/layout/components/TabArea.vue'
+import PageTabs from '@/pages/core/layout/components/PageTabs.vue'
 </script>
 
 <template>
   <div class="layout__header">
     <div class="h-(--app-header-size) border-b border-b-(--app-border-color) bg-white"></div>
-    <tab-area />
+    <page-tabs />
   </div>
 </template>
 

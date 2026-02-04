@@ -10,16 +10,14 @@ import type {
   ConfirmOptions,
 } from '@/components/dialog/types/ConfirmDialogTypes'
 
-import { createPromiseWithResolver } from '@/utils/promise.ts'
+import { useResolver } from '@/utils/promise.ts'
 
 export function openConfirmDialog(
   content: string | TNode,
   options?: ConfirmOptions,
 ): ConfirmDialogResult {
-  const { promise, resolve } = createPromiseWithResolver<ConfirmBehavior>()
-  const { promise: closedSignal, resolve: notifyClosed } =
-    // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-    createPromiseWithResolver<void>()
+  const { promise, resolve } = useResolver<ConfirmBehavior>()
+  const { promise: closedSignal, resolve: notifyClosed } = useResolver<void>()
 
   const RootComponent = defineComponent({
     setup() {

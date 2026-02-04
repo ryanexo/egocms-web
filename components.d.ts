@@ -14,7 +14,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     ConfirmDialog: typeof import('./src/components/dialog/ConfirmDialog.vue')['default']
     ElementWrapper: typeof import('./src/components/form/ElementWrapper.vue')['default']
-    FrameworkLayout: typeof import('./src/pages/core/framework/UniversalLayout.vue')['default']
+    FrameworkLayout: typeof import('./src/pages/core/framework/AppLayout.vue')['default']
     GridLayout: typeof import('./src/components/form/GridLayout.vue')['default']
     HeaderLayout: typeof import('./src/pages/core/framework/components/LayoutHeader.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
@@ -52,7 +52,7 @@ declare module 'vue' {
 declare global {
   const ConfirmDialog: (typeof import('./src/components/dialog/ConfirmDialog.vue'))['default']
   const ElementWrapper: (typeof import('./src/components/form/ElementWrapper.vue'))['default']
-  const FrameworkLayout: (typeof import('./src/pages/core/framework/UniversalLayout.vue'))['default']
+  const FrameworkLayout: (typeof import('./src/pages/core/framework/AppLayout.vue'))['default']
   const GridLayout: (typeof import('./src/components/form/GridLayout.vue'))['default']
   const HeaderLayout: (typeof import('./src/pages/core/framework/components/LayoutHeader.vue'))['default']
   const HelloWorld: (typeof import('./src/components/HelloWorld.vue'))['default']

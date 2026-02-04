@@ -9,6 +9,7 @@ import type { IPageService } from '@/services/types/page.service'
 import type { Page } from '@/stores/types/page'
 
 import { CoreRouteNameEnum } from '@/router/constants/route.enum.ts'
+import { progressService } from '@/services'
 import { usePageStore, useRouterStore } from '@/stores'
 
 export function usePageService(router?: Router): IPageService {
@@ -102,31 +103,44 @@ export function usePageService(router?: Router): IPageService {
     if (currentIndex === targetIndex || targetIndex < 0 || targetIndex >= pageStore.opened.length) {
       return
     }
-    if (targetIndex > currentIndex) {
-      targetIndex -= 1
+
+    const currentId = pageStore.opened?.[currentIndex] as string
+    const targetId = pageStore.opened?.[targetIndex] as string
+    if (pageStore.pined.has(currentId) || pageStore.pined.has(targetId)) {
+      return
     }
-    const id = pageStore.opened?.[currentIndex]
-    if (id) {
-      pageStore.opened.splice(currentIndex, 1)
-      pageStore.opened.splice(targetIndex, 0, id)
-    }
+
+    pageStore.opened[currentIndex] = targetId
+    pageStore.opened[targetIndex] = currentId
+  }
+  const partitionByPined = () => {
+    pageStore.opened = [
+      ...pageStore.pined,
+      ...pageStore.opened.filter((item) => !pageStore.pined.has(item)),
+    ]
   }
   const pin: IPageService['pin'] = (id: string) => {
     pageStore.pined.add(id)
+    partitionByPined()
   }
   const unpin: IPageService['unpin'] = (id: string) => {
     const page = pageStore.pages.get(id)
     if (page?.affixCancelable !== true) {
       pageStore.pined.delete(id)
+      partitionByPined()
     }
   }
   const refresh: IPageService['refresh'] = async () => {
+    progressService.start()
     pageStore.visible = false
+    pageStore.skipCache.add(pageStore.current)
 
     await nextTick()
     await promiseTimeout(200)
 
+    pageStore.skipCache.delete(pageStore.current)
     pageStore.visible = true
+    progressService.done()
   }
   /**
    * 清理页面关联数据，force=true时会强制清理固定页面

@@ -30,6 +30,14 @@ const NestedMenuItem = defineComponent<MenuProps>({
         const isLeaf = !Array.isArray(children) || children.length === 0
         const uniqueName = name ? String(name) : path
 
+        const icon = () => {
+          const menuIcon = meta.icon ? <Icon name={meta.icon} /> : <></>
+
+          return (
+            <span class="inline-flex h-6 w-6 items-center justify-center text-xs">{menuIcon}</span>
+          )
+        }
+
         if (isLeaf) {
           result.push(
             <MenuItem
@@ -42,7 +50,7 @@ const NestedMenuItem = defineComponent<MenuProps>({
               value={uniqueName}
             >
               {{
-                icon: () => (meta.icon ? <Icon name={meta.icon} /> : undefined),
+                icon,
               }}
             </MenuItem>,
           )
@@ -54,7 +62,7 @@ const NestedMenuItem = defineComponent<MenuProps>({
             >
               {{
                 default: () => <NestedMenuItem menus={children}></NestedMenuItem>,
-                icon: () => (meta.icon ? <Icon name={meta.icon} /> : undefined),
+                icon,
               }}
             </Submenu>,
           )

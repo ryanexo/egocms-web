@@ -33,4 +33,9 @@ watch(
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style>
+.menu {
+  .t-default-menu .t-menu__item.t-is-active:not(.t-is-opened) {
+  }
+}
+</style>
