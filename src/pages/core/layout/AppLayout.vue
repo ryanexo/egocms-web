@@ -14,7 +14,7 @@ const ns = useClassNs('app-layout')
     :class="[ns.b()]"
   >
     <div
-      class="relative flex h-full w-(--app-sidebar-size) shrink-0 flex-col border-r border-(--app-border-color) bg-white"
+      class="relative flex h-full w-(--app-sidebar-size) shrink-0 flex-col border-r border-(--app-border) bg-white"
     >
       <app-logo
         class="shrink-0"

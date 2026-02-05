@@ -1,47 +1,71 @@
 @import '@/assets/theme.css';
 
 .page-tabs {
-  --td-comp-size-xxl: var(--text-4xl);
   --td-bg-color-secondarycontainer-hover: var(--color-gray-100);
-
-  background: var(--color-white);
-  padding: calc(var(--spacing) * 1);
+  --page-tabs-bg: var(--app-bg);
+  --page-tabs-bg-hover: var(--app-bg-hover);
+  --page-tabs-bg-active: white;
+  --page-tabs-limiter: var(--app-bg-limiter);
+  --td-comp-size-xxl: calc(var(--spacing) * 10);
 
   :global(.t-tabs__nav-container.t-tabs__nav--card) {
-    background-color: white;
+    background-color: var(--page-tabs-bg);
   }
 
   :global(.t-tabs__nav-wrap) {
     row-gap: calc(var(--spacing) * 1);
-    column-gap: calc(var(--spacing) * 1);
   }
 
   :global(.t-tabs__nav--card.t-tabs__nav-item) {
+    position: relative;
+    background: var(--page-tabs-bg);
+    border-top-left-radius: var(--radius-md);
+    border-top-right-radius: var(--radius-md);
+    border: none;
+
     transition-timing-function: linear;
     transition-duration: 0.1s;
     transition-property: border-color, background-color;
-    background: white;
-    border-radius: var(--radius-md);
-    border: none;
+  }
+
+  :global(.t-tabs__nav--card.t-tabs__nav-item::before) {
+    content: '';
+    background: var(--page-tabs-limiter);
+    width: 1px;
+    height: 50%;
+    position: absolute;
+    display: block;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    transition: background 0.2s linear;
+  }
+
+  :global(.t-tabs__nav--card.t-tabs__nav-item:first-child::before),
+  :global(.t-tabs__nav--card.t-tabs__nav-item:hover::before),
+  :global(.t-tabs__nav--card.t-tabs__nav-item:hover + .t-tabs__nav--card.t-tabs__nav-item::before),
+  :global(.t-tabs__nav--card.t-tabs__nav-item.t-is-active::before),
+  :global(
+    .t-tabs__nav--card.t-tabs__nav-item.t-is-active + .t-tabs__nav--card.t-tabs__nav-item::before
+  ) {
+    background: transparent;
   }
 
   :global(.t-tabs__nav--card.t-tabs__nav-item:not(.t-is-disabled):not(.t-is-active):hover) {
-    background-color: var(--app-background-color);
-    border-color: var(--app-border-color);
+    background-color: var(--page-tabs-bg-hover);
+    border: none;
   }
 
   :global(.t-tabs__nav--card.t-tabs__nav-item.t-is-active) {
-    background-color: var(--app-background-color);
+    background-color: var(--page-tabs-bg-active);
   }
 
-  :global(.t-icon-close) {
-    width: var(--text-xl);
-    height: var(--text-xl);
-    padding: 0.125rem;
+  :global(.t-tabs__nav--card.t-tabs__nav-item.t-is-active::before) {
+    content: '';
   }
 
   :global(.t-icon-close:hover) {
-    transition: 0.05s linear all;
+    transition: 0.2s linear all;
     border-radius: 100%;
 
     @apply text-danger;

@@ -13,6 +13,7 @@ import {
   ExpandHorizontalIcon,
   LockCheckedIcon,
   LockOffIcon,
+  PinIcon,
   RefreshIcon,
 } from 'tdesign-icons-vue-next'
 import { Dropdown, DropdownItem, DropdownMenu, Icon, TabPanel, Tabs } from 'tdesign-vue-next'
@@ -96,7 +97,9 @@ const TabPanelLabel = defineComponent<TabPanelLabelProps>({
     },
   },
   setup(props: TabPanelLabelProps, { emit }) {
+    const pageStore = usePageStore()
     const pageService = usePageService()
+    const ns = useClassNs('page-tabs')
 
     const actionIcon: Record<ContextmenuAction, TabDropdownAction> = {
       close: {
@@ -142,6 +145,7 @@ const TabPanelLabel = defineComponent<TabPanelLabelProps>({
     }
 
     return () => {
+      const pined = pageStore.pined.has(props.data.id)
       const { contextmenuMinWidth, contextmenuVisible, data, disableActions } = props
 
       const actionChunks: ContextmenuAction[][] = [
@@ -176,6 +180,32 @@ const TabPanelLabel = defineComponent<TabPanelLabelProps>({
         visible: contextmenuVisible,
       }
 
+      const pinAction = (
+        <span
+          class={[
+            ns.e('icon'),
+            ns.em('icon', 'pin'),
+            'ml-(--td-comp-margin-s)',
+            'flex',
+            'justify-center',
+            'items-center',
+          ]}
+          onClick={() => onTriggerAction('unpin')}
+        >
+          <PinIcon
+            class={[
+              'h-(--text-lg)',
+              'w-(--text-lg)',
+              'p-0.5',
+              'text-zinc-500',
+              'hover:text-zinc-900',
+              'transition-colors',
+              'duration-200',
+            ]}
+          />
+        </span>
+      )
+
       return (
         <Dropdown
           minColumnWidth={contextmenuMinWidth}
@@ -185,9 +215,12 @@ const TabPanelLabel = defineComponent<TabPanelLabelProps>({
           {{
             default: () => {
               return (
-                <span class="inline-flex items-center justify-center gap-x-1">
-                  {data.icon ? <Icon name={data.icon}></Icon> : undefined}
-                  {data.title}
+                <span class="inline-flex items-center justify-center">
+                  <span class="inline-flex items-center justify-center gap-x-1">
+                    {data.icon ? <Icon name={data.icon} /> : undefined}
+                    {data.title}
+                  </span>
+                  {pined ? pinAction : undefined}
                 </span>
               )
             },
@@ -259,7 +292,9 @@ const PageTabs = defineComponent({
 
       pages.forEach((item, index) => {
         const pined = pageStore.pined.has(item.id)
+        const removable = !pined && (!item.defaultPined || !item.alwaysPined)
         const disableActions: Partial<TabPanelLabelProps['disableActions']> = {
+          close: pined,
           closeAfter: index === pages.length - 1,
           closeBefore: index === 0,
           pin: item.alwaysPined || pined,
@@ -273,7 +308,7 @@ const PageTabs = defineComponent({
             key={item.id}
             label={item.title}
             onRemove={onTabRemove}
-            removable={!item.defaultPined || !item.alwaysPined}
+            removable={removable}
             value={item.id}
           >
             {{
@@ -297,7 +332,20 @@ const PageTabs = defineComponent({
       })
 
       return (
-        <div class={[ns.b(), styles.pageTabs]}>
+        <div
+          class={[
+            ns.b(),
+            styles.pageTabs,
+            'bg-(--page-tabs-bg)',
+            'flex',
+            'flex-col',
+            'justify-end',
+            'px-1',
+            'pt-1',
+            'border-b',
+            'border-b-limiter',
+          ]}
+        >
           <Tabs
             class="bg-transparent!"
             dragSort={true}

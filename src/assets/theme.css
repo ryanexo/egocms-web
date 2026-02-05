@@ -1,6 +1,16 @@
 @import 'tailwindcss';
 
 @theme {
+  --app-header-size: calc(var(--spacing) * 12);
+  --app-sidebar-size: calc(var(--spacing) * 60);
+
+  --app-border: var(--color-zinc-200);
+  --app-border-hover: var(--color-zinc-300);
+
+  --app-bg: var(--color-zinc-100);
+  --app-bg-hover: var(--color-zinc-200);
+  --app-bg-limiter: var(--color-zinc-300);
+
   --primary: 0 82 217;
   --success: 43 164 113;
   --danger: 213 73 65;
@@ -11,16 +21,9 @@
   --color-danger: rgb(var(--danger));
   --color-warning: rgb(var(--warning));
 
-  --color-t-base: var(--color-gray-700);
-  --color-t-secondary: var(--color-gray-500);
-  --color-t-muted: var(--color-gray-400);
+  --color-t-base: var(--color-stone-800);
+  --color-t-secondary: var(--color-stone-600);
+  --color-t-muted: var(--color-stone-400);
 
-  --app-header-size: var(--text-6xl);
-  --app-sidebar-size: calc(var(--spacing) * 60);
-
-  --app-background-color: var(--color-zinc-100);
-  --app-background-color-hover: var(--color-zinc-100);
-
-  --app-border-color: var(--color-zinc-200);
-  --app-border-color-hover: var(--color-zinc-300);
+  --border-color-limiter: var(--app-border);
 }
