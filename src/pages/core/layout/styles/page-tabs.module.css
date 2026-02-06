@@ -1,11 +1,11 @@
 @import '@/assets/theme.css';
 
-.page-tabs {
+.pageTabs {
   --td-bg-color-secondarycontainer-hover: var(--color-gray-100);
-  --page-tabs-bg: var(--app-bg);
-  --page-tabs-bg-hover: var(--app-bg-hover);
+  --page-tabs-bg: var(--color-tab-bg);
+  --page-tabs-bg-hover: var(--color-tab-hover);
   --page-tabs-bg-active: white;
-  --page-tabs-limiter: var(--app-bg-limiter);
+  --page-tabs-limiter: var(--color-tab-limiter);
   --td-comp-size-xxl: calc(var(--spacing) * 10);
 
   :global(.t-tabs__nav-container.t-tabs__nav--card) {

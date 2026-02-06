@@ -1,10 +1,9 @@
 import type { Arrayable } from '@vueuse/core'
-import type { Pinia } from 'pinia'
 import type { RouteRecordRaw } from 'vue-router'
 
 import { isNil, trimEnd } from 'es-toolkit'
 import { castArray } from 'es-toolkit/compat'
-import { defineStore } from 'pinia'
+import { acceptHMRUpdate, defineStore } from 'pinia'
 import { defineAsyncComponent, defineComponent, h } from 'vue'
 
 import type {
@@ -17,82 +16,78 @@ import { useAsyncComponentSkeleton } from '@/components/skeleton/AsyncComponentS
 import { trans } from '@/locales'
 import { getLocalRoutes } from '@/router'
 
-export function createRouterStore(pinia: Pinia) {
-  const store = defineStore('store.router', {
-    actions: {
-      $reset() {
-        this.loaded = false
-        this.parentRouteMap = new Map()
-        this.routeMap = new Map()
-        this.routes = []
-        this.whitelist = new Set()
-      },
-      findAncestor(name: string) {
-        const result: RouteRecordRaw[] = []
-        const visited = new Set<string>()
-        let current = this.routeMap.get(name)
-
-        while (current?.meta?.parent) {
-          const parent = this.routeMap.get(current.meta?.parent as string)
-          if (!parent) {
-            break
-          }
-          if (visited.has(parent.name as string)) {
-            break
-          }
-          result.push(parent)
-          current = parent
-        }
-
-        return result
-      },
-      async generateRoutes(srv: RouterContextProvider) {
-        const { parentRouteMap, routeMap, routes } = await generateRoutes(srv)
-        routes.forEach((route) => srv.addRoute(route))
-
-        this.routes = routes
-        this.routeMap = routeMap
-        this.parentRouteMap = parentRouteMap
-        this.loaded = true
-      },
-      isRouteInWhitelist(path: string) {
-        return this.whitelist.has(path)
-      },
-      setHomePath(path: string) {
-        if (path === '/') {
-          throw new Error(trans('common.app.error.setHomePath'))
-        }
-        this.homePath = path
-      },
-      setUnauthorizedRedirectPath(path: string) {
-        this.whitelist.delete(this.unauthorizedRedirectPath)
-        this.whitelist.add(path)
-        this.unauthorizedRedirectPath = path
-      },
-      setWhitelist(whitelist: Arrayable<string>, replace: boolean = true) {
-        const list = castArray(whitelist)
-        if (replace) {
-          this.whitelist = new Set(list)
-        } else {
-          list.forEach((path) => this.whitelist.add(path))
-        }
-      },
+const useRouterStore = defineStore('store.router', {
+  actions: {
+    $reset() {
+      this.loaded = false
+      this.parentRouteMap = new Map()
+      this.routeMap = new Map()
+      this.routes = []
+      this.whitelist = new Set()
     },
-    state: (): RouterStoreState => {
-      return {
-        homePath: undefined,
-        loaded: false,
-        parentRouteMap: new Map(),
-        routeMap: new Map(),
-        routes: [],
-        unauthorizedRedirectPath: '',
-        whitelist: new Set(),
+    findAncestor(name: string) {
+      const result: RouteRecordRaw[] = []
+      const visited = new Set<string>()
+      let current = this.routeMap.get(name)
+
+      while (current?.meta?.parent) {
+        const parent = this.routeMap.get(current.meta?.parent as string)
+        if (!parent) {
+          break
+        }
+        if (visited.has(parent.name as string)) {
+          break
+        }
+        result.push(parent)
+        current = parent
+      }
+
+      return result
+    },
+    async generateRoutes(srv: RouterContextProvider) {
+      const { parentRouteMap, routeMap, routes } = await generateRoutes(srv)
+      routes.forEach((route) => srv.addRoute(route))
+
+      this.routes = routes
+      this.routeMap = routeMap
+      this.parentRouteMap = parentRouteMap
+      this.loaded = true
+    },
+    isRouteInWhitelist(path: string) {
+      return this.whitelist.has(path)
+    },
+    setHomePath(path: string) {
+      if (path === '/') {
+        throw new Error(trans('common.app.error.setHomePath'))
+      }
+      this.homePath = path
+    },
+    setUnauthorizedRedirectPath(path: string) {
+      this.whitelist.delete(this.unauthorizedRedirectPath)
+      this.whitelist.add(path)
+      this.unauthorizedRedirectPath = path
+    },
+    setWhitelist(whitelist: Arrayable<string>, replace: boolean = true) {
+      const list = castArray(whitelist)
+      if (replace) {
+        this.whitelist = new Set(list)
+      } else {
+        list.forEach((path) => this.whitelist.add(path))
       }
     },
-  })
-
-  return () => store(pinia)
-}
+  },
+  state: (): RouterStoreState => {
+    return {
+      homePath: undefined,
+      loaded: false,
+      parentRouteMap: new Map(),
+      routeMap: new Map(),
+      routes: [],
+      unauthorizedRedirectPath: '',
+      whitelist: new Set(),
+    }
+  },
+})
 
 export function useAsyncComponentName(name: string, component: ImportFn) {
   return async () => {
@@ -232,3 +227,9 @@ async function generateRoutes(srv: RouterContextProvider) {
 
   return { parentRouteMap, routeMap, routes } as RouteGenerationContext
 }
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useRouterStore, import.meta.hot))
+}
+
+export { useRouterStore }

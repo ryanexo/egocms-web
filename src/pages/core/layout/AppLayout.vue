@@ -14,7 +14,7 @@ const ns = useClassNs('app-layout')
     :class="[ns.b()]"
   >
     <div
-      class="relative flex h-full w-(--app-sidebar-size) shrink-0 flex-col border-r border-(--app-border) bg-white"
+      class="w-sidebar border-r-gray-line bg-base-bg relative flex h-full shrink-0 flex-col border-r"
     >
       <app-logo
         class="shrink-0"
@@ -29,7 +29,7 @@ const ns = useClassNs('app-layout')
       <layout-header
         class="shrink-0"
         :class="ns.e('header')"
-      ></layout-header>
+      />
       <div
         class="h-auto overflow-y-auto lg:h-0 lg:grow"
         :class="[ns.e('content')]"

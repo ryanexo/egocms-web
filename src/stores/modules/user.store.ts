@@ -1,6 +1,6 @@
 import type { Pinia } from 'pinia'
 
-import { defineStore } from 'pinia'
+import { acceptHMRUpdate, defineStore } from 'pinia'
 
 import type { UserInfo, UserStoreState } from '@/stores/types/user'
 
@@ -31,6 +31,10 @@ export function createUserStore(pinia: Pinia) {
       }
     },
   })
+
+  if (import.meta.hot) {
+    import.meta.hot.accept(acceptHMRUpdate(store, import.meta.hot))
+  }
 
   return () => store(pinia)
 }

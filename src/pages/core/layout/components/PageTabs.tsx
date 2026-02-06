@@ -30,7 +30,6 @@ import type { Page } from '@/stores/types/page'
 import { trans } from '@/locales'
 import { usePageService } from '@/services'
 import { usePageStore, useRouterStore } from '@/stores'
-import { useClassNs } from '@/utils/bem.ts'
 
 import styles from '../styles/page-tabs.module.css'
 
@@ -99,7 +98,6 @@ const TabPanelLabel = defineComponent<TabPanelLabelProps>({
   setup(props: TabPanelLabelProps, { emit }) {
     const pageStore = usePageStore()
     const pageService = usePageService()
-    const ns = useClassNs('page-tabs')
 
     const actionIcon: Record<ContextmenuAction, TabDropdownAction> = {
       close: {
@@ -182,14 +180,7 @@ const TabPanelLabel = defineComponent<TabPanelLabelProps>({
 
       const pinAction = (
         <span
-          class={[
-            ns.e('icon'),
-            ns.em('icon', 'pin'),
-            'ml-(--td-comp-margin-s)',
-            'flex',
-            'justify-center',
-            'items-center',
-          ]}
+          class={['ml-(--td-comp-margin-s)', 'flex', 'justify-center', 'items-center']}
           onClick={() => onTriggerAction('unpin')}
         >
           <PinIcon
@@ -237,7 +228,6 @@ const TabPanelLabel = defineComponent<TabPanelLabelProps>({
 const PageTabs = defineComponent({
   name: 'PageTabs',
   setup() {
-    const ns = useClassNs('page-tabs')
     const router = useRouter()
     const routerStore = useRouterStore()
     const pageStore = usePageStore()
@@ -304,7 +294,6 @@ const PageTabs = defineComponent({
 
         panels.push(
           <TabPanel
-            class={[ns.e('panel')]}
             key={item.id}
             label={item.title}
             onRemove={onTabRemove}
@@ -334,7 +323,6 @@ const PageTabs = defineComponent({
       return (
         <div
           class={[
-            ns.b(),
             styles.pageTabs,
             'bg-(--page-tabs-bg)',
             'flex',
@@ -343,7 +331,7 @@ const PageTabs = defineComponent({
             'px-1',
             'pt-1',
             'border-b',
-            'border-b-limiter',
+            'border-b-gray-line',
           ]}
         >
           <Tabs

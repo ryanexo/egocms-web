@@ -1,0 +1,20 @@
+@import '@/assets/theme.css';
+
+.nestedMenu {
+  :global(.t-menu__item.t-is-active:not(.t-is-opened)) {
+    background-color: var(--color-zinc-100);
+    color: var(--color-zinc-900);
+  }
+  :global(.t-menu__item) {
+    color: var(--color-zinc-400);
+  }
+}
+
+.nestedMenuItem {
+  :global(.t-is-active) .nestedMenuItemIcon {
+  }
+}
+
+.nestedMenuItemIcon {
+  color: var(--color-zinc-800);
+}

@@ -1,36 +1,34 @@
-import type { Pinia } from 'pinia'
-
 import { useTimeoutPoll } from '@vueuse/core'
-import { defineStore } from 'pinia'
+import { acceptHMRUpdate, defineStore } from 'pinia'
 
 import type { AppStoreState, AppUpdater } from '@/stores/types/app'
 
-export function createAppStore(pinia: Pinia) {
-  let updaterCloser: Callable | undefined = undefined
+let updaterCloser: Callable | undefined = undefined
 
-  const store = defineStore('store.app', {
-    actions: {
-      setAppUpdater(updater: AppUpdater) {
-        updaterCloser?.()
-        updaterCloser = watchAppVersion(updater)
-      },
-      setPageTitle(title: string) {
-        this.pageTitle = title
-      },
+const useAppStore = defineStore('store.app', {
+  actions: {
+    setAppUpdater(updater: AppUpdater) {
+      updaterCloser?.()
+      updaterCloser = watchAppVersion(updater)
     },
-    getters: {
-      pageTitleFormatted: (state) => {
-        return [state.pageTitle, import.meta.env.VITE_APP_TITLE].filter(Boolean).join(' - ')
-      },
+    setPageTitle(title: string) {
+      this.pageTitle = title
     },
-    state: (): AppStoreState => {
-      return {
-        pageTitle: '',
-      }
+  },
+  getters: {
+    pageTitleFormatted: (state) => {
+      return [state.pageTitle, import.meta.env.VITE_APP_TITLE].filter(Boolean).join(' - ')
     },
-  })
+  },
+  state: (): AppStoreState => {
+    return {
+      pageTitle: '',
+    }
+  },
+})
 
-  return () => store(pinia)
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useAppStore, import.meta.hot))
 }
 
 function watchAppVersion(updater: AppUpdater) {
@@ -65,3 +63,5 @@ function watchAppVersion(updater: AppUpdater) {
 
   return () => abort()
 }
+
+export { useAppStore }

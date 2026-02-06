@@ -1,29 +1,42 @@
 @import 'tailwindcss';
 
 @theme {
-  --app-header-size: calc(var(--spacing) * 12);
-  --app-sidebar-size: calc(var(--spacing) * 60);
-
-  --app-border: var(--color-zinc-200);
-  --app-border-hover: var(--color-zinc-300);
-
-  --app-bg: var(--color-zinc-100);
-  --app-bg-hover: var(--color-zinc-200);
-  --app-bg-limiter: var(--color-zinc-300);
-
+  /* 全局主题配置 */
   --primary: 0 82 217;
   --success: 43 164 113;
   --danger: 213 73 65;
   --warning: 227 115 24;
+
+  --color-brand-50: oklch(0.98 0.01 261.351);
+  --color-brand-100: oklch(0.95 0.03 261.351);
+  --color-brand-200: oklch(0.9 0.06 261.351);
+  --color-brand-300: oklch(0.82 0.1 261.351);
+  --color-brand-400: oklch(0.72 0.14 261.351);
+  --color-brand-500: oklch(0.492 0.217 261.351);
+  --color-brand-600: oklch(0.42 0.2 261.351);
+  --color-brand-700: oklch(0.34 0.17 261.351);
+  --color-brand-800: oklch(0.26 0.13 261.351);
+  --color-brand-900: oklch(0.18 0.08 261.351);
 
   --color-primary: rgb(var(--primary));
   --color-success: rgb(var(--success));
   --color-danger: rgb(var(--danger));
   --color-warning: rgb(var(--warning));
 
-  --color-t-base: var(--color-stone-800);
+  --color-t-base: var(--color-stone-900);
   --color-t-secondary: var(--color-stone-600);
   --color-t-muted: var(--color-stone-400);
 
-  --border-color-limiter: var(--app-border);
+  /* 布局配置 */
+  --height-header: calc(var(--spacing) * 12);
+  --width-sidebar: calc(var(--spacing) * 60);
+
+  --color-gray-line: var(--color-zinc-200);
+
+  --color-tab-bg: var(--color-zinc-100);
+  --color-tab-hover: var(--color-zinc-200);
+  --color-tab-limiter: var(--color-zinc-300);
+
+  --color-menu-bg: white;
+  --color-menu-active: var(--color-slate-100);
 }
