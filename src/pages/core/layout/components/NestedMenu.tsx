@@ -41,13 +41,13 @@ const NestedMenuItem = defineComponent<MenuProps>({
           return (
             <span
               class={[
-                styles.nestedMenuItemIcon,
                 'inline-flex',
                 'h-6',
                 'w-6',
                 'items-center',
                 'justify-center',
                 'text-xs',
+                'mr-3',
               ]}
             >
               {menuIcon}
@@ -58,7 +58,6 @@ const NestedMenuItem = defineComponent<MenuProps>({
         if (isLeaf) {
           result.push(
             <MenuItem
-              class={[styles.nestedMenuItem]}
               content={meta.title}
               href={meta.externalUrl}
               key={uniqueName}
@@ -81,12 +80,7 @@ const NestedMenuItem = defineComponent<MenuProps>({
               value={uniqueName}
             >
               {{
-                default: () => (
-                  <NestedMenuItem
-                    class={[styles.nestedMenuItem]}
-                    menus={children}
-                  />
-                ),
+                default: () => <NestedMenuItem menus={children} />,
                 icon,
               }}
             </Submenu>,
@@ -123,7 +117,7 @@ const NestedMenu = defineComponent({
     return () => {
       return (
         <Menu
-          class={[styles.nestedMenu, 'bg-menu-bg!', 'w-full!']}
+          class={[styles.nestedMenu, 'bg-sidebar-bg!', 'w-full!']}
           expanded={expanded.value}
           expandMutex={true}
           onExpand={onUpdateExpanded}

@@ -23,10 +23,10 @@ export default defineConfig((context) => {
       },
     },
     plugins: [
+      tailwindcss(),
       vue(),
       vueJsx(),
       vueDevTools(),
-      tailwindcss(),
       svgLoader(),
       AutoImport({
         resolvers: [

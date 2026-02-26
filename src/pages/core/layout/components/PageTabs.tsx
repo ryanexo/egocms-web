@@ -328,8 +328,8 @@ const PageTabs = defineComponent({
             'flex',
             'flex-col',
             'justify-end',
-            'px-1',
-            'pt-1',
+            'p-1',
+            'pb-0',
             'border-b',
             'border-b-gray-line',
           ]}

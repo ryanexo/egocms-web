@@ -14,7 +14,7 @@ const ns = useClassNs('app-layout')
     :class="[ns.b()]"
   >
     <div
-      class="w-sidebar border-r-gray-line bg-base-bg relative flex h-full shrink-0 flex-col border-r"
+      class="w-sidebar border-r-gray-line bg-sidebar-bg relative flex h-full shrink-0 flex-col border-r"
     >
       <app-logo
         class="shrink-0"
@@ -40,7 +40,4 @@ const ns = useClassNs('app-layout')
   </div>
 </template>
 
-<style scoped lang="scss">
-.app-layout {
-}
-</style>
+<style scoped lang="scss"></style>

@@ -1,10 +1,5 @@
+@import './global.css';
+@import './n-progress.css';
 @import 'tdesign-vue-next/es/style/index.css';
-@import './overrides/n-progress.override.css';
-
-html,
-body,
-#app {
-  height: 100%;
-  background: var(--color-gray-100);
-  color: var(--color-t-base);
-}
+@import './tdesign-tokens.css';
+@import './transition.css';

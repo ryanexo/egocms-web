@@ -1,12 +1,13 @@
-@import '@/assets/theme.css';
+@reference 'tailwindcss';
 
 .pageTabs {
   --td-bg-color-secondarycontainer-hover: var(--color-gray-100);
   --page-tabs-bg: var(--color-tab-bg);
   --page-tabs-bg-hover: var(--color-tab-hover);
-  --page-tabs-bg-active: white;
+  --page-tabs-bg-active: var(--color-tab-bg-active);
   --page-tabs-limiter: var(--color-tab-limiter);
-  --td-comp-size-xxl: calc(var(--spacing) * 10);
+  --page-tabs-radius: var(--radius-sm);
+  --page-tabs-height: var(--text-4xl);
 
   :global(.t-tabs__nav-container.t-tabs__nav--card) {
     background-color: var(--page-tabs-bg);
@@ -17,11 +18,12 @@
   }
 
   :global(.t-tabs__nav--card.t-tabs__nav-item) {
-    position: relative;
     background: var(--page-tabs-bg);
-    border-top-left-radius: var(--radius-md);
-    border-top-right-radius: var(--radius-md);
+    height: var(--page-tabs-height);
+    position: relative;
+    border-radius: var(--page-tabs-radius) var(--page-tabs-radius) 0 0;
     border: none;
+    line-height: var(--page-tabs-height);
 
     transition-timing-function: linear;
     transition-duration: 0.1s;
@@ -67,7 +69,6 @@
   :global(.t-icon-close:hover) {
     transition: 0.2s linear all;
     border-radius: 100%;
-
-    @apply text-danger;
+    color: var(--color-danger);
   }
 }

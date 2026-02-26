@@ -1,5 +1,3 @@
-import '@/assets/theme.css'
-import '@/assets/main.css'
 import { useTitle } from '@vueuse/core'
 import { computed, createApp as createVueApp } from 'vue'
 
@@ -10,6 +8,7 @@ import { router } from '@/router'
 import { CoreRoutePathEnum } from '@/router/constants/route.enum.ts'
 import { pinia, useAppStore, useAuthStore, useRouterStore } from '@/stores'
 import { useAppUpdater } from '@/stores/adapters/app-updater.ts'
+import '@/assets/main.css'
 
 async function createApp() {
   const app = createVueApp(App).use(pinia).use(i18n)
