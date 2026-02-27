@@ -2,28 +2,29 @@
 
 .pageTabs {
   --td-bg-color-secondarycontainer-hover: var(--color-gray-100);
+  --td-comp-paddingLR-l: calc(var(--spacing) * 3);
+  --td-comp-size-xxl: var(--text-4xl);
+
   --page-tabs-bg: var(--color-tab-bg);
   --page-tabs-bg-hover: var(--color-tab-hover);
   --page-tabs-bg-active: var(--color-tab-bg-active);
   --page-tabs-limiter: var(--color-tab-limiter);
   --page-tabs-radius: var(--radius-sm);
-  --page-tabs-height: var(--text-4xl);
 
   :global(.t-tabs__nav-container.t-tabs__nav--card) {
     background-color: var(--page-tabs-bg);
   }
 
   :global(.t-tabs__nav-wrap) {
-    row-gap: calc(var(--spacing) * 1);
+    row-gap: 2px;
+    column-gap: 2px;
   }
 
   :global(.t-tabs__nav--card.t-tabs__nav-item) {
     background: var(--page-tabs-bg);
-    height: var(--page-tabs-height);
     position: relative;
-    border-radius: var(--page-tabs-radius) var(--page-tabs-radius) 0 0;
+    border-radius: var(--page-tabs-radius);
     border: none;
-    line-height: var(--page-tabs-height);
 
     transition-timing-function: linear;
     transition-duration: 0.1s;

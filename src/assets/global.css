@@ -23,7 +23,7 @@
   --color-t-placeholder: oklch(0.85 0.023 272);
   --color-t-disabled: oklch(0.8 0.03 268);
 
-  --color-brand-bg: oklch(0.59 0.22 264 / 0.01);
+  --color-brand-bg: #F8FAFC;
 
   /* 布局配置 */
   --height-header: calc(var(--spacing) * 12);
@@ -33,7 +33,7 @@
 
   --color-tab-bg: var(--color-white);
   --color-tab-hover: var(--color-zinc-100);
-  --color-tab-bg-active: var(--color-zinc-100);
+  --color-tab-bg-active: var(--color-brand-100);
   --color-tab-limiter: var(--color-zinc-300);
 
   --color-sidebar-bg: white;

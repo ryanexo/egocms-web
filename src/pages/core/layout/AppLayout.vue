@@ -25,13 +25,13 @@ const ns = useClassNs('app-layout')
         :class="[ns.e('sidebar')]"
       />
     </div>
-    <div class="relative flex h-full min-w-3xl grow flex-col">
+    <div class="relative flex h-full min-w-0 grow flex-col">
       <layout-header
         class="shrink-0"
         :class="ns.e('header')"
       />
       <div
-        class="h-auto overflow-y-auto lg:h-0 lg:grow"
+        class="relative h-auto grow overflow-y-auto"
         :class="[ns.e('content')]"
       >
         <layout-content />

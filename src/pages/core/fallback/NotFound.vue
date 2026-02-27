@@ -20,13 +20,13 @@ function onGobackHome() {
 
 <template>
   <fullscreen-layout>
-    <div class="flex h-full w-full flex-col items-center justify-center gap-y-10">
+    <div class="mt-auto mb-auto flex w-full flex-col items-center justify-center gap-y-10">
       <div class="text-primary w-60">
         <notfound />
       </div>
       <div class="flex flex-col items-center justify-center gap-y-4 text-center">
         <span class="text-3xl leading-8 font-bold">{{ trans('fallback.notFound.title') }}</span>
-        <span class="text-t-secondary leading-3">{{ trans('fallback.notFound.subtitle') }}</span>
+        <span class="text-t-secondary leading-6">{{ trans('fallback.notFound.subtitle') }}</span>
       </div>
       <t-button @click="onGobackHome">
         <template #icon>

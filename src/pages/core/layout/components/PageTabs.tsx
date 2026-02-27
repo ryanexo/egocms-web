@@ -144,6 +144,7 @@ const TabPanelLabel = defineComponent<TabPanelLabelProps>({
 
     return () => {
       const pined = pageStore.pined.has(props.data.id)
+      const removable = !pined && (!props.data.defaultPined || !props.data.alwaysPined)
       const { contextmenuMinWidth, contextmenuVisible, data, disableActions } = props
 
       const actionChunks: ContextmenuAction[][] = [
@@ -181,7 +182,10 @@ const TabPanelLabel = defineComponent<TabPanelLabelProps>({
       const pinAction = (
         <span
           class={['ml-(--td-comp-margin-s)', 'flex', 'justify-center', 'items-center']}
-          onClick={() => onTriggerAction('unpin')}
+          onClick={(e) => {
+            e.stopPropagation()
+            onTriggerAction('unpin')
+          }}
         >
           <PinIcon
             class={[
@@ -193,6 +197,28 @@ const TabPanelLabel = defineComponent<TabPanelLabelProps>({
               'transition-colors',
               'duration-200',
             ]}
+          />
+        </span>
+      )
+      const removeAction = (
+        <span
+          class={['ml-(--td-comp-margin-s)', 'flex', 'justify-center', 'items-center']}
+          onClick={(e) => {
+            e.stopPropagation()
+            onTriggerAction('close')
+          }}
+        >
+          <CloseIcon
+            class={[
+              'h-(--text-lg)',
+              'w-(--text-lg)',
+              'p-0.5',
+              'text-zinc-500',
+              'hover:text-rose-600',
+              'transition-colors',
+              'duration-200',
+            ]}
+            size="1.25rem"
           />
         </span>
       )
@@ -212,6 +238,7 @@ const TabPanelLabel = defineComponent<TabPanelLabelProps>({
                     {data.title}
                   </span>
                   {pined ? pinAction : undefined}
+                  {removable ? removeAction : undefined}
                 </span>
               )
             },
@@ -251,9 +278,8 @@ const PageTabs = defineComponent({
       const name = String(value)
       router.push({ name })
     }
-    const onTabRemove = (options: { value: TabValue }) => {
-      const name = String(options.value)
-      pageService.close(name)
+    const onTabClose = () => {
+      contextmenuActiveName.value = undefined
     }
     const onTabSort = (context: TabsDragSortContext) => {
       pageService.move(context.currentIndex, context.targetIndex)
@@ -261,10 +287,8 @@ const PageTabs = defineComponent({
     const onPopupVisibleChange = (page: Page, visible: boolean, ctx: PopupVisibleChangeContext) => {
       if (ctx.trigger === 'document') {
         contextmenuActiveName.value = undefined
-      } else if (visible) {
-        contextmenuActiveName.value = page.id
       } else {
-        contextmenuActiveName.value = undefined
+        contextmenuActiveName.value = visible ? page.id : undefined
       }
     }
 
@@ -282,7 +306,6 @@ const PageTabs = defineComponent({
 
       pages.forEach((item, index) => {
         const pined = pageStore.pined.has(item.id)
-        const removable = !pined && (!item.defaultPined || !item.alwaysPined)
         const disableActions: Partial<TabPanelLabelProps['disableActions']> = {
           close: pined,
           closeAfter: index === pages.length - 1,
@@ -296,8 +319,6 @@ const PageTabs = defineComponent({
           <TabPanel
             key={item.id}
             label={item.title}
-            onRemove={onTabRemove}
-            removable={removable}
             value={item.id}
           >
             {{
@@ -309,6 +330,7 @@ const PageTabs = defineComponent({
                     dataIndex={index}
                     disableActions={disableActions}
                     key={item.id}
+                    onClose={onTabClose}
                     onContextmenuVisibleChange={(visible, context) =>
                       onPopupVisibleChange(item, visible, context)
                     }
@@ -327,9 +349,8 @@ const PageTabs = defineComponent({
             'bg-(--page-tabs-bg)',
             'flex',
             'flex-col',
-            'justify-end',
-            'p-1',
-            'pb-0',
+            'justify-center',
+            'p-0.5',
             'border-b',
             'border-b-gray-line',
           ]}
