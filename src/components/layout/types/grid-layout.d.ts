@@ -1,17 +1,9 @@
-/* eslint-disable perfectionist/sort-interfaces */
+/* eslint-disabled perfectionist/sort-interfaces */
 export interface GridColProps {
   /**
    * 初始列数
    */
   col?: number
-  /**
-   * 以col为基数的跨列数量
-   */
-  span?: number
-  /**
-   * width >= 1920
-   */
-  xl?: number
   /**
    * width >= 1280
    */
@@ -24,6 +16,14 @@ export interface GridColProps {
    * width >= 540
    */
   sm?: number
+  /**
+   * 以col为基数的跨列数量
+   */
+  span?: number
+  /**
+   * width >= 1920
+   */
+  xl?: number
   /**
    * width < 540
    */

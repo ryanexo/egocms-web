@@ -1,12 +1,8 @@
-import type {
-  PopupProps,
-  PopupVisibleChangeContext,
-  TabsDragSortContext,
-  TabValue,
-} from 'tdesign-vue-next'
+import type { TabsDragSortContext, TabValue } from 'tdesign-vue-next'
 import type { PropType, VNode } from 'vue'
 
 import {
+  ChevronDownIcon,
   ChevronLeftDoubleIcon,
   ChevronRightDoubleIcon,
   CloseIcon,
@@ -17,23 +13,25 @@ import {
   RefreshIcon,
 } from 'tdesign-icons-vue-next'
 import { Dropdown, DropdownItem, DropdownMenu, Icon, TabPanel, Tabs } from 'tdesign-vue-next'
-import { computed, defineComponent, ref, watch } from 'vue'
+import { computed, defineComponent, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 import type {
   ContextmenuAction,
+  TabActionMenuProps,
   TabDropdownAction,
-  TabPanelLabelProps,
+  TabItemProps,
 } from '@/pages/core/layout/types/page-tabs'
 import type { Page } from '@/stores/types/page'
 
 import { trans } from '@/locales'
 import { usePageService } from '@/services'
 import { usePageStore, useRouterStore } from '@/stores'
+import { useClassNs } from '@/utils/bem.ts'
 
-import styles from '../styles/page-tabs.module.css'
+import '../styles/app-page-tabs.css'
 
-const TabPanelLabel = defineComponent<TabPanelLabelProps>({
+const TabActionMenu = defineComponent({
   emits: [
     'close',
     'closeAfter',
@@ -44,62 +42,57 @@ const TabPanelLabel = defineComponent<TabPanelLabelProps>({
     'refresh',
     'unpin',
   ],
-  name: 'TabPanelLabel',
+  name: 'TabActionMenu',
   props: {
-    contextmenuMinWidth: {
-      default: 120,
-      type: Number as PropType<TabPanelLabelProps['contextmenuMinWidth']>,
-    },
-    contextmenuVisible: {
-      default: false,
-      type: Boolean as PropType<TabPanelLabelProps['contextmenuVisible']>,
-    },
     data: {
       required: true,
-      type: Object as PropType<TabPanelLabelProps['data']>,
+      type: Object as PropType<TabActionMenuProps['data']>,
     },
     dataIndex: {
       required: true,
-      type: Number as PropType<TabPanelLabelProps['dataIndex']>,
+      type: Number as PropType<TabActionMenuProps['dataIndex']>,
     },
-    disableActions: {
+    disabled: {
       required: false,
-      type: Object as PropType<TabPanelLabelProps['disableActions']>,
+      type: Object as PropType<TabActionMenuProps['disabled']>,
     },
     onClose: {
       required: false,
-      type: Function as PropType<TabPanelLabelProps['onClose']>,
+      type: Function as PropType<TabActionMenuProps['onClose']>,
     },
     onCloseAfter: {
       required: false,
-      type: Function as PropType<TabPanelLabelProps['onCloseAfter']>,
+      type: Function as PropType<TabActionMenuProps['onCloseAfter']>,
     },
     onCloseBefore: {
       required: false,
-      type: Function as PropType<TabPanelLabelProps['onCloseBefore']>,
+      type: Function as PropType<TabActionMenuProps['onCloseBefore']>,
     },
     onCloseOther: {
       required: false,
-      type: Function as PropType<TabPanelLabelProps['onCloseOther']>,
+      type: Function as PropType<TabActionMenuProps['onCloseOther']>,
     },
     onPin: {
       required: false,
-      type: Function as PropType<TabPanelLabelProps['onPin']>,
+      type: Function as PropType<TabActionMenuProps['onPin']>,
     },
     onRefresh: {
       required: false,
-      type: Function as PropType<TabPanelLabelProps['onRefresh']>,
+      type: Function as PropType<TabActionMenuProps['onRefresh']>,
     },
     onUnpin: {
       required: false,
-      type: Function as PropType<TabPanelLabelProps['onUnpin']>,
+      type: Function as PropType<TabActionMenuProps['onUnpin']>,
+    },
+    trigger: {
+      default: 'context-menu',
+      required: false,
+      type: String as PropType<TabActionMenuProps['trigger']>,
     },
   },
-  setup(props: TabPanelLabelProps, { emit }) {
-    const pageStore = usePageStore()
+  setup(props: TabActionMenuProps, { emit, slots }) {
     const pageService = usePageService()
-
-    const actionIcon: Record<ContextmenuAction, TabDropdownAction> = {
+    const actionContext: Record<ContextmenuAction, TabDropdownAction> = {
       close: {
         icon: CloseIcon,
         label: trans('common.app.tab.close'),
@@ -139,14 +132,11 @@ const TabPanelLabel = defineComponent<TabPanelLabelProps>({
 
     const onTriggerAction = (action: ContextmenuAction) => {
       emit(action)
-      actionIcon[action]?.onClick()
+      actionContext[action]?.onClick()
     }
 
     return () => {
-      const pined = pageStore.pined.has(props.data.id)
-      const removable = !pined && (!props.data.defaultPined || !props.data.alwaysPined)
-      const { contextmenuMinWidth, contextmenuVisible, data, disableActions } = props
-
+      const { disabled } = props
       const actionChunks: ContextmenuAction[][] = [
         ['close', 'refresh'],
         ['pin', 'unpin'],
@@ -156,11 +146,11 @@ const TabPanelLabel = defineComponent<TabPanelLabelProps>({
 
       actionChunks.forEach((actions, chunkIndex) => {
         actions.forEach((action, index) => {
-          const { icon: ActionIcon, label } = actionIcon[action]
+          const { icon: ActionIcon, label } = actionContext[action]
 
           dropdownItems.push(
             <DropdownItem
-              disabled={disableActions?.[action]}
+              disabled={disabled?.[action]}
               divider={chunkIndex < actionChunks.length - 1 && index === actions.length - 1}
               key={action}
               onClick={() => onTriggerAction(action)}
@@ -174,17 +164,51 @@ const TabPanelLabel = defineComponent<TabPanelLabelProps>({
         })
       })
 
-      const popupProps: PopupProps = {
-        onVisibleChange: (visible, context) => emit('contextmenuVisibleChange', visible, context),
-        visible: contextmenuVisible,
-      }
+      return (
+        <Dropdown
+          minColumnWidth={120}
+          popupProps={{ delay: 0 }}
+          trigger={props.trigger}
+        >
+          {{
+            default: slots.default,
+            dropdown: () => {
+              return <DropdownMenu>{dropdownItems}</DropdownMenu>
+            },
+          }}
+        </Dropdown>
+      )
+    }
+  },
+})
+
+const TabItem = defineComponent<TabItemProps>({
+  name: 'AppTabItem',
+  props: {
+    data: {
+      required: true,
+      type: Object as PropType<TabItemProps['data']>,
+    },
+    dataIndex: {
+      required: true,
+      type: Number as PropType<TabItemProps['dataIndex']>,
+    },
+  },
+  setup(props: TabItemProps) {
+    const pageStore = usePageStore()
+    const pageService = usePageService()
+
+    return () => {
+      const pined = pageStore.pined.has(props.data.id)
+      const removable = !pined && (!props.data.defaultPined || !props.data.alwaysPined)
+      const { data } = props
 
       const pinAction = (
         <span
           class={['ml-(--td-comp-margin-s)', 'flex', 'justify-center', 'items-center']}
           onClick={(e) => {
             e.stopPropagation()
-            onTriggerAction('unpin')
+            pageService.unpin(props.data.id)
           }}
         >
           <PinIcon
@@ -197,6 +221,7 @@ const TabPanelLabel = defineComponent<TabPanelLabelProps>({
               'transition-colors',
               'duration-200',
             ]}
+            size="1.25rem"
           />
         </span>
       )
@@ -205,7 +230,7 @@ const TabPanelLabel = defineComponent<TabPanelLabelProps>({
           class={['ml-(--td-comp-margin-s)', 'flex', 'justify-center', 'items-center']}
           onClick={(e) => {
             e.stopPropagation()
-            onTriggerAction('close')
+            pageService.close(props.dataIndex)
           }}
         >
           <CloseIcon
@@ -224,41 +249,27 @@ const TabPanelLabel = defineComponent<TabPanelLabelProps>({
       )
 
       return (
-        <Dropdown
-          minColumnWidth={contextmenuMinWidth}
-          popupProps={popupProps}
-          trigger="context-menu"
-        >
-          {{
-            default: () => {
-              return (
-                <span class="inline-flex items-center justify-center">
-                  <span class="inline-flex items-center justify-center gap-x-1">
-                    {data.icon ? <Icon name={data.icon} /> : undefined}
-                    {data.title}
-                  </span>
-                  {pined ? pinAction : undefined}
-                  {removable ? removeAction : undefined}
-                </span>
-              )
-            },
-            dropdown: () => {
-              return <DropdownMenu>{dropdownItems}</DropdownMenu>
-            },
-          }}
-        </Dropdown>
+        <span class="inline-flex items-center justify-center">
+          <span class="inline-flex items-center justify-center gap-x-1">
+            {data.icon ? <Icon name={data.icon} /> : undefined}
+            {data.title}
+          </span>
+          {pined ? pinAction : undefined}
+          {removable ? removeAction : undefined}
+        </span>
       )
     }
   },
 })
 
-const PageTabs = defineComponent({
-  name: 'PageTabs',
+const AppPageTabs = defineComponent({
+  name: 'AppPageTabs',
   setup() {
     const router = useRouter()
     const routerStore = useRouterStore()
     const pageStore = usePageStore()
     const pageService = usePageService()
+    const ns = useClassNs('app-page-tabs')
 
     const openedPages = computed<Page[]>(() => {
       const pages: Page[] = []
@@ -272,24 +283,26 @@ const PageTabs = defineComponent({
       return pages
     })
 
-    const contextmenuActiveName = ref()
-
+    const createActionDisableOptions = (
+      data: Page,
+      index: number,
+    ): Partial<TabActionMenuProps['disabled']> => {
+      const pined = pageStore.pined.has(data.id)
+      return {
+        close: pined,
+        closeAfter: index === pageStore.openedPages.length - 1,
+        closeBefore: index === 0,
+        pin: data.alwaysPined || pined,
+        refresh: pageStore.current !== data.id,
+        unpin: data.alwaysPined || !pined,
+      }
+    }
     const onTabChange = (value: TabValue) => {
       const name = String(value)
       router.push({ name })
     }
-    const onTabClose = () => {
-      contextmenuActiveName.value = undefined
-    }
     const onTabSort = (context: TabsDragSortContext) => {
       pageService.move(context.currentIndex, context.targetIndex)
-    }
-    const onPopupVisibleChange = (page: Page, visible: boolean, ctx: PopupVisibleChangeContext) => {
-      if (ctx.trigger === 'document') {
-        contextmenuActiveName.value = undefined
-      } else {
-        contextmenuActiveName.value = visible ? page.id : undefined
-      }
     }
 
     watch(
@@ -305,16 +318,6 @@ const PageTabs = defineComponent({
       const pages = openedPages.value
 
       pages.forEach((item, index) => {
-        const pined = pageStore.pined.has(item.id)
-        const disableActions: Partial<TabPanelLabelProps['disableActions']> = {
-          close: pined,
-          closeAfter: index === pages.length - 1,
-          closeBefore: index === 0,
-          pin: item.alwaysPined || pined,
-          refresh: pageStore.current !== item.id,
-          unpin: item.alwaysPined || !pined,
-        }
-
         panels.push(
           <TabPanel
             key={item.id}
@@ -324,17 +327,16 @@ const PageTabs = defineComponent({
             {{
               label: () => {
                 return (
-                  <TabPanelLabel
-                    contextmenuVisible={contextmenuActiveName.value === item.id}
+                  <TabActionMenu
                     data={item}
                     dataIndex={index}
-                    disableActions={disableActions}
-                    key={item.id}
-                    onClose={onTabClose}
-                    onContextmenuVisibleChange={(visible, context) =>
-                      onPopupVisibleChange(item, visible, context)
-                    }
-                  />
+                    disabled={createActionDisableOptions(item, index)}
+                  >
+                    <TabItem
+                      data={item}
+                      dataIndex={index}
+                    />
+                  </TabActionMenu>
                 )
               },
             }}
@@ -342,33 +344,46 @@ const PageTabs = defineComponent({
         )
       })
 
+      const shortcuts = () => {
+        const { currentIndex, currentPage } = pageStore
+        if (currentPage) {
+          return (
+            <TabActionMenu
+              data={currentPage}
+              dataIndex={currentIndex}
+              disabled={createActionDisableOptions(currentPage, currentIndex)}
+              trigger="click"
+            >
+              <div
+                class="border-l-divider flex h-full w-8 cursor-pointer items-center justify-center border-l"
+                tabindex={0}
+              >
+                <ChevronDownIcon size="1.25rem" />
+              </div>
+            </TabActionMenu>
+          )
+        }
+      }
+
       return (
-        <div
-          class={[
-            styles.pageTabs,
-            'bg-(--page-tabs-bg)',
-            'flex',
-            'flex-col',
-            'justify-center',
-            'p-0.5',
-            'border-b',
-            'border-b-gray-line',
-          ]}
-        >
-          <Tabs
-            class="bg-transparent!"
-            dragSort={true}
-            onChange={onTabChange}
-            onDragSort={onTabSort}
-            theme="card"
-            value={pageStore.current}
-          >
-            {panels}
-          </Tabs>
+        <div class={ns.b()}>
+          <div class="h-full px-2 py-0.5">
+            <Tabs
+              class="h-full bg-transparent!"
+              dragSort={true}
+              onChange={onTabChange}
+              onDragSort={onTabSort}
+              theme="card"
+              value={pageStore.current}
+            >
+              {panels}
+            </Tabs>
+          </div>
+          {shortcuts()}
         </div>
       )
     }
   },
 })
 
-export { PageTabs as default }
+export { AppPageTabs as default }

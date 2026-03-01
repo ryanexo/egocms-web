@@ -1,6 +1,4 @@
-@reference 'tailwindcss';
-
-.pageTabs {
+.app-page-tabs {
   --td-bg-color-secondarycontainer-hover: var(--color-gray-100);
   --td-comp-paddingLR-l: calc(var(--spacing) * 3);
   --td-comp-size-xxl: var(--text-4xl);
@@ -11,16 +9,33 @@
   --page-tabs-limiter: var(--color-tab-limiter);
   --page-tabs-radius: var(--radius-sm);
 
-  :global(.t-tabs__nav-container.t-tabs__nav--card) {
+  background: var(--page-tabs-bg);
+  height: var(--app-tabs);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--color-divider);
+
+  .t-tabs__header,
+  .t-tabs__nav,
+  .t-tabs__nav-scroll,
+  .t-tabs__nav--card,
+  .t-tabs__nav-wrap {
+    height: 100% !important;
+  }
+
+  .t-tabs__nav-container.t-tabs__nav--card {
     background-color: var(--page-tabs-bg);
   }
 
-  :global(.t-tabs__nav-wrap) {
+  .t-tabs__nav-wrap {
     row-gap: 2px;
     column-gap: 2px;
   }
 
-  :global(.t-tabs__nav--card.t-tabs__nav-item) {
+  .t-tabs__nav--card.t-tabs__nav-item {
+    height: 100% !important;
+    line-height: 1 !important;
     background: var(--page-tabs-bg);
     position: relative;
     border-radius: var(--page-tabs-radius);
@@ -31,7 +46,7 @@
     transition-property: border-color, background-color;
   }
 
-  :global(.t-tabs__nav--card.t-tabs__nav-item::before) {
+  .t-tabs__nav--card.t-tabs__nav-item::before {
     content: '';
     background: var(--page-tabs-limiter);
     width: 1px;
@@ -44,30 +59,28 @@
     transition: background 0.2s linear;
   }
 
-  :global(.t-tabs__nav--card.t-tabs__nav-item:first-child::before),
-  :global(.t-tabs__nav--card.t-tabs__nav-item:hover::before),
-  :global(.t-tabs__nav--card.t-tabs__nav-item:hover + .t-tabs__nav--card.t-tabs__nav-item::before),
-  :global(.t-tabs__nav--card.t-tabs__nav-item.t-is-active::before),
-  :global(
-    .t-tabs__nav--card.t-tabs__nav-item.t-is-active + .t-tabs__nav--card.t-tabs__nav-item::before
-  ) {
+  .t-tabs__nav--card.t-tabs__nav-item:first-child::before,
+  .t-tabs__nav--card.t-tabs__nav-item:hover::before,
+  .t-tabs__nav--card.t-tabs__nav-item:hover + .t-tabs__nav--card.t-tabs__nav-item::before,
+  .t-tabs__nav--card.t-tabs__nav-item.t-is-active::before,
+  .t-tabs__nav--card.t-tabs__nav-item.t-is-active + .t-tabs__nav--card.t-tabs__nav-item::before {
     background: transparent;
   }
 
-  :global(.t-tabs__nav--card.t-tabs__nav-item:not(.t-is-disabled):not(.t-is-active):hover) {
+  .t-tabs__nav--card.t-tabs__nav-item:not(.t-is-disabled):not(.t-is-active):hover {
     background-color: var(--page-tabs-bg-hover);
     border: none;
   }
 
-  :global(.t-tabs__nav--card.t-tabs__nav-item.t-is-active) {
+  .t-tabs__nav--card.t-tabs__nav-item.t-is-active {
     background-color: var(--page-tabs-bg-active);
   }
 
-  :global(.t-tabs__nav--card.t-tabs__nav-item.t-is-active::before) {
+  .t-tabs__nav--card.t-tabs__nav-item.t-is-active::before {
     content: '';
   }
 
-  :global(.t-icon-close:hover) {
+  .t-icon-close:hover {
     transition: 0.2s linear all;
     border-radius: 100%;
     color: var(--color-danger);

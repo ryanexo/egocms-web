@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import PageTabs from '@/pages/core/layout/components/PageTabs.tsx'
+import PageTabs from '@/pages/core/layout/components/AppPageTabs.tsx'
+import StatusBar from '@/pages/core/layout/components/AppStatusBar.tsx'
 </script>
 
 <template>
   <div class="layout__header">
-    <div class="h-header border-b-gray-line border-b bg-white"></div>
+    <status-bar />
     <page-tabs />
   </div>
 </template>

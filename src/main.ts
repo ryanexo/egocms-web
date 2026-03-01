@@ -7,7 +7,7 @@ import { i18n, restoreLocale } from '@/locales'
 import { router } from '@/router'
 import { CoreRoutePathEnum } from '@/router/constants/route.enum.ts'
 import { pinia, useAppStore, useAuthStore, useRouterStore } from '@/stores'
-import { useAppUpdater } from '@/stores/adapters/app-updater.ts'
+import { useAppUpdater } from '@/stores/providers/app-updater.ts'
 import '@/assets/main.css'
 
 async function createApp() {

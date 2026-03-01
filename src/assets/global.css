@@ -23,13 +23,13 @@
   --color-t-placeholder: oklch(0.85 0.023 272);
   --color-t-disabled: oklch(0.8 0.03 268);
 
-  --color-brand-bg: #F8FAFC;
+  --color-brand-bg: #f8fafc;
+  --color-divider: var(--color-zinc-200);
 
   /* 布局配置 */
-  --height-header: calc(var(--spacing) * 12);
-  --width-sidebar: calc(var(--spacing) * 60);
-
-  --color-gray-line: var(--color-zinc-200);
+  --app-header: calc(var(--spacing) * 12);
+  --app-sidebar: calc(var(--spacing) * 60);
+  --app-tabs: calc(var(--spacing) * 10);
 
   --color-tab-bg: var(--color-white);
   --color-tab-hover: var(--color-zinc-100);
@@ -41,6 +41,14 @@
   --color-menu-active-text: var(--color-white);
   --color-menu-hover-bg: var(--color-brand-50);
   --color-menu-hover-text: var(--color-primary);
+}
+
+@layer components {
+  .flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 html,

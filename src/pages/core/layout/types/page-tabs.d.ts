@@ -1,4 +1,4 @@
-import type { PopupVisibleChangeContext } from 'tdesign-vue-next'
+import type { PopupVisibleChangeContext, TdDropdownProps } from 'tdesign-vue-next'
 import type { DefineSetupFnComponent } from 'vue'
 
 import type { Page } from '@/stores/types/page'
@@ -12,12 +12,10 @@ export type ContextmenuAction =
   | 'refresh'
   | 'unpin'
 
-export interface TabPanelLabelProps {
-  contextmenuMinWidth?: number
-  contextmenuVisible?: boolean
+export interface TabActionMenuProps {
   data: Page
   dataIndex: number
-  disableActions?: Partial<Record<ContextmenuAction, boolean>>
+  disabled?: Partial<Record<ContextmenuAction, boolean>>
   onClose?: (data: Page) => void
   onCloseAfter?: (data: Page) => void
   onCloseBefore?: (data: Page) => void
@@ -26,7 +24,10 @@ export interface TabPanelLabelProps {
   onPin?: (data: Page) => void
   onRefresh?: (data: Page) => void
   onUnpin?: (data: Page) => void
+  trigger?: TdDropdownProps['trigger']
 }
+
+export type TabItemProps = Pick<TabActionMenuProps, 'data' | 'dataIndex'>
 
 export interface TabDropdownAction {
   icon: DefineSetupFnComponent<any>

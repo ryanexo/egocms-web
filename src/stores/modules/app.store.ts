@@ -14,6 +14,9 @@ const useAppStore = defineStore('store.app', {
     setPageTitle(title: string) {
       this.pageTitle = title
     },
+    toggleSidebarCollapsed() {
+      this.sidebarCollapsed = !this.sidebarCollapsed
+    },
   },
   getters: {
     pageTitleFormatted: (state) => {
@@ -23,6 +26,7 @@ const useAppStore = defineStore('store.app', {
   state: (): AppStoreState => {
     return {
       pageTitle: '',
+      sidebarCollapsed: false,
     }
   },
 })

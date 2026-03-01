@@ -37,7 +37,7 @@ function useLoading(duration: number = 200): Loading {
       if (duration === 0 || timeDiff >= duration) {
         resolve(value)
       } else {
-        setTimeout(resolve, duration - timeDiff)
+        setTimeout(() => resolve(value), duration - timeDiff)
       }
     }
   }
@@ -54,16 +54,12 @@ function useLoading(duration: number = 200): Loading {
     return { promise, reject: createResolver<T>(reject), resolve: createResolver<T>(resolve) }
   }
 
-  const load = async <T>(executor: Callable) => {
-    const { promise, reject: originalReject, resolve: originalResolve } = startLoading<T>()
-    const resolve = createResolver<T>(originalResolve)
-    const reject = createResolver<T>(originalReject)
+  const load = <T>(executor: Callable) => {
+    const { promise, reject, resolve } = startLoading<T>()
 
-    try {
-      resolve(executor())
-    } catch (error: any) {
-      reject(error)
-    }
+    Promise.resolve(executor())
+      .then((result) => resolve(result))
+      .catch((error) => reject(error))
 
     return promise
   }

@@ -1,5 +1,6 @@
 export interface AppStoreState {
   pageTitle: string
+  sidebarCollapsed: boolean
 }
 
 export interface AppUpdater {

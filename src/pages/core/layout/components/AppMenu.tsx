@@ -8,12 +8,13 @@ import { useRoute, useRouter } from 'vue-router'
 
 import type { MenuProps } from '@/pages/core/layout/types/menu'
 
-import { useRouterStore } from '@/stores'
+import { useAppStore, useRouterStore } from '@/stores'
+import { useClassNs } from '@/utils/bem.ts'
 
-import styles from '../styles/nested-menu.module.css'
+import '../styles/app-menu.css'
 
-const NestedMenuItem = defineComponent<MenuProps>({
-  name: 'NestedMenuItem',
+const AppMenuItem = defineComponent<MenuProps>({
+  name: 'AppMenuItem',
   props: {
     menus: {
       required: true,
@@ -21,6 +22,7 @@ const NestedMenuItem = defineComponent<MenuProps>({
     },
   },
   setup(props: MenuProps) {
+    const ns = useClassNs('app-menu')
     const router = useRouter()
 
     return () => {
@@ -38,21 +40,7 @@ const NestedMenuItem = defineComponent<MenuProps>({
         const icon = () => {
           const menuIcon = meta.icon ? <Icon name={meta.icon} /> : <></>
 
-          return (
-            <span
-              class={[
-                'inline-flex',
-                'h-6',
-                'w-6',
-                'items-center',
-                'justify-center',
-                'text-xs',
-                'mr-3',
-              ]}
-            >
-              {menuIcon}
-            </span>
-          )
+          return <span class={ns.e('icon')}>{menuIcon}</span>
         }
 
         if (isLeaf) {
@@ -80,7 +68,7 @@ const NestedMenuItem = defineComponent<MenuProps>({
               value={uniqueName}
             >
               {{
-                default: () => <NestedMenuItem menus={children} />,
+                default: () => <AppMenuItem menus={children} />,
                 icon,
               }}
             </Submenu>,
@@ -93,14 +81,15 @@ const NestedMenuItem = defineComponent<MenuProps>({
   },
 })
 
-const NestedMenu = defineComponent({
-  name: 'NestedMenu',
-  setup() {
+const AppMenu = defineComponent({
+  name: 'AppMenu',
+  setup(_, { expose }) {
     const route = useRoute()
+    const appStore = useAppStore()
     const routerStore = useRouterStore()
-
     const activeMenu = computed(() => String(route.name))
     const expanded = ref<string[]>([])
+    const ns = useClassNs('app-menu')
 
     const onUpdateExpanded = (value: MenuValue[]) => {
       expanded.value = value as string[]
@@ -113,21 +102,24 @@ const NestedMenu = defineComponent({
       },
       { flush: 'sync', immediate: true },
     )
+    expose({ activeMenu, expanded })
 
     return () => {
       return (
         <Menu
-          class={[styles.nestedMenu, 'bg-sidebar-bg!', 'w-full!']}
+          class={ns.b()}
+          collapsed={appStore.sidebarCollapsed}
           expanded={expanded.value}
           expandMutex={true}
           onExpand={onUpdateExpanded}
           value={activeMenu.value}
+          width={appStore.sidebarCollapsed ? 'calc(var(--spacing) * 20)' : 'var(--app-sidebar)'}
         >
-          <NestedMenuItem menus={routerStore.routes} />
+          <AppMenuItem menus={routerStore.routes} />
         </Menu>
       )
     }
   },
 })
 
-export { NestedMenu as default }
+export { AppMenu as default }

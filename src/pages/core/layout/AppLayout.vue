@@ -13,15 +13,13 @@ const ns = useClassNs('app-layout')
     class="flex h-full w-full"
     :class="[ns.b()]"
   >
-    <div
-      class="w-sidebar border-r-gray-line bg-sidebar-bg relative flex h-full shrink-0 flex-col border-r"
-    >
+    <div class="border-r-divider bg-sidebar-bg relative flex h-full shrink-0 flex-col border-r">
       <app-logo
         class="shrink-0"
         :class="[ns.e('logo')]"
       />
       <layout-sidebar
-        class="h-0 grow"
+        class="transition-base h-0 grow"
         :class="[ns.e('sidebar')]"
       />
     </div>
@@ -40,4 +38,12 @@ const ns = useClassNs('app-layout')
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.app-layout {
+  &__sidebar {
+    &.is-collapsed {
+      --app-sidebar: calc(var(--spacing) * 20);
+    }
+  }
+}
+</style>

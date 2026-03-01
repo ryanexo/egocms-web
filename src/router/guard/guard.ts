@@ -3,7 +3,7 @@ import type { RouteLocationNormalizedGeneric, Router } from 'vue-router'
 import { CoreRouteNameEnum } from '@/router/constants/route.enum.ts'
 import { progressService, useAuthService } from '@/services'
 import { useAppStore, useAuthStore, useRouterStore } from '@/stores'
-import { useRouterStoreContextProvider } from '@/stores/adapters/router-context-provider.ts'
+import { useRouterStoreContextProvider } from '@/stores/providers/router-context.ts'
 
 export function useAccessGuard(router: Router) {
   const extractRedirectURI = (to: RouteLocationNormalizedGeneric) => {
