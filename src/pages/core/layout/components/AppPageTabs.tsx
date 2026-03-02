@@ -12,7 +12,15 @@ import {
   PinIcon,
   RefreshIcon,
 } from 'tdesign-icons-vue-next'
-import { Dropdown, DropdownItem, DropdownMenu, Icon, TabPanel, Tabs } from 'tdesign-vue-next'
+import {
+  Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  Icon,
+  TabPanel,
+  Tabs,
+} from 'tdesign-vue-next'
 import { computed, defineComponent, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -237,13 +245,11 @@ const TabItem = defineComponent<TabItemProps>({
             class={[
               'h-(--text-lg)',
               'w-(--text-lg)',
-              'p-0.5',
               'text-zinc-500',
               'hover:text-rose-600',
               'transition-colors',
               'duration-200',
             ]}
-            size="1.25rem"
           />
         </span>
       )
@@ -254,7 +260,7 @@ const TabItem = defineComponent<TabItemProps>({
             {data.icon ? <Icon name={data.icon} /> : undefined}
             {data.title}
           </span>
-          {pined ? pinAction : undefined}
+          {pined && !props.data.alwaysPined ? pinAction : undefined}
           {removable ? removeAction : undefined}
         </span>
       )
@@ -354,11 +360,13 @@ const AppPageTabs = defineComponent({
               disabled={createActionDisableOptions(currentPage, currentIndex)}
               trigger="click"
             >
-              <div
-                class="border-l-divider flex h-full w-8 cursor-pointer items-center justify-center border-l"
-                tabindex={0}
-              >
-                <ChevronDownIcon size="1.25rem" />
+              <div class="border-l-divider flex h-full w-(--app-tabs) cursor-pointer items-center justify-center border-l">
+                <Button
+                  class="h-full! rounded-none! border-0!"
+                  variant="text"
+                >
+                  <ChevronDownIcon size="1.25rem" />
+                </Button>
               </div>
             </TabActionMenu>
           )

@@ -1,6 +1,5 @@
 .app-page-tabs {
   --td-bg-color-secondarycontainer-hover: var(--color-gray-100);
-  --td-comp-paddingLR-l: calc(var(--spacing) * 3);
   --td-comp-size-xxl: var(--text-4xl);
 
   --page-tabs-bg: var(--color-tab-bg);
