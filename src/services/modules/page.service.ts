@@ -10,11 +10,11 @@ import type { Page } from '@/stores/types/page'
 
 import { CoreRouteNameEnum } from '@/router/constants/route.enum.ts'
 import { progressService } from '@/services'
-import { usePageStore, useRouterStore } from '@/stores'
+import { usePageStore, useRouteStore } from '@/stores'
 
 export function usePageService(router?: Router): IPageService {
   const currentRouter = router ?? useRouter()
-  const routerStore = useRouterStore()
+  const routeStore = useRouteStore()
   const pageStore = usePageStore()
 
   const findIndexByIdOrIndex = (idOrIndex: number | string) => {
@@ -45,7 +45,7 @@ export function usePageService(router?: Router): IPageService {
     }
   }
   const openDefaultPage = async () => {
-    const path = routerStore.homePath ?? CoreRouteNameEnum.Home
+    const path = routeStore.homePath ?? CoreRouteNameEnum.Home
     return currentRouter.push(path)
   }
   const closeAll: IPageService['closeAll'] = () => {

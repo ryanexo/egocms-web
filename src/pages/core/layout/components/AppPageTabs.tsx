@@ -34,7 +34,7 @@ import type { Page } from '@/stores/types/page'
 
 import { trans } from '@/locales'
 import { usePageService } from '@/services'
-import { usePageStore, useRouterStore } from '@/stores'
+import { usePageStore, useRouteStore } from '@/stores'
 import { useClassNs } from '@/utils/bem.ts'
 
 import '../styles/app-page-tabs.css'
@@ -272,7 +272,7 @@ const AppPageTabs = defineComponent({
   name: 'AppPageTabs',
   setup() {
     const router = useRouter()
-    const routerStore = useRouterStore()
+    const routeStore = useRouteStore()
     const pageStore = usePageStore()
     const pageService = usePageService()
     const ns = useClassNs('app-page-tabs')
@@ -280,7 +280,7 @@ const AppPageTabs = defineComponent({
     const openedPages = computed<Page[]>(() => {
       const pages: Page[] = []
       pageStore.openedPages.forEach((page) => {
-        if (page.path === routerStore.homePath) {
+        if (page.path === routeStore.homePath) {
           pages.unshift(page)
         } else {
           pages.push(page)
@@ -360,7 +360,7 @@ const AppPageTabs = defineComponent({
               disabled={createActionDisableOptions(currentPage, currentIndex)}
               trigger="click"
             >
-              <div class="border-l-divider flex h-full w-(--app-tabs) cursor-pointer items-center justify-center border-l">
+              <div class="border-l-divider flex h-full w-(--app-tabs-height) cursor-pointer items-center justify-center border-l">
                 <Button
                   class="h-full! rounded-none! border-0!"
                   variant="text"
@@ -375,7 +375,7 @@ const AppPageTabs = defineComponent({
 
       return (
         <div class={ns.b()}>
-          <div class="h-full px-2 py-0.5">
+          <div class="h-full overflow-x-clip px-2 py-0.5">
             <Tabs
               class="h-full bg-transparent!"
               dragSort={true}

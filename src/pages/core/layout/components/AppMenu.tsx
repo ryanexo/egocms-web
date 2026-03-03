@@ -8,7 +8,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 import type { MenuProps } from '@/pages/core/layout/types/menu'
 
-import { useAppStore, useRouterStore } from '@/stores'
+import { useAppStore, useRouteStore } from '@/stores'
 import { useClassNs } from '@/utils/bem.ts'
 
 import '../styles/app-menu.css'
@@ -86,7 +86,7 @@ const AppMenu = defineComponent({
   setup(_, { expose }) {
     const route = useRoute()
     const appStore = useAppStore()
-    const routerStore = useRouterStore()
+    const routeStore = useRouteStore()
     const activeMenu = computed(() => String(route.name))
     const expanded = ref<string[]>([])
     const ns = useClassNs('app-menu')
@@ -98,7 +98,7 @@ const AppMenu = defineComponent({
     watch(
       () => route.name,
       (name) => {
-        expanded.value = routerStore.findAncestor(String(name)).map((item) => item.name as string)
+        expanded.value = routeStore.findAncestor(String(name)).map((item) => item.name as string)
       },
       { flush: 'sync', immediate: true },
     )
@@ -113,9 +113,11 @@ const AppMenu = defineComponent({
           expandMutex={true}
           onExpand={onUpdateExpanded}
           value={activeMenu.value}
-          width={appStore.sidebarCollapsed ? 'calc(var(--spacing) * 20)' : 'var(--app-sidebar)'}
+          width={
+            appStore.sidebarCollapsed ? 'calc(var(--spacing) * 20)' : 'var(--app-sidebar-width)'
+          }
         >
-          <AppMenuItem menus={routerStore.routes} />
+          <AppMenuItem menus={routeStore.routes} />
         </Menu>
       )
     }

@@ -23,13 +23,13 @@ const ns = useClassNs('app-layout')
         :class="[ns.e('sidebar')]"
       />
     </div>
-    <div class="relative flex h-full min-w-0 grow flex-col">
+    <div class="relative h-full min-w-0 grow">
       <layout-header
-        class="shrink-0"
+        class="absolute top-0 left-0 z-1 w-full"
         :class="ns.e('header')"
       />
       <div
-        class="relative h-auto grow overflow-y-auto"
+        class="relative h-full grow overflow-y-auto pt-(--app-header-height)"
         :class="[ns.e('content')]"
       >
         <layout-content />
@@ -42,7 +42,7 @@ const ns = useClassNs('app-layout')
 .app-layout {
   &__sidebar {
     &.is-collapsed {
-      --app-sidebar: calc(var(--spacing) * 20);
+      --app-sidebar-width: calc(var(--spacing) * 20);
     }
   }
 }

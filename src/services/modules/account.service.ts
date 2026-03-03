@@ -4,7 +4,7 @@ import type { UserCredentialParams } from '@/api/user/types/params'
 import type { IAccountService } from '@/services/types/account.service'
 
 import { userApi } from '@/api/user'
-import { useAuthStore, useRouterStore } from '@/stores'
+import { useAuthStore, useRouteStore } from '@/stores'
 
 export function useAccountService(): IAccountService {
   const login: IAccountService['login'] = async (credential) => {
@@ -12,12 +12,12 @@ export function useAccountService(): IAccountService {
 
     const authStore = useAuthStore()
     const router = useRouter()
-    const routerStore = useRouterStore()
+    const routeStore = useRouteStore()
 
     authStore.setToken(token)
     authStore.setPermission([])
 
-    await router.push({ path: routerStore.homePath })
+    await router.push({ path: routeStore.homePath })
   }
 
   return { login }

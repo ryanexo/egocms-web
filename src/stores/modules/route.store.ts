@@ -9,14 +9,14 @@ import { defineAsyncComponent, defineComponent, h } from 'vue'
 import type {
   RouteGenerationContext,
   RouterContextProvider,
-  RouterStoreState,
-} from '@/stores/types/router'
+  RouteStoreState,
+} from '@/stores/types/route'
 
 import { useAsyncComponentSkeleton } from '@/components/skeleton/AsyncComponentSkelton.tsx'
 import { trans } from '@/locales'
 import { getLocalRoutes } from '@/router'
 
-const useRouterStore = defineStore('store.router', {
+const useRouteStore = defineStore('store.route', {
   actions: {
     $reset() {
       this.loaded = false
@@ -76,7 +76,7 @@ const useRouterStore = defineStore('store.router', {
       }
     },
   },
-  state: (): RouterStoreState => {
+  state: (): RouteStoreState => {
     return {
       homePath: undefined,
       loaded: false,
@@ -229,7 +229,7 @@ async function generateRoutes(srv: RouterContextProvider) {
 }
 
 if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useRouterStore, import.meta.hot))
+  import.meta.hot.accept(acceptHMRUpdate(useRouteStore, import.meta.hot))
 }
 
-export { useRouterStore }
+export { useRouteStore }

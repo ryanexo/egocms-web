@@ -4,7 +4,7 @@ import StatusBar from '@/pages/core/layout/components/AppStatusBar.tsx'
 </script>
 
 <template>
-  <div class="layout__header">
+  <div class="app-layout__header">
     <status-bar />
     <page-tabs />
   </div>

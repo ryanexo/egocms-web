@@ -5,7 +5,9 @@ const appStore = useAppStore()
 </script>
 
 <template>
-  <div class="border-b-divider flex h-(--app-header) w-full items-center justify-center border-b">
+  <div
+    class="border-b-divider flex h-(--app-status-bar-height) w-full items-center justify-center border-b"
+  >
     <span
       v-if="!appStore.sidebarCollapsed"
       class="text-primary text-2xl font-bold uppercase"

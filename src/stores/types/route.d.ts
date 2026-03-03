@@ -1,8 +1,8 @@
 import type { RouteRecordRaw } from 'vue-router'
 
 export interface RouteGenerationContext {
-  parentRouteMap: RouterStoreState['parentRouteMap']
-  routeMap: RouterStoreState['routeMap']
+  parentRouteMap: RouteStoreState['parentRouteMap']
+  routeMap: RouteStoreState['routeMap']
   routes: RouteRecordRaw[]
 }
 
@@ -13,7 +13,7 @@ export interface RouterContextProvider {
   resolveNotExistsComponent(originalPath: string): ImportFn
 }
 
-export interface RouterStoreState {
+export interface RouteStoreState {
   homePath?: string
   loaded: boolean
   parentRouteMap: Map<string, RouteRecordRaw>

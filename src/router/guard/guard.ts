@@ -2,8 +2,8 @@ import type { RouteLocationNormalizedGeneric, Router } from 'vue-router'
 
 import { CoreRouteNameEnum } from '@/router/constants/route.enum.ts'
 import { progressService, useAuthService } from '@/services'
-import { useAppStore, useAuthStore, useRouterStore } from '@/stores'
-import { useRouterStoreContextProvider } from '@/stores/providers/router-context.ts'
+import { useAppStore, useAuthStore, useRouteStore } from '@/stores'
+import { useRouteStoreContextProvider } from '@/stores/providers/router-context.ts'
 
 export function useAccessGuard(router: Router) {
   const extractRedirectURI = (to: RouteLocationNormalizedGeneric) => {
@@ -14,19 +14,19 @@ export function useAccessGuard(router: Router) {
   }
 
   router.beforeEach(async (to) => {
-    const routerStore = useRouterStore()
+    const routeStore = useRouteStore()
     const authStore = useAuthStore()
 
-    if (to.name === CoreRouteNameEnum.Home && routerStore.homePath !== undefined) {
-      return { path: routerStore.homePath, replace: true }
+    if (to.name === CoreRouteNameEnum.Home && routeStore.homePath !== undefined) {
+      return { path: routeStore.homePath, replace: true }
     }
 
-    if (to.meta.requiresAuth === false || routerStore.isRouteInWhitelist(to.path)) {
-      if (to.path === routerStore.unauthorizedRedirectPath && authStore.isValid()) {
+    if (to.meta.requiresAuth === false || routeStore.isRouteInWhitelist(to.path)) {
+      if (to.path === routeStore.unauthorizedRedirectPath && authStore.isValid()) {
         const redirect = extractRedirectURI(to)
         return redirect
           ? { ...redirect, replace: true }
-          : { path: routerStore.homePath, replace: true }
+          : { path: routeStore.homePath, replace: true }
       }
 
       return true
@@ -37,9 +37,9 @@ export function useAccessGuard(router: Router) {
       return false
     }
 
-    if (!routerStore.loaded) {
-      const service = useRouterStoreContextProvider(router)
-      await routerStore.generateRoutes(service)
+    if (!routeStore.loaded) {
+      const service = useRouteStoreContextProvider(router)
+      await routeStore.generateRoutes(service)
 
       const redirect = extractRedirectURI(to) ?? router.resolve(to.fullPath)
       return { ...redirect, replace: true }

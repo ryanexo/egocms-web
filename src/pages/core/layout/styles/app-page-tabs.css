@@ -9,7 +9,7 @@
   --page-tabs-radius: var(--radius-sm);
 
   background: var(--page-tabs-bg);
-  height: var(--app-tabs);
+  height: var(--app-tabs-height);
   display: flex;
   justify-content: space-between;
   align-items: center;

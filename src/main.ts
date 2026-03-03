@@ -6,7 +6,7 @@ import { startErrorCapture } from '@/core/errors'
 import { i18n, restoreLocale } from '@/locales'
 import { router } from '@/router'
 import { CoreRoutePathEnum } from '@/router/constants/route.enum.ts'
-import { pinia, useAppStore, useAuthStore, useRouterStore } from '@/stores'
+import { pinia, useAppStore, useAuthStore, useRouteStore } from '@/stores'
 import { useAppUpdater } from '@/stores/providers/app-updater.ts'
 import '@/assets/main.css'
 
@@ -15,16 +15,16 @@ async function createApp() {
 
   const appStore = useAppStore()
   const authStore = useAuthStore()
-  const routerStore = useRouterStore()
+  const routeStore = useRouteStore()
 
   await restoreLocale('zh-CN')
 
   useTitle(computed(() => appStore.pageTitleFormatted))
 
   appStore.setAppUpdater(useAppUpdater(30))
-  routerStore.setHomePath(CoreRoutePathEnum.Dashboard)
-  routerStore.setWhitelist([CoreRoutePathEnum.Login, CoreRoutePathEnum.Register])
-  routerStore.setUnauthorizedRedirectPath(CoreRoutePathEnum.Login)
+  routeStore.setHomePath(CoreRoutePathEnum.Dashboard)
+  routeStore.setWhitelist([CoreRoutePathEnum.Login, CoreRoutePathEnum.Register])
+  routeStore.setUnauthorizedRedirectPath(CoreRoutePathEnum.Login)
 
   if (import.meta.env.DEV) {
     /**

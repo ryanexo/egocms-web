@@ -5,15 +5,15 @@ import { useRouter } from 'vue-router'
 import { trans } from '@/locales'
 import FullscreenLayout from '@/pages/core/layout/FullscreenLayout.vue'
 import { CoreRoutePathEnum } from '@/router/constants/route.enum.ts'
-import { useRouterStore } from '@/stores'
+import { useRouteStore } from '@/stores'
 
 import notfound from './images/notfound.svg'
 
 const router = useRouter()
-const routerStore = useRouterStore()
+const routeStore = useRouteStore()
 
 function onGobackHome() {
-  const homePath = routerStore.homePath ?? CoreRoutePathEnum.Home
+  const homePath = routeStore.homePath ?? CoreRoutePathEnum.Home
   router.replace(homePath)
 }
 </script>

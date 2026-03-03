@@ -27,9 +27,10 @@
   --color-divider: var(--color-zinc-200);
 
   /* 布局配置 */
-  --app-header: calc(var(--spacing) * 12);
-  --app-sidebar: calc(var(--spacing) * 60);
-  --app-tabs: calc(var(--spacing) * 10);
+  --app-status-bar-height: calc(var(--spacing) * 12);
+  --app-sidebar-width: calc(var(--spacing) * 60);
+  --app-tabs-height: calc(var(--spacing) * 10);
+  --app-header-height: calc(var(--app-status-bar-height) + var(--app-tabs-height));
 
   --color-tab-bg: var(--color-white);
   --color-tab-hover: var(--color-zinc-100);

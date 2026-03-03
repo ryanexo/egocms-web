@@ -3,13 +3,13 @@ import type { Router } from 'vue-router'
 import { trimStart } from 'es-toolkit'
 
 import type { IRoute } from '@/router/types/common'
-import type { RouterContextProvider } from '@/stores/types/router'
+import type { RouterContextProvider } from '@/stores/types/route'
 
 import { trans } from '@/locales'
 import { CoreRouteNameEnum } from '@/router/constants/route.enum.ts'
 import { messageService } from '@/services'
 
-export function useRouterStoreContextProvider(router: Router): RouterContextProvider {
+export function useRouteStoreContextProvider(router: Router): RouterContextProvider {
   const addRoute: RouterContextProvider['addRoute'] = (route) => {
     router.addRoute(CoreRouteNameEnum.Home, route)
   }
@@ -25,7 +25,7 @@ export function useRouterStoreContextProvider(router: Router): RouterContextProv
     return result
   }
   const fetchRoutes: RouterContextProvider['fetchRoutes'] = async () => {
-    const message = messageService.loading(trans('common.app.router.loadingMenus'), { duration: 0 })
+    const message = messageService.loading(trans('common.app.menu.loadingMenus'), { duration: 0 })
     const result: IRoute[] = [
       {
         component: '/',
