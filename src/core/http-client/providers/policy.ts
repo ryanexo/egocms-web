@@ -11,7 +11,7 @@ import { useAuthStore } from '@/stores'
 
 export function createHttpClientValidator(): HttpClientValidator {
   const isValidCode: HttpClientValidator['isValidCode'] = (code) => {
-    return code === 'SERVER-000-00000'
+    return code === 'SERVER-000-000000'
   }
   const isValidJsonData: HttpClientValidator['isValidJsonData'] = (
     response: any,

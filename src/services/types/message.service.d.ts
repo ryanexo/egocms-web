@@ -14,7 +14,7 @@ export interface MessageOptions {
   duration?: number
 }
 
-export interface MessageService {
+export interface IMessageService {
   confirm(options: ConfirmOptions): Promise<[boolean, MessageConfirmBehavior]>
   error(content: string, options?: MessageOptions): Promise<MessageCloser>
   info(content: string, options?: MessageOptions): Promise<MessageCloser>

@@ -1,10 +1,10 @@
 import { MessagePlugin } from 'tdesign-vue-next'
 
-import type { MessageService } from '@/services/types/message.service'
+import type { IMessageService } from '@/services/types/message.service'
 
 import { openConfirmDialog } from '@/components/dialog/ConfirmDialog.tsx'
 
-export function createMessageService(): MessageService {
+export function createMessageService(): IMessageService {
   return {
     confirm: async (options) => {
       const result = await openConfirmDialog(options.content, {

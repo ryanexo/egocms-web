@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { castArray } from 'es-toolkit/compat'
+import { castArray, isEmpty } from 'es-toolkit/compat'
 import { acceptHMRUpdate, defineStore } from 'pinia'
 
 import type { AuthStoreState, Permission } from '@/stores/types/auth'
@@ -27,7 +27,7 @@ const useAuthStore = defineStore('store.auth', {
      * 检查当前用户授权是否有效
      */
     isValid() {
-      return this.token !== '' && !this.isExpired()
+      return !isEmpty(this.token) && !this.isExpired()
     },
     /**
      * 设置当前用户权限

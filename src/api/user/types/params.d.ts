@@ -10,8 +10,8 @@ export interface UserCredentialParams {
  * dto.UserAuthnResult
  */
 export interface DtoUserAuthnResult {
-  detail?: DtoUser
-  token?: string
+  detail: DtoUser
+  token: string
 }
 
 /**

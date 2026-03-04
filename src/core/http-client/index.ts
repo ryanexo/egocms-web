@@ -10,7 +10,7 @@ import {
   useRejectionInterceptor,
   useStandardResponseInterceptor,
 } from '@/core/http-client/interceptor.ts'
-import { useHttpClientDefaultPolicies } from '@/core/http-client/providers/policy.adapter.ts'
+import { useHttpClientDefaultPolicies } from '@/core/http-client/providers/policy.ts'
 
 function createHttpClient(policies: HttpClientPolicies): AxiosInstance {
   const httpClient = axios.create({

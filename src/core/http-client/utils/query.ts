@@ -27,7 +27,7 @@ function defineQuery<T, R = any>(
   query: Query<T, R>,
   defaultConfig?: Omit<AxiosRequestConfig, 'signal'>,
 ) {
-  return (data: T, config?: Omit<AxiosRequestConfig, 'signal'>): QueryResult<R> => {
+  return (data?: T, config?: Omit<AxiosRequestConfig, 'signal'>): QueryResult<R> => {
     return createQueryDefinition<T, R>(httpClient, query, defaultConfig, data, config)
   }
 }

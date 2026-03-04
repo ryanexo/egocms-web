@@ -1,3 +1,11 @@
+import type { AxiosRequestConfig } from 'axios'
+
+import type {
+  DtoUserAuthnResult,
+  UserCreateParams,
+  UserCredentialParams,
+} from '@/api/user/types/params'
+
 export interface UserApi {
   login: (
     data: UserCredentialParams,

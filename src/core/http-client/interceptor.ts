@@ -22,18 +22,18 @@ export function useCustomConfigInterceptor(axios: AxiosInstance, policies: HttpC
   })
 }
 
-export function useRejectionInterceptor(axios: AxiosInstance, _: HttpClientPolicies) {
+export function useRejectionInterceptor(axios: AxiosInstance, policies: HttpClientPolicies) {
   axios.interceptors.request.use(undefined, (rejection) => {
     if (rejection instanceof HttpRequestException) {
       throw rejection
     }
-    throw new HttpRequestException(rejection.reason ?? rejection.message, rejection)
+    throw new HttpRequestException(rejection.reason ?? rejection.message, policies, rejection)
   })
   axios.interceptors.response.use(undefined, (rejection) => {
     if (rejection instanceof HttpResponseException) {
       throw rejection
     }
-    throw new HttpResponseException(rejection.reason ?? rejection.message, rejection)
+    throw new HttpResponseException(rejection.reason ?? rejection.message, policies, rejection)
   })
 }
 
@@ -43,7 +43,7 @@ export function useStandardResponseInterceptor(axios: AxiosInstance, policies: H
 
     if (policies.validator.isValidJsonData(data)) {
       if (!policies.validator.isValidCode(data.code)) {
-        throw new HttpResponseException(data.msg).withContext(response)
+        throw new HttpResponseException(data.msg, policies).withContext(response)
       }
       if (response.config.unwrapResponse !== false) {
         response.data = data.data

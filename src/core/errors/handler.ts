@@ -1,5 +1,7 @@
 import type { Router } from 'vue-router'
 
+import { isAxiosError } from 'axios'
+
 import type { IErrorHandler } from '@/core/errors/types/handler'
 
 import {
@@ -20,10 +22,23 @@ export function createErrorHandler(router: Router) {
       messageService.error(error.message)
       return true
     } else if (error instanceof HttpResponseException) {
-      const code = error.getContext()?.data?.code
-      const message = code ? `${error.message} [${code}]` : error.message
-      messageService.error(message)
-      return true
+      const prevError = error.unwrap()
+      if (!prevError) {
+        const code = error.getContext()?.data?.code
+        const message = code ? `${error.message} [${code}]` : error.message
+        messageService.error(message)
+        return true
+      }
+      if (isAxiosError(prevError) && prevError.response) {
+        const { response } = prevError
+        const policies = error.getPolicies()
+        const message = policies.validator.isValidJsonData(response.data)
+          ? response.data.msg
+          : error.message
+        messageService.error(message)
+        return true
+      }
+      return false
     } else if (error instanceof SessionExpiredException) {
       useAuthServiceWithRouter(router).invalidateSession({
         redirect: router.currentRoute.value.fullPath,
