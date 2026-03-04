@@ -15,7 +15,7 @@ export type ContextmenuAction =
 export interface TabActionMenuProps {
   data: Page
   dataIndex: number
-  disabled?: Partial<Record<ContextmenuAction, boolean>>
+  disabled?: (data: ContextmenuAction) => boolean
   onClose?: (data: Page) => void
   onCloseAfter?: (data: Page) => void
   onCloseBefore?: (data: Page) => void

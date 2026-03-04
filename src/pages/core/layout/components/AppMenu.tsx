@@ -107,15 +107,13 @@ const AppMenu = defineComponent({
     return () => {
       return (
         <Menu
-          class={ns.b()}
+          class={[ns.b(), 'w-full!']}
           collapsed={appStore.sidebarCollapsed}
           expanded={expanded.value}
           expandMutex={true}
           onExpand={onUpdateExpanded}
           value={activeMenu.value}
-          width={
-            appStore.sidebarCollapsed ? 'calc(var(--spacing) * 20)' : 'var(--app-sidebar-width)'
-          }
+          width="100%"
         >
           <AppMenuItem menus={routeStore.routes} />
         </Menu>

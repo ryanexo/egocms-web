@@ -11,8 +11,7 @@
       "setHomePath": "HomePath不能为'/'"
     },
     "menu": {
-      "loadingMenus": "正在加载菜单...",
-      "collapse": "折叠/展开菜单"
+      "loadingMenus": "正在加载菜单..."
     },
     "tab": {
       "close": "关闭标签",

@@ -158,14 +158,14 @@ const TabActionMenu = defineComponent({
 
           dropdownItems.push(
             <DropdownItem
-              disabled={disabled?.[action]}
+              disabled={disabled?.(action)}
               divider={chunkIndex < actionChunks.length - 1 && index === actions.length - 1}
               key={action}
               onClick={() => onTriggerAction(action)}
             >
               <span class="inline-flex items-center gap-x-1.5">
-                <ActionIcon></ActionIcon>
-                {label}
+                <ActionIcon />
+                <span>{label}</span>
               </span>
             </DropdownItem>,
           )
@@ -213,7 +213,7 @@ const TabItem = defineComponent<TabItemProps>({
 
       const pinAction = (
         <span
-          class={['ml-(--td-comp-margin-s)', 'flex', 'justify-center', 'items-center']}
+          class={['w-4', 'ml-(--td-comp-margin-s)', 'flex', 'justify-center', 'items-center']}
           onClick={(e) => {
             e.stopPropagation()
             pageService.unpin(props.data.id)
@@ -229,13 +229,12 @@ const TabItem = defineComponent<TabItemProps>({
               'transition-colors',
               'duration-200',
             ]}
-            size="1.25rem"
           />
         </span>
       )
       const removeAction = (
         <span
-          class={['ml-(--td-comp-margin-s)', 'flex', 'justify-center', 'items-center']}
+          class={['w-4', 'ml-(--td-comp-margin-s)', 'flex', 'justify-center', 'items-center']}
           onClick={(e) => {
             e.stopPropagation()
             pageService.close(props.dataIndex)
@@ -289,18 +288,31 @@ const AppPageTabs = defineComponent({
       return pages
     })
 
-    const createActionDisableOptions = (
-      data: Page,
-      index: number,
-    ): Partial<TabActionMenuProps['disabled']> => {
+    const createDisableValidator = (data: Page, index: number): TabActionMenuProps['disabled'] => {
       const pined = pageStore.pined.has(data.id)
-      return {
-        close: pined,
-        closeAfter: index === pageStore.openedPages.length - 1,
-        closeBefore: index === 0,
-        pin: data.alwaysPined || pined,
-        refresh: pageStore.current !== data.id,
-        unpin: data.alwaysPined || !pined,
+      return (action: ContextmenuAction) => {
+        switch (action) {
+          case 'close': {
+            return pined
+          }
+          case 'closeAfter': {
+            return index === pageStore.openedPages.length - 1
+          }
+          case 'closeBefore': {
+            return index === 0
+          }
+          case 'pin': {
+            return data.alwaysPined || pined
+          }
+          case 'refresh': {
+            return pageStore.current !== data.id
+          }
+          case 'unpin': {
+            return data.alwaysPined || !pined
+          }
+          default:
+            return false
+        }
       }
     }
     const onTabChange = (value: TabValue) => {
@@ -336,7 +348,7 @@ const AppPageTabs = defineComponent({
                   <TabActionMenu
                     data={item}
                     dataIndex={index}
-                    disabled={createActionDisableOptions(item, index)}
+                    disabled={createDisableValidator(item, index)}
                   >
                     <TabItem
                       data={item}
@@ -357,7 +369,7 @@ const AppPageTabs = defineComponent({
             <TabActionMenu
               data={currentPage}
               dataIndex={currentIndex}
-              disabled={createActionDisableOptions(currentPage, currentIndex)}
+              disabled={createDisableValidator(currentPage, currentIndex)}
               trigger="click"
             >
               <div class="border-l-divider flex h-full w-(--app-tabs-height) cursor-pointer items-center justify-center border-l">
@@ -374,8 +386,8 @@ const AppPageTabs = defineComponent({
       }
 
       return (
-        <div class={ns.b()}>
-          <div class="h-full overflow-x-clip px-2 py-0.5">
+        <div class={[ns.b(), 'overflow-x-hidden']}>
+          <div class="h-full overflow-x-hidden px-2 py-0.5">
             <Tabs
               class="h-full bg-transparent!"
               dragSort={true}

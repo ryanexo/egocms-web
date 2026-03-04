@@ -1,15 +1,16 @@
 import type { RouteRecordRaw } from 'vue-router'
 
 import { IconFont, SwapIcon } from 'tdesign-icons-vue-next'
-import { Breadcrumb, BreadcrumbItem, Button, Tooltip } from 'tdesign-vue-next'
+import { Breadcrumb, BreadcrumbItem, Button } from 'tdesign-vue-next'
 import { computed, defineComponent } from 'vue'
+import { useRouter } from 'vue-router'
 
-import { trans } from '@/locales'
 import { useAppStore, usePageStore, useRouteStore } from '@/stores'
 
 const MenuBreadcrumb = defineComponent({
   name: 'MenuBreadcrumb',
   setup() {
+    const router = useRouter()
     const pageStore = usePageStore()
     const routeStore = useRouteStore()
     const ancestors = computed<RouteRecordRaw[]>(() => {
@@ -21,12 +22,20 @@ const MenuBreadcrumb = defineComponent({
       return result
     })
 
+    const onClick = (data: RouteRecordRaw) => {
+      if (data.name) {
+        router.push({ name: data.name })
+      }
+    }
+
     return () => {
+      const items = ancestors.value
+
       return (
         <Breadcrumb>
-          {ancestors.value.map((item) => {
+          {items.map((item) => {
             return (
-              <BreadcrumbItem>
+              <BreadcrumbItem onClick={() => onClick(item)}>
                 {{
                   default: () => item.meta?.title,
                   icon: () =>
@@ -53,14 +62,9 @@ const AppStatusBar = defineComponent({
             class="flex-center w-8"
             onClick={() => appStore.toggleSidebarCollapsed()}
           >
-            <Tooltip
-              content={trans('common.app.menu.collapse')}
-              duration={0}
-            >
-              <Button variant="text">
-                <SwapIcon />
-              </Button>
-            </Tooltip>
+            <Button variant="text">
+              <SwapIcon />
+            </Button>
           </div>
           <MenuBreadcrumb />
         </div>

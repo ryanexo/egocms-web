@@ -6,7 +6,7 @@ const appStore = useAppStore()
 
 <template>
   <div
-    class="border-b-divider flex h-(--app-status-bar-height) w-full items-center justify-center border-b"
+    class="border-b-divider flex h-(--app-status-bar-height) w-full items-center justify-center overflow-clip border-b"
   >
     <span
       v-if="!appStore.sidebarCollapsed"

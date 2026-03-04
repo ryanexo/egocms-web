@@ -33,16 +33,22 @@
   }
 
   .t-tabs__nav--card.t-tabs__nav-item {
-    height: 100% !important;
-    line-height: 1 !important;
     background: var(--page-tabs-bg);
+    height: 100% !important;
     position: relative;
+    display: flex;
+    align-items: stretch;
     border-radius: var(--page-tabs-radius);
     border: none;
+    line-height: 1 !important;
 
     transition-timing-function: linear;
     transition-duration: 0.1s;
     transition-property: border-color, background-color;
+  }
+  .t-tabs__nav-item-text-wrapper {
+    display: flex;
+    align-items: stretch;
   }
 
   .t-tabs__nav--card.t-tabs__nav-item::before {

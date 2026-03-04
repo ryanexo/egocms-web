@@ -10,15 +10,26 @@ const classNs = useClassNs('app-sidebar')
 <template>
   <div
     :class="[
-      appStore.sidebarCollapsed ? 'is-collapsed' : null,
       classNs.b(),
+      appStore.sidebarCollapsed ? 'is-collapsed' : null,
       'flex',
       'h-full',
       'flex-col',
+      'transition-all',
     ]"
   >
     <app-menu />
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+@reference "tailwindcss";
+
+.app-sidebar {
+  width: var(--app-sidebar-width);
+
+  &.is-collapsed {
+    @apply w-16;
+  }
+}
+</style>
